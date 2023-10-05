@@ -1,0 +1,24 @@
+package com.project.pescueshop.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.List;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "USER_ROLE")
+@Entity
+public class Role {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Integer roleId;
+    public String roleName;
+    @ManyToMany(mappedBy = "userRoles", fetch = FetchType.LAZY)
+    private List<User> users;
+}
