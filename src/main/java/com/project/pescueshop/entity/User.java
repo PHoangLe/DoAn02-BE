@@ -1,6 +1,7 @@
 package com.project.pescueshop.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.pescueshop.dto.UserDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,8 +29,9 @@ public class User implements UserDetails {
     private String userPassword;
     private String userFirstName;
     private String userLastName;
-    private String phoneNo;
+    private String userPhoneNumber;
     private String userAvatar;
+    private Boolean isSocial;
     private String status;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -41,6 +43,16 @@ public class User implements UserDetails {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     private List<Address> addressList;
 
+    public User(UserDTO dto){
+        this.userEmail = dto.getUserEmail();
+        this.userPassword = dto.getUserPassword();
+        this.userFirstName = dto.getUserFirstName();
+        this.userLastName = dto.getUserLastName();
+        this.userPhoneNumber = dto.getUserPhoneNumber();
+        this.userAvatar = dto.getUserAvatar();
+        this.status = dto.getStatus();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> roles = new ArrayList<>();
@@ -49,7 +61,6 @@ public class User implements UserDetails {
         });
         return roles;
     }
-
     @Override
     @JsonIgnore
     public String getPassword() {
@@ -80,4 +91,7 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return this.status == "ACTIVE";
     }
+
+    public boolean isLocked(){return this.status == "LOCKED";}
+    public boolean isDeleted(){return this.status == "DELETED";}
 }
