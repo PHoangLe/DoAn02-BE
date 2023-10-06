@@ -6,7 +6,8 @@ import java.util.Map;
 public enum EnumStatus {
     ACTIVE(1, "ACTIVE"),
     DELETED(2, "DELETED"),
-    LOCKED(3, "LOCKED");
+    INACTIVE(3, "INACTIVE"),
+    LOCKED(4, "LOCKED"),;
 
     private static final Map<Integer, EnumStatus> BY_ID = new HashMap<>();
     private static final Map<String, EnumStatus> BY_LABEL = new HashMap<>();
