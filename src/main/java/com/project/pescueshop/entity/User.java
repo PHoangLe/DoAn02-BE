@@ -74,22 +74,22 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return this.status == "ACTIVE";
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return this.status == "ACTIVE";
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return this.status == "ACTIVE";
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return this.status == "ACTIVE";
+        return true;
     }
 
     public boolean isLocked(){return this.status == "LOCKED";}

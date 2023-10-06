@@ -76,6 +76,7 @@ public class AuthenticationService {
             return ResponseEntity.ok(response);
         }
         catch (AuthenticationException e){
+            log.trace(e.getMessage());
             ResponseDTO<UserDTO> response = new ResponseDTO<>(EnumResponseCode.BAD_CREDENTIAL);
             return ResponseEntity.ok(response);
         }
