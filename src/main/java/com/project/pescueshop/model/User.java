@@ -44,7 +44,8 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "roleId", referencedColumnName = "roleId")
     )
     private List<Role> userRoles;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(referencedColumnName = "userId")
     private List<Address> addressList;
 
     public User(UserDTO dto){
