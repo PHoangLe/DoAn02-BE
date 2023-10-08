@@ -1,8 +1,11 @@
 package com.project.pescueshop.util.constant;
 
+import lombok.Getter;
+
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
 public enum EnumResponseCode {
     //<editor-fold desc="Authentication">
     CREATED_ACCOUNT_SUCCESSFUL("1_1_s", "Account has been created"),
@@ -24,8 +27,8 @@ public enum EnumResponseCode {
         }
     }
 
-    public final String statusCode;
-    public final String message;
+    private final String statusCode;
+    private final String message;
 
     private EnumResponseCode(String statusCode, String message) {
         this.statusCode = statusCode;

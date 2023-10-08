@@ -2,11 +2,15 @@ package com.project.pescueshop.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.pescueshop.dto.UserDTO;
+
+import com.project.pescueshop.util.annotation.Name;
+import com.project.pescueshop.util.constant.EnumStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,13 +30,16 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
     private String userEmail;
+    @JsonIgnore
     private String userPassword;
     private String userFirstName;
     private String userLastName;
     private String userPhoneNumber;
     private String userAvatar;
     private Boolean isSocial;
-    private String status;
+    private String status = "IN_ACTIVE";
+    private Integer mainAddressId;
+    private Integer memberPoint;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "USERS_ROLES",
@@ -51,6 +58,7 @@ public class User implements UserDetails {
         this.userPhoneNumber = dto.getUserPhoneNumber();
         this.userAvatar = dto.getUserAvatar();
         this.status = dto.getStatus();
+        this.memberPoint = dto.getMemberPoint();
     }
 
     @Override
@@ -93,5 +101,6 @@ public class User implements UserDetails {
     }
 
     public boolean isLocked(){return this.status == "LOCKED";}
+    public boolean isInActive(){return this.status == "IN_ACTIVE";}
     public boolean isDeleted(){return this.status == "DELETED";}
 }

@@ -6,6 +6,7 @@ import com.project.pescueshop.dto.UserDTO;
 import com.project.pescueshop.entity.User;
 import com.project.pescueshop.security.JwtService;
 import com.project.pescueshop.util.constant.EnumResponseCode;
+import com.project.pescueshop.util.constant.EnumStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class AuthenticationService {
     public ResponseEntity<ResponseDTO<UserDTO>> userRegister(UserDTO request){
         User user = userService.findByEmail(request.getUserEmail());
         if (user != null){
-            if (!user.isLocked()) {
+            if (!user.isInActive()) {
                 ResponseDTO<UserDTO> response = new ResponseDTO<>(EnumResponseCode.ACCOUNT_EXISTED);
                 return ResponseEntity.ok(response);
             }
@@ -36,10 +37,14 @@ public class AuthenticationService {
                 return ResponseEntity.ok(response);
             }
         }
+
         user = new User(request);
 
+        //Set default for new User
         user.setUserPassword(passwordEncoder.encode(request.getUserPassword()));
         user.setIsSocial(false);
+        user.setMemberPoint(0);
+        user.setStatus(EnumStatus.INACTIVE.getValue());
 
         user = userService.addUser(user);
 
@@ -57,20 +62,22 @@ public class AuthenticationService {
             );
 
             User user = userService.findByEmail(request.getUserEmail());
+            EnumStatus status = EnumStatus.getByValue(user.getStatus());
 
-            if (user.isLocked()) {
-                ResponseDTO<UserDTO> response = new ResponseDTO<>(EnumResponseCode.ACCOUNT_INACTIVE);
-                return ResponseEntity.ok(response);
-            }
-
-            if (user.isDeleted()) {
-                ResponseDTO<UserDTO> response = new ResponseDTO<>(EnumResponseCode.ACCOUNT_NOT_FOUND);
-                return ResponseEntity.ok(response);
+            switch (status) {
+                case INACTIVE -> {
+                    return ResponseEntity.ok(new ResponseDTO<>(EnumResponseCode.ACCOUNT_INACTIVE));
+                }
+                case LOCKED -> {
+                    return ResponseEntity.ok(new ResponseDTO<>(EnumResponseCode.ACCOUNT_LOCKED));
+                }
+                case DELETED -> {
+                    return ResponseEntity.ok(new ResponseDTO<>(EnumResponseCode.ACCOUNT_NOT_FOUND));
+                }
             }
 
             var jwtToken = jwtService.generateJwtToken(user);
             log.trace("Successfully authenticate user: " + request.getUserEmail());
-
 
             ResponseDTO<UserDTO> response = new ResponseDTO<>(EnumResponseCode.AUTHENTICATE_SUCCESSFUL, new UserDTO(user, jwtToken));
             return ResponseEntity.ok(response);
