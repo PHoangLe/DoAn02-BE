@@ -19,6 +19,4 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer roleId;
     public String roleName;
-    @ManyToMany(mappedBy = "userRoles", fetch = FetchType.LAZY)
-    private List<User> users;
 }
