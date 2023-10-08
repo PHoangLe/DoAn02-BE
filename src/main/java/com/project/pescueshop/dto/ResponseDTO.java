@@ -27,6 +27,7 @@ public class ResponseDTO<T>{
         this.data.put(extractFieldName(data), data);
     }
     public ResponseDTO(EnumResponseCode enumResponseCode){
+        this.meta = new MetaData();
         this.setMeta(enumResponseCode);
     }
 
