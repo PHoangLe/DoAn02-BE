@@ -45,7 +45,7 @@ public class User implements UserDetails {
     )
     private List<Role> userRoles;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(referencedColumnName = "userId")
+    @JoinColumn(name = "userId",referencedColumnName = "userId")
     private List<Address> addressList;
 
     public User(UserDTO dto){
