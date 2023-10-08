@@ -1,10 +1,10 @@
 package com.project.pescueshop.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.project.pescueshop.entity.Address;
-import com.project.pescueshop.entity.Role;
-import com.project.pescueshop.entity.User;
-import com.project.pescueshop.util.annotation.Name;
+import com.project.pescueshop.model.Address;
+import com.project.pescueshop.model.Role;
+import com.project.pescueshop.model.User;
+import com.project.pescueshop.model.annotation.Name;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

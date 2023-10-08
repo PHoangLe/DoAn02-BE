@@ -1,4 +1,4 @@
-package com.project.pescueshop.util.annotation;
+package com.project.pescueshop.model.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

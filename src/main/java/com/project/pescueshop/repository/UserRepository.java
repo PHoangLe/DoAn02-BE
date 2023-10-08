@@ -1,6 +1,6 @@
 package com.project.pescueshop.repository;
 
-import com.project.pescueshop.entity.User;
+import com.project.pescueshop.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

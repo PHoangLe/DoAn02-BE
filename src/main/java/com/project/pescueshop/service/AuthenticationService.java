@@ -3,7 +3,7 @@ package com.project.pescueshop.service;
 import com.project.pescueshop.dto.AuthenticationDTO;
 import com.project.pescueshop.dto.ResponseDTO;
 import com.project.pescueshop.dto.UserDTO;
-import com.project.pescueshop.entity.User;
+import com.project.pescueshop.model.User;
 import com.project.pescueshop.security.JwtService;
 import com.project.pescueshop.util.constant.EnumResponseCode;
 import com.project.pescueshop.util.constant.EnumStatus;
@@ -14,6 +14,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,11 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+
+    public User getCurrentLoggedInUser(){
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
     public ResponseEntity<ResponseDTO<UserDTO>> userRegister(UserDTO request){
         User user = userService.findByEmail(request.getUserEmail());
         if (user != null){
@@ -94,7 +100,10 @@ public class AuthenticationService {
 
         if (user == null){
             user = new User(request);
+
             user.setIsSocial(true);
+            user.setMemberPoint(0);
+            user.setStatus(EnumStatus.ACTIVE.getValue());
 
             user = userService.addUser(user);
         }

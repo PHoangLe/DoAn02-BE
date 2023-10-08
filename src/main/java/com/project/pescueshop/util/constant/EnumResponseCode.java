@@ -7,7 +7,11 @@ import java.util.Map;
 
 @Getter
 public enum EnumResponseCode {
-    //<editor-fold desc="Authentication">
+    //<editor-fold desc="0-System">
+    SYSTEM_ERROR("0_1_f", "System Error"),
+    //</editor-fold>
+
+    //<editor-fold desc="1-Authentication">
     CREATED_ACCOUNT_SUCCESSFUL("1_1_s", "Account has been created"),
     ACCOUNT_EXISTED("1_2_f", "Email existed"),
     ACCOUNT_LOCKED("1_3_f", "Account has been locked"),

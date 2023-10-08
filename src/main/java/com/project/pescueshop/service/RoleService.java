@@ -1,6 +1,6 @@
 package com.project.pescueshop.service;
 
-import com.project.pescueshop.entity.Role;
+import com.project.pescueshop.model.Role;
 import com.project.pescueshop.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

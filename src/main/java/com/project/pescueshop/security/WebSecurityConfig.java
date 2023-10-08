@@ -33,9 +33,9 @@ public class WebSecurityConfig{
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-//                        .requestMatchers("/api/v1/auth/**", "/api/v1/otp/**", "/api/v1/chat/**", "/ws/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**", "/api/v1/otp/**", "/api/v1/chat/**", "/ws/**").permitAll()
                         .requestMatchers("/swagger-ui/", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .anyRequest().permitAll())
+                        .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

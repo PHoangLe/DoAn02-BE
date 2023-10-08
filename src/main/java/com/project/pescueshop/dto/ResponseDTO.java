@@ -1,6 +1,6 @@
 package com.project.pescueshop.dto;
 
-import com.project.pescueshop.util.annotation.Name;
+import com.project.pescueshop.model.annotation.Name;
 import com.project.pescueshop.util.constant.EnumResponseCode;
 import lombok.*;
 
