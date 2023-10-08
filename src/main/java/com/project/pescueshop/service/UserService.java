@@ -1,9 +1,8 @@
 package com.project.pescueshop.service;
 
-import com.project.pescueshop.entity.Role;
-import com.project.pescueshop.entity.User;
+import com.project.pescueshop.model.Role;
+import com.project.pescueshop.model.User;
 import com.project.pescueshop.repository.UserRepository;
-import com.project.pescueshop.util.constant.EnumStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,8 +25,6 @@ public class UserService {
     public User addUser(User user){
         List<Role> userRoles = roleService.getDefaultUserRole();
         user.setUserRoles(userRoles);
-
-        user.setStatus(EnumStatus.ACTIVE.value);
 
         return userRepository.save(user);
     }

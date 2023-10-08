@@ -1,4 +1,4 @@
-package com.project.pescueshop.entity;
+package com.project.pescueshop.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import lombok.Setter;
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Integer addressId;
+    private Integer addressId;
     private String streetName;
     private String wardName;
     private String districtName;

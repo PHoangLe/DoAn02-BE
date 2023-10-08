@@ -1,30 +1,49 @@
 package com.project.pescueshop.dto;
 
+import com.project.pescueshop.model.annotation.Name;
 import com.project.pescueshop.util.constant.EnumResponseCode;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseDTO<T>{
-    public String statusCode;
-    public String message;
-    public T data;
+    private MetaData meta;
+    private Map<String, T> data;
 
     public void setMeta(EnumResponseCode enumResponseCode){
-        this.statusCode = enumResponseCode.statusCode;
-        this.message = enumResponseCode.message;
+        this.meta.setStatusCode(enumResponseCode.getStatusCode());
+        this.meta.setMessage(enumResponseCode.getMessage());
     }
 
     public ResponseDTO(EnumResponseCode enumResponseCode, T data){
+        this.meta = new MetaData();
+        this.data = new HashMap<>();
         this.setMeta(enumResponseCode);
-        this.data = data;
+        this.data.put(extractFieldName(data), data);
     }
     public ResponseDTO(EnumResponseCode enumResponseCode){
         this.setMeta(enumResponseCode);
+    }
+
+    @Getter
+    @Setter
+    @RequiredArgsConstructor
+    private static class MetaData {
+        private String statusCode;
+        private String message;
+    }
+
+    private String extractFieldName(T data) {
+        Class<?> clazz = data.getClass();
+        Name annotation = clazz.getAnnotation(Name.class);
+        if (annotation != null) {
+            return annotation.noun();
+        }
+        throw new IllegalArgumentException("No class annotated with @Name found.");
     }
 }

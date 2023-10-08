@@ -1,12 +1,15 @@
 package com.project.pescueshop.util.constant;
 
+import lombok.Getter;
+
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
 public enum EnumStatus {
     ACTIVE(1, "ACTIVE"),
     DELETED(2, "DELETED"),
-    INACTIVE(3, "INACTIVE"),
+    INACTIVE(3, "IN_ACTIVE"),
     LOCKED(4, "LOCKED"),;
 
     private static final Map<Integer, EnumStatus> BY_ID = new HashMap<>();
@@ -19,8 +22,8 @@ public enum EnumStatus {
         }
     }
 
-    public final Integer id;
-    public final String value;
+    private final Integer id;
+    private final String value;
 
     private EnumStatus(Integer id, String value) {
         this.id = id;

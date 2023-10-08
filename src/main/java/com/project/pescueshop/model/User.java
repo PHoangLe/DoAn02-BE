@@ -1,7 +1,8 @@
-package com.project.pescueshop.entity;
+package com.project.pescueshop.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.pescueshop.dto.UserDTO;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,14 +27,17 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
     private String userEmail;
+    @JsonIgnore
     private String userPassword;
     private String userFirstName;
     private String userLastName;
     private String userPhoneNumber;
     private String userAvatar;
     private Boolean isSocial;
-    private String status;
-    @ManyToMany(fetch = FetchType.LAZY)
+    private String status = "IN_ACTIVE";
+    private Integer mainAddressId;
+    private Integer memberPoint;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "USERS_ROLES",
             joinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"),
@@ -51,6 +55,7 @@ public class User implements UserDetails {
         this.userPhoneNumber = dto.getUserPhoneNumber();
         this.userAvatar = dto.getUserAvatar();
         this.status = dto.getStatus();
+        this.memberPoint = dto.getMemberPoint();
     }
 
     @Override
@@ -93,5 +98,6 @@ public class User implements UserDetails {
     }
 
     public boolean isLocked(){return this.status == "LOCKED";}
+    public boolean isInActive(){return this.status == "IN_ACTIVE";}
     public boolean isDeleted(){return this.status == "DELETED";}
 }

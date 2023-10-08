@@ -1,8 +1,10 @@
 package com.project.pescueshop.dto;
 
-import com.project.pescueshop.entity.Address;
-import com.project.pescueshop.entity.Role;
-import com.project.pescueshop.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.pescueshop.model.Address;
+import com.project.pescueshop.model.Role;
+import com.project.pescueshop.model.User;
+import com.project.pescueshop.model.annotation.Name;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,9 +16,11 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Name(noun = "user", pluralNoun = "users")
 public class UserDTO {
     private Integer userId;
     private String userEmail;
+    @JsonIgnore
     private String userPassword;
     private String userFirstName;
     private String userLastName;
@@ -26,10 +30,13 @@ public class UserDTO {
     private Boolean isSocial;
     private String status;
     private String jwtToken;
+    private Integer mainAddressId;
+    private Integer memberPoint;
     private List<Address> addressList;
     private List<Role> userRoles;
 
     public UserDTO(User user){
+        this.userId = user.getUserId();
         this.userEmail = user.getUserEmail();
         this.userFirstName = user.getUserFirstName();
         this.userLastName = user.getUserLastName();
@@ -38,21 +45,14 @@ public class UserDTO {
         this.userAvatar = user.getUserAvatar();
         this.isSocial = user.getIsSocial();
         this.status = user.getStatus();
+        this.mainAddressId = user.getMainAddressId();
+        this.memberPoint = user.getMemberPoint();
         this.addressList = user.getAddressList();
         this.userRoles = user.getUserRoles();
     }
 
     public UserDTO(User user, String jwtToken){
-        this.userEmail = user.getUserEmail();
-        this.userFirstName = user.getUserFirstName();
-        this.userLastName = user.getUserLastName();
-        this.userFullName = this.userFirstName + this.userLastName;
-        this.userPhoneNumber = user.getUserPhoneNumber();
-        this.userAvatar = user.getUserAvatar();
-        this.isSocial = user.getIsSocial();
-        this.status = user.getStatus();
-        this.addressList = user.getAddressList();
-        this.userRoles = user.getUserRoles();
+        this(user);
         this.jwtToken = jwtToken;
     }
 }
