@@ -20,7 +20,5 @@ public class Address {
     private String wardName;
     private String districtName;
     private String cityName;
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    private User user;
+    private Integer userId;
 }
