@@ -23,18 +23,20 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
-    @PostMapping("/userRegister")
-    public ResponseEntity<ResponseDTO<UserDTO>> userRegister(@RequestBody RegisterDTO request){
-        return authenticationService.userRegister(request);
-    }
-
     @PostMapping("/authenticate")
     public ResponseEntity<ResponseDTO<UserDTO>> authenticate(@RequestBody AuthenticationDTO request){
         return authenticationService.authenticate(request);
     }
 
+    @PostMapping("/userRegister")
+    public ResponseEntity<ResponseDTO<UserDTO>> userRegister(@RequestBody RegisterDTO request){
+        request.setIsSocial(false);
+        return authenticationService.userRegister(request);
+    }
+
     @PostMapping("/authenticateGoogleUser")
     public ResponseEntity<ResponseDTO<UserDTO>> googleUserAuthenticate(@RequestBody RegisterDTO request){
+        request.setIsSocial(true);
         return authenticationService.googleUserAuthenticate(request);
     }
 

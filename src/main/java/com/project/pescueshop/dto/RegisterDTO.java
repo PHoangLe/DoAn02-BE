@@ -22,5 +22,6 @@ public class RegisterDTO {
     private String userLastName;
     private String userPhoneNumber;
     private String userAvatar;
+    @JsonIgnore
     private Boolean isSocial;
 }
