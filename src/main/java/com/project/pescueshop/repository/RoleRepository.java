@@ -1,6 +1,6 @@
 package com.project.pescueshop.repository;
 
-import com.project.pescueshop.model.Role;
+import com.project.pescueshop.model.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Integer> {
+public interface RoleRepository extends JpaRepository<Role, String> {
     @Query("SELECT r FROM Role r " +
-            "WHERE r.roleId = 2 ")
+            "WHERE r.roleName = 'ROLE_CUSTOMER' ")
     public List<Role> getDefaultUserRole();
 }

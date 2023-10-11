@@ -1,9 +1,9 @@
-package com.project.pescueshop.dto;
+package com.project.pescueshop.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.project.pescueshop.model.Address;
-import com.project.pescueshop.model.Role;
-import com.project.pescueshop.model.User;
+import com.project.pescueshop.model.entity.Address;
+import com.project.pescueshop.model.entity.Role;
+import com.project.pescueshop.model.entity.User;
 import com.project.pescueshop.model.annotation.Name;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Name(noun = "user", pluralNoun = "users")
 public class UserDTO {
-    private Integer userId;
+    private String userId;
     private String userEmail;
     @JsonIgnore
     private String userPassword;
@@ -40,7 +40,7 @@ public class UserDTO {
         this.userEmail = user.getUserEmail();
         this.userFirstName = user.getUserFirstName();
         this.userLastName = user.getUserLastName();
-        this.userFullName = this.userFirstName + this.userLastName;
+        this.userFullName = this.userFirstName + " " + this.userLastName;
         this.userPhoneNumber = user.getUserPhoneNumber();
         this.userAvatar = user.getUserAvatar();
         this.isSocial = user.getIsSocial();

@@ -1,4 +1,4 @@
-package com.project.pescueshop.dto;
+package com.project.pescueshop.model.dto.general;
 
 import com.project.pescueshop.model.annotation.Name;
 import com.project.pescueshop.util.constant.EnumResponseCode;

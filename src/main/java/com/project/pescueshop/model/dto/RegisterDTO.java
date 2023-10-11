@@ -1,12 +1,8 @@
-package com.project.pescueshop.dto;
+package com.project.pescueshop.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.project.pescueshop.model.Address;
-import com.project.pescueshop.model.Role;
 import com.project.pescueshop.model.annotation.Name;
 import lombok.*;
-
-import java.util.List;
 
 @Data
 @Builder
