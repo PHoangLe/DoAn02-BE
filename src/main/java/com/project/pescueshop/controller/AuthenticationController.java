@@ -1,6 +1,7 @@
 package com.project.pescueshop.controller;
 
 import com.project.pescueshop.dto.AuthenticationDTO;
+import com.project.pescueshop.dto.RegisterDTO;
 import com.project.pescueshop.dto.ResponseDTO;
 import com.project.pescueshop.dto.UserDTO;
 import com.project.pescueshop.model.User;
@@ -23,7 +24,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/userRegister")
-    public ResponseEntity<ResponseDTO<UserDTO>> userRegister(@RequestBody UserDTO request){
+    public ResponseEntity<ResponseDTO<UserDTO>> userRegister(@RequestBody RegisterDTO request){
         return authenticationService.userRegister(request);
     }
 
@@ -33,7 +34,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticateGoogleUser")
-    public ResponseEntity<ResponseDTO<UserDTO>> googleUserAuthenticate(@RequestBody UserDTO request){
+    public ResponseEntity<ResponseDTO<UserDTO>> googleUserAuthenticate(@RequestBody RegisterDTO request){
         return authenticationService.googleUserAuthenticate(request);
     }
 

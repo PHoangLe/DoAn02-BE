@@ -1,6 +1,7 @@
 package com.project.pescueshop.service;
 
 import com.project.pescueshop.dto.AuthenticationDTO;
+import com.project.pescueshop.dto.RegisterDTO;
 import com.project.pescueshop.dto.ResponseDTO;
 import com.project.pescueshop.dto.UserDTO;
 import com.project.pescueshop.model.User;
@@ -31,7 +32,7 @@ public class AuthenticationService {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-    public ResponseEntity<ResponseDTO<UserDTO>> userRegister(UserDTO request){
+    public ResponseEntity<ResponseDTO<UserDTO>> userRegister(RegisterDTO request){
         User user = userService.findByEmail(request.getUserEmail());
         if (user != null){
             if (!user.isInActive()) {
@@ -95,7 +96,7 @@ public class AuthenticationService {
         }
     }
 
-    public ResponseEntity<ResponseDTO<UserDTO>> googleUserAuthenticate(UserDTO request){
+    public ResponseEntity<ResponseDTO<UserDTO>> googleUserAuthenticate(RegisterDTO request){
         User user = userService.findByEmail(request.getUserEmail());
 
         if (user == null){
