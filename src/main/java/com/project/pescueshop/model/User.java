@@ -1,8 +1,10 @@
 package com.project.pescueshop.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.pescueshop.dto.RegisterDTO;
 import com.project.pescueshop.dto.UserDTO;
 
+import com.project.pescueshop.util.constant.EnumStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -57,6 +59,17 @@ public class User implements UserDetails {
         this.userAvatar = dto.getUserAvatar();
         this.status = dto.getStatus();
         this.memberPoint = dto.getMemberPoint();
+    }
+
+    public User(RegisterDTO dto){
+        this.userEmail = dto.getUserEmail();
+        this.userPassword = dto.getUserPassword();
+        this.userFirstName = dto.getUserFirstName();
+        this.userLastName = dto.getUserLastName();
+        this.userPhoneNumber = dto.getUserPhoneNumber();
+        this.userAvatar = dto.getUserAvatar();
+        this.status = EnumStatus.INACTIVE.getValue();
+        this.memberPoint = 0;
     }
 
     @Override
