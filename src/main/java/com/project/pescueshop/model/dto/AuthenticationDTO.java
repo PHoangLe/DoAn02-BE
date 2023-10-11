@@ -1,4 +1,4 @@
-package com.project.pescueshop.dto;
+package com.project.pescueshop.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

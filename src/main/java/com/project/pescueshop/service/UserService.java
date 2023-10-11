@@ -1,7 +1,7 @@
 package com.project.pescueshop.service;
 
-import com.project.pescueshop.model.Role;
-import com.project.pescueshop.model.User;
+import com.project.pescueshop.model.entity.Role;
+import com.project.pescueshop.model.entity.User;
 import com.project.pescueshop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

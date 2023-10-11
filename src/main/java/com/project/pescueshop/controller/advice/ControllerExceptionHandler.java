@@ -1,9 +1,11 @@
 package com.project.pescueshop.controller.advice;
 
-import com.project.pescueshop.dto.ErrorLogDTO;
-import com.project.pescueshop.dto.ResponseDTO;
+import com.project.pescueshop.model.dto.ErrorLogDTO;
+import com.project.pescueshop.model.dto.general.ResponseDTO;
+import com.project.pescueshop.model.exception.FriendlyException;
+import com.project.pescueshop.model.exception.UnauthenticatedException;
 import com.project.pescueshop.model.general.ErrorLog;
-import com.project.pescueshop.model.User;
+import com.project.pescueshop.model.entity.User;
 import com.project.pescueshop.repository.ErrorLogRepository;
 import com.project.pescueshop.service.AuthenticationService;
 import com.project.pescueshop.util.constant.EnumResponseCode;
@@ -23,6 +25,18 @@ import java.util.Date;
 public class ControllerExceptionHandler {
     private final AuthenticationService authenticationService;
     private final ErrorLogRepository errorLogRepository;
+
+    @ExceptionHandler(FriendlyException.class)
+    public ResponseEntity<ResponseDTO<ErrorLogDTO>> friendlyExceptionHandler(FriendlyException ex, WebRequest request) {
+        return ResponseEntity.ok(new ResponseDTO<>(ex.getStatusCode()));
+    }
+
+    @ExceptionHandler(UnauthenticatedException.class)
+    public ResponseEntity<ResponseDTO<ErrorLogDTO>> unauthenticatedExceptionHandler(UnauthenticatedException ex, WebRequest request) {
+
+        return ResponseEntity.ok(new ResponseDTO<>(ex.getStatusCode()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseDTO<ErrorLogDTO>> globalExceptionHandler(Exception ex, WebRequest request) {
         User user = authenticationService.getCurrentLoggedInUser();
@@ -33,6 +47,7 @@ public class ControllerExceptionHandler {
                 .stackTrace(ExceptionUtils.getStackTrace(ex))
                 .message(ex.getMessage())
                 .date(new Date())
+                .email(user.getUserEmail())
                 .client(request.getRemoteUser())
                 .build());
 

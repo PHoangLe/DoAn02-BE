@@ -15,7 +15,7 @@ public enum EnumResponseCode {
     CREATED_ACCOUNT_SUCCESSFUL("1_1_s", "Account has been created"),
     ACCOUNT_EXISTED("1_2_f", "Email existed"),
     ACCOUNT_LOCKED("1_3_f", "Account has been locked"),
-    ACCOUNT_INACTIVE("1_4_f", "Email existed"),
+    ACCOUNT_INACTIVE("1_4_f", "You must active your email before log in"),
     ACCOUNT_NOT_FOUND("1_5_f", "Account has not found"),
     BAD_CREDENTIAL("1_6_f", "Credential error"),
     AUTHENTICATE_SUCCESSFUL("1_7_s", "Log in successfully");

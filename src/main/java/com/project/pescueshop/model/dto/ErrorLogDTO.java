@@ -1,4 +1,4 @@
-package com.project.pescueshop.dto;
+package com.project.pescueshop.model.dto;
 
 import com.project.pescueshop.model.general.ErrorLog;
 import com.project.pescueshop.model.annotation.Name;
@@ -14,12 +14,13 @@ import java.util.Date;
 @NoArgsConstructor
 @Name(noun = "error", pluralNoun = "errorList")
 public class ErrorLogDTO {
-    private Integer errorLogId;
+    private String errorLogId;
     private String message;
     private String stackTrace;
     private String client;
     private String url;
     private String locale;
+    private String email;
     private Date date;
 
     public ErrorLogDTO(ErrorLog log){
@@ -29,6 +30,7 @@ public class ErrorLogDTO {
         this.client = log.getClient();
         this.url = log.getUrl();
         this.locale = log.getLocale();
+        this.email = log.getEmail();
         this.date = log.getDate();
     }
 }

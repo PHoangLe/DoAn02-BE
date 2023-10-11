@@ -1,15 +1,19 @@
-package com.project.pescueshop.model;
+package com.project.pescueshop.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.project.pescueshop.dto.RegisterDTO;
-import com.project.pescueshop.dto.UserDTO;
+import com.project.pescueshop.model.dto.RegisterDTO;
+import com.project.pescueshop.model.dto.UserDTO;
 
+import com.project.pescueshop.model.annotation.Name;
+import com.project.pescueshop.model.entity.Address;
+import com.project.pescueshop.model.entity.Role;
 import com.project.pescueshop.util.constant.EnumStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,10 +28,12 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "USERS")
 @Entity
+@Name(prefix = "USER")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer userId;
+    @GeneratedValue(generator = "CustomIdGenerator")
+    @GenericGenerator(name = "CustomIdGenerator", strategy = "com.project.pescueshop.util.CustomIdGenerator")
+    private String userId;
     private String userEmail;
     @JsonIgnore
     private String userPassword;
