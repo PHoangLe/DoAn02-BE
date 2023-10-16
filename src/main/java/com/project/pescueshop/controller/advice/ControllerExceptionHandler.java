@@ -39,7 +39,6 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseDTO<ErrorLogDTO>> globalExceptionHandler(Exception ex, WebRequest request) {
-        User user = authenticationService.getCurrentLoggedInUser();
 
         ErrorLog errorLog = errorLogRepository.save(ErrorLog.builder()
                 .url(request.getDescription(false))
@@ -47,7 +46,6 @@ public class ControllerExceptionHandler {
                 .stackTrace(ExceptionUtils.getStackTrace(ex))
                 .message(ex.getMessage())
                 .date(new Date())
-                .email(user.getUserEmail())
                 .client(request.getRemoteUser())
                 .build());
 

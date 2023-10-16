@@ -10,7 +10,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Name(noun = "new user", pluralNoun = "new users")
+@Name(noun = "newUser", pluralNoun = "newUserList")
 public class RegisterDTO {
     private String userEmail;
     private String userPassword;

@@ -26,6 +26,14 @@ public class ResponseDTO<T>{
         this.setMeta(enumResponseCode);
         this.data.put(extractFieldName(data), data);
     }
+
+    public ResponseDTO(EnumResponseCode enumResponseCode, T data, String name){
+        this.meta = new MetaData();
+        this.data = new HashMap<>();
+        this.setMeta(enumResponseCode);
+        this.data.put(name, data);
+    }
+
     public ResponseDTO(EnumResponseCode enumResponseCode){
         this.meta = new MetaData();
         this.setMeta(enumResponseCode);
@@ -45,6 +53,6 @@ public class ResponseDTO<T>{
         if (annotation != null) {
             return annotation.noun();
         }
-        throw new IllegalArgumentException("No class annotated with @Name found.");
+        return "data";
     }
 }

@@ -1,4 +1,4 @@
-package com.project.pescueshop.security;
+package com.project.pescueshop.config.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
