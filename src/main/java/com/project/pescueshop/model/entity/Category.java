@@ -17,7 +17,7 @@ import org.hibernate.annotations.GenericGenerator;
 @NoArgsConstructor
 @Table(name = "CATEGORY")
 @Entity
-@Name(prefix = "CATE")
+@Name(prefix = "CATE", noun = "category")
 public class Category {
     @Id
     @GeneratedValue(generator = "CustomIdGenerator")

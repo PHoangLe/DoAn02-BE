@@ -10,7 +10,8 @@ public enum EnumStatus {
     ACTIVE(1, "ACTIVE"),
     DELETED(2, "DELETED"),
     INACTIVE(3, "IN_ACTIVE"),
-    LOCKED(4, "LOCKED"),;
+    LOCKED(4, "LOCKED"),
+    HIDDEN(5, "HIDDEN");
 
     private static final Map<Integer, EnumStatus> BY_ID = new HashMap<>();
     private static final Map<String, EnumStatus> BY_LABEL = new HashMap<>();

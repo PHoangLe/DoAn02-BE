@@ -14,13 +14,15 @@ import org.hibernate.annotations.GenericGenerator;
 @NoArgsConstructor
 @Table(name = "SUB_CATEGORY")
 @Entity
-@Name(prefix = "SBCA")
+@Name(prefix = "SBCA", noun = "subCategory")
 public class SubCategory {
     @Id
     @GeneratedValue(generator = "CustomIdGenerator")
     @GenericGenerator(name = "CustomIdGenerator", strategy = "com.project.pescueshop.util.CustomIdGenerator")
     private String subCategoryId;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Transient
+    private String categoryId;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "categoryId", referencedColumnName = "categoryId")
     private Category category;
     private String name;

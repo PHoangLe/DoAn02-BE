@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Name {
-    String pluralNoun() default "";
-    String noun() default "";
+    String pluralNoun() default "dataList";
+    String noun() default "data";
     String prefix() default "";
 }

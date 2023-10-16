@@ -7,7 +7,7 @@ import com.project.pescueshop.model.dto.UserDTO;
 import com.project.pescueshop.model.entity.User;
 import com.project.pescueshop.model.exception.FriendlyException;
 import com.project.pescueshop.model.exception.UnauthenticatedException;
-import com.project.pescueshop.security.JwtService;
+import com.project.pescueshop.config.security.JwtService;
 import com.project.pescueshop.util.constant.EnumResponseCode;
 import com.project.pescueshop.util.constant.EnumStatus;
 import lombok.RequiredArgsConstructor;

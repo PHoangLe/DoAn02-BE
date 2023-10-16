@@ -1,4 +1,4 @@
-package com.project.pescueshop.security;
+package com.project.pescueshop.config.security;
 
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;

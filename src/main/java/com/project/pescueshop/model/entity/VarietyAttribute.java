@@ -17,7 +17,7 @@ import org.hibernate.annotations.GenericGenerator;
 @NoArgsConstructor
 @Table(name = "VARIETY_ATTRIBUTE")
 @Entity
-@Name(prefix = "VAAT")
+@Name(prefix = "VAAT", noun = "varietyAttribute")
 public class VarietyAttribute {
     @Id
     @GeneratedValue(generator = "CustomIdGenerator")

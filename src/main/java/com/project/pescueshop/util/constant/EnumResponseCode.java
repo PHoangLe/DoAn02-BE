@@ -9,6 +9,8 @@ import java.util.Map;
 public enum EnumResponseCode {
     //<editor-fold desc="0-System">
     SYSTEM_ERROR("0_1_f", "System Error"),
+    SUCCESS("0_2_s", "Succeed"),
+    FAILED("0_3_f", "FAILED"),
     //</editor-fold>
 
     //<editor-fold desc="1-Authentication">
@@ -18,7 +20,17 @@ public enum EnumResponseCode {
     ACCOUNT_INACTIVE("1_4_f", "You must active your email before log in"),
     ACCOUNT_NOT_FOUND("1_5_f", "Account has not found"),
     BAD_CREDENTIAL("1_6_f", "Credential error"),
-    AUTHENTICATE_SUCCESSFUL("1_7_s", "Log in successfully");
+    AUTHENTICATE_SUCCESSFUL("1_7_s", "Log in successfully"),
+    //</editor-fold>
+
+    //<editor-fold desc="2-PRODUCT">
+    CREATED_CATEGORY_SUCCESSFUL("2_1_s", "New category has been added"),
+    CREATED_SUBCATEGORY_SUCCESSFUL("2_2_f", "New subcategory has been added"),
+    AB("1_3_f", "Account has been locked"),
+    GG("1_4_f", "You must active your email before log in"),
+    EE("1_5_f", "Account has not found"),
+    ADS("1_6_f", "Credential error"),
+    B("1_7_s", "Log in successfully");
     //</editor-fold>
 
     private static final Map<String, EnumResponseCode> BY_STATUS_CODE = new HashMap<>();

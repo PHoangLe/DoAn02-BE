@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Name(noun = "user", pluralNoun = "users")
+@Name(noun = "user", pluralNoun = "userList")
 public class UserDTO {
     private String userId;
     private String userEmail;

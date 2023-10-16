@@ -18,11 +18,12 @@ import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
 @NoArgsConstructor
 @Table(name = "BRAND")
 @Entity
-@Name(prefix = "BRND")
+@Name(prefix = "BRND", noun = "brand")
 public class Brand {
     @Id
     @GeneratedValue(generator = "CustomIdGenerator")
     @GenericGenerator(name = "CustomIdGenerator", strategy = "com.project.pescueshop.util.CustomIdGenerator")
     private String brandId;
     private String name;
+    private String brandLogo;
 }
