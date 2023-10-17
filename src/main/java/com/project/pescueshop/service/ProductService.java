@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -32,5 +34,13 @@ public class ProductService {
 
         Product product = productRepository.save(new Product(productDTO));
         return transformProductToDTO(product);
+    }
+
+    public List<ProductDTO> findAllProduct(){
+        List<Product> productList = productRepository.findAll();
+
+        return productList.stream()
+                .map(this::transformProductToDTO)
+                .toList();
     }
 }
