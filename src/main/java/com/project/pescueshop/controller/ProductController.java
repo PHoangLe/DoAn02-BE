@@ -106,5 +106,14 @@ public class ProductController {
 
         return ResponseEntity.ok(result);
     }
+
+    @GetMapping("")
+    public ResponseEntity<ResponseDTO<List<ProductDTO>>> findAllProduct() throws FriendlyException {
+        List<ProductDTO> productList = productService.findAllProduct();
+
+        ResponseDTO<List<ProductDTO>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, productList, "productList");
+
+        return ResponseEntity.ok(result);
+    }
     //</editor-fold>
 }
