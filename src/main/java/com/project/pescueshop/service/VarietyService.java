@@ -27,4 +27,9 @@ public class VarietyService {
         Variety result = varietyRepository.save(new Variety(dto));
         return transformVarietyToDTO(result);
     }
+
+    public Variety addVariety(Variety variety){
+        Variety result = varietyRepository.save(variety);
+        return result;
+    }
 }

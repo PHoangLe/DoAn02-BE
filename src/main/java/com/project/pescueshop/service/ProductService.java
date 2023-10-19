@@ -1,7 +1,9 @@
 package com.project.pescueshop.service;
 
 import com.project.pescueshop.model.dto.ProductDTO;
+import com.project.pescueshop.model.entity.Brand;
 import com.project.pescueshop.model.entity.Product;
+import com.project.pescueshop.model.entity.Variety;
 import com.project.pescueshop.repository.ProductRepository;
 import com.project.pescueshop.util.constant.EnumPetType;
 import jakarta.transaction.Transactional;
@@ -18,6 +20,7 @@ import java.util.List;
 @Transactional
 public class ProductService {
     private final ProductRepository productRepository;
+    private final VarietyService varietyService;
 
     public ProductDTO transformProductToDTO(Product product){
         return new ProductDTO(product);
@@ -32,8 +35,26 @@ public class ProductService {
 
         productDTO.setPetType(petType.getValue());
 
-        Product product = productRepository.save(new Product(productDTO));
+        Product product = new Product(productDTO);
+//        Brand brand = product.getBrand();
+        productRepository.saveAndFlush(product);
+
+        product = addDefaultVariety(product, productDTO);
+
         return transformProductToDTO(product);
+    }
+
+    private Product addDefaultVariety(Product product, ProductDTO dto) {
+        if (product == null)
+            return null;
+
+        Variety variety = new Variety(product.getProductId(), product.getName(), dto.getCoverImage(), product.getPrice(), product.getStatus());
+
+        variety = varietyService.addVariety(variety);
+
+        product.addVariety(variety);
+
+        return product;
     }
 
     public List<ProductDTO> findAllProduct(){

@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -26,19 +27,19 @@ public class Product {
     @GenericGenerator(name = "CustomIdGenerator", strategy = "com.project.pescueshop.util.CustomIdGenerator")
     private String productId;
     private String name;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "subCategoryId", referencedColumnName = "subCategoryId")
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "subCategoryId", referencedColumnName = "subCategoryId", insertable = false, updatable = false)
     private SubCategory subCategory;
     private long price;
     private String petType;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "brandId", referencedColumnName = "brandId")
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "brandId", referencedColumnName = "brandId", insertable = false, updatable = false)
     private Brand brand;
     private String detail;
     private String description;
     @Column(columnDefinition = "0")
     private float avgRating;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "productId", referencedColumnName = "productId")
     private List<Variety> varieties;
     private String status;
@@ -59,5 +60,13 @@ public class Product {
                     .toList();
         }
         this.status = dto.getStatus();
+    }
+
+    public void addVariety(Variety variety){
+        if (this.varieties == null) {
+            this.varieties = new ArrayList<>();
+        }
+
+        this.varieties.add(variety);
     }
 }
