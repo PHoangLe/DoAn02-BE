@@ -24,6 +24,7 @@ public class ProductDTO {
     private int petTypeId;
     private String petType;
     private String brandId;
+    private String coverImage;
     private Brand brand;
     private String detail;
     private String description;

@@ -1,10 +1,7 @@
 package com.project.pescueshop.model.entity;
 
 import com.project.pescueshop.model.annotation.Name;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,9 +17,9 @@ import org.hibernate.annotations.GenericGenerator;
 @Name(prefix = "VAAT", noun = "varietyAttribute")
 public class VarietyAttribute {
     @Id
-    @GeneratedValue(generator = "CustomIdGenerator")
-    @GenericGenerator(name = "CustomIdGenerator", strategy = "com.project.pescueshop.util.CustomIdGenerator")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private String attributeId;
     private String type;
+    private String name;
     private String value;
 }
