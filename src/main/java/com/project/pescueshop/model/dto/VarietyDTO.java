@@ -22,6 +22,7 @@ public class VarietyDTO {
     private long price;
     private List<String> varietyAttributeIdList;
     private List<VarietyAttribute> varietyAttributes;
+    private String status;
 
     public VarietyDTO(Variety variety){
         this.varietyId = variety.getVarietyId();
@@ -30,5 +31,6 @@ public class VarietyDTO {
         this.images = variety.getImages();
         this.price = variety.getPrice();
         this.varietyAttributes = variety.getVarietyAttributes();
+        this.status = variety.getStatus();
     }
 }
