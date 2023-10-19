@@ -35,6 +35,7 @@ public class Variety {
             inverseJoinColumns = @JoinColumn(name = "attributeId", referencedColumnName = "attributeId")
     )
     private List<VarietyAttribute> varietyAttributes;
+    private String status;
 
     public Variety(VarietyDTO dto){
         this.varietyId = dto.getVarietyId();
@@ -43,5 +44,6 @@ public class Variety {
         this.images = dto.getImages();
         this.price = dto.getPrice();
         this.varietyAttributes = dto.getVarietyAttributes();
+        this.status = dto.getStatus();
     }
 }
