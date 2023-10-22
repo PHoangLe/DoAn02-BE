@@ -46,10 +46,10 @@ public class Variety {
         this.status = dto.getStatus();
     }
 
-    public Variety(String productId, String name, String image, Long price, String status){
+    public Variety(String productId, String name, List<String> images, Long price, String status){
         this.productId = productId;
         this.name = name;
-        this.addImage(image);
+        this.images = images;
         this.price = price;
         this.status = status;
     }
