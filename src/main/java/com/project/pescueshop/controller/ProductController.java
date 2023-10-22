@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -99,8 +100,8 @@ public class ProductController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @SecurityRequirement(name = "Bearer Authentication")
     @PostMapping("")
-    public ResponseEntity<ResponseDTO<ProductDTO>> addProduct(@RequestBody ProductDTO productDTO) throws FriendlyException {
-        productDTO = productService.addProduct(productDTO);
+    public ResponseEntity<ResponseDTO<ProductDTO>> addProduct(@RequestPart ProductDTO productDTO, @RequestPart("images") MultipartFile[] images) throws FriendlyException {
+        productDTO = productService.addProduct(productDTO, images);
 
         ResponseDTO<ProductDTO> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, productDTO);
 

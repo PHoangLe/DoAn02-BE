@@ -1,7 +1,6 @@
 package com.project.pescueshop.service;
 
 import com.project.pescueshop.model.dto.ProductDTO;
-import com.project.pescueshop.model.entity.Brand;
 import com.project.pescueshop.model.entity.Product;
 import com.project.pescueshop.model.entity.Variety;
 import com.project.pescueshop.repository.ProductRepository;
@@ -10,7 +9,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -21,6 +23,7 @@ import java.util.List;
 public class ProductService {
     private final ProductRepository productRepository;
     private final VarietyService varietyService;
+    private final FileUploadService fileUploadService;
 
     public ProductDTO transformProductToDTO(Product product){
         return new ProductDTO(product);
@@ -30,31 +33,29 @@ public class ProductService {
     }
 
     @Transactional(rollbackOn = Exception.class)
-    public ProductDTO addProduct(ProductDTO productDTO){
+    public ProductDTO addProduct(ProductDTO productDTO, MultipartFile[] images){
+        List<MultipartFile> imagesList = Arrays.stream(images).toList();
         EnumPetType petType = EnumPetType.getById(productDTO.getPetTypeId());
-
         productDTO.setPetType(petType.getValue());
 
         Product product = new Product(productDTO);
-//        Brand brand = product.getBrand();
         productRepository.saveAndFlush(product);
 
-        product = addDefaultVariety(product, productDTO);
+        List<String> imagesUrl = uploadProductImages(product.getProductId(), imagesList);
+        addDefaultVariety(product, productDTO, imagesUrl);
 
         return transformProductToDTO(product);
     }
 
-    private Product addDefaultVariety(Product product, ProductDTO dto) {
+    private void addDefaultVariety(Product product, ProductDTO dto, List<String> imagesUrl) {
         if (product == null)
-            return null;
+            return;
 
-        Variety variety = new Variety(product.getProductId(), product.getName(), dto.getCoverImage(), product.getPrice(), product.getStatus());
-
+        Variety variety = new Variety(product.getProductId(), product.getName(), dto.getCoverImages(), product.getPrice(), product.getStatus());
+        variety.setImages(imagesUrl);
         variety = varietyService.addVariety(variety);
 
         product.addVariety(variety);
-
-        return product;
     }
 
     public List<ProductDTO> findAllProduct(){
@@ -63,5 +64,12 @@ public class ProductService {
         return productList.stream()
                 .map(this::transformProductToDTO)
                 .toList();
+    }
+
+    public List<String> uploadProductImages(String productId, final List<MultipartFile> images){
+        List<String> imagesUrl = new ArrayList<>();
+        images.forEach(image -> imagesUrl.add(fileUploadService.uploadFile(image, "product/", productId +  System.currentTimeMillis())));
+
+        return imagesUrl;
     }
 }
