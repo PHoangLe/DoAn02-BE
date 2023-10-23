@@ -5,10 +5,12 @@ import com.project.pescueshop.model.dto.general.ResponseDTO;
 import com.project.pescueshop.model.entity.Brand;
 import com.project.pescueshop.model.entity.Category;
 import com.project.pescueshop.model.entity.SubCategory;
+import com.project.pescueshop.model.entity.VarietyAttribute;
 import com.project.pescueshop.model.exception.FriendlyException;
 import com.project.pescueshop.service.BrandService;
 import com.project.pescueshop.service.CategoryService;
 import com.project.pescueshop.service.ProductService;
+import com.project.pescueshop.service.VarietyService;
 import com.project.pescueshop.util.constant.EnumResponseCode;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -29,6 +32,7 @@ public class ProductController {
     private final CategoryService categoryService;
     private final BrandService brandService;
     private final ProductService productService;
+    private final VarietyService varietyService;
 
     //<editor-fold desc="Category">
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -96,6 +100,17 @@ public class ProductController {
     }
     //</editor-fold>
 
+    //<editor-fold desc="Variety">
+    @GetMapping("/variety/attributes")
+    public ResponseEntity<ResponseDTO<Map<String, List<VarietyAttribute>>>> findAllAttribute() throws FriendlyException {
+        Map<String, List<VarietyAttribute>> varietyAttribute = varietyService.findAllVarietyAttribute();
+
+        ResponseDTO<Map<String, List<VarietyAttribute>>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, varietyAttribute, "productList");
+
+        return ResponseEntity.ok(result);
+    }
+    //</editor-fold>
+
     //<editor-fold desc="Product">
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @SecurityRequirement(name = "Bearer Authentication")
@@ -113,6 +128,24 @@ public class ProductController {
         List<ProductDTO> productList = productService.findAllProduct();
 
         ResponseDTO<List<ProductDTO>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, productList, "productList");
+
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/add-variety")
+    public ResponseEntity<ResponseDTO<ProductDTO>> addVariety(@RequestBody VarietyDTO dto) throws FriendlyException {
+        ProductDTO product = productService.addVariety(dto);
+
+        ResponseDTO<ProductDTO> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, product, "product");
+
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/add-attribute/{productId}")
+    public ResponseEntity<ResponseDTO<ProductDTO>> addAttribute(@RequestBody VarietyAttribute attribute, @PathVariable String productId) throws FriendlyException {
+        ProductDTO product = productService.addVarietyAttribute(attribute, productId);
+
+        ResponseDTO<ProductDTO> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, product, "product");
 
         return ResponseEntity.ok(result);
     }

@@ -6,6 +6,7 @@ import com.project.pescueshop.model.entity.VarietyAttribute;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -20,7 +21,6 @@ public class VarietyDTO {
     private String name;
     private List<String> images;
     private long price;
-    private List<String> varietyAttributeIdList;
     private List<VarietyAttribute> varietyAttributes;
     private String status;
 
@@ -28,7 +28,6 @@ public class VarietyDTO {
         this.varietyId = variety.getVarietyId();
         this.productId = variety.getProductId();
         this.name = variety.getName();
-        this.images = variety.getImages();
         this.price = variety.getPrice();
         this.varietyAttributes = variety.getVarietyAttributes();
         this.status = variety.getStatus();

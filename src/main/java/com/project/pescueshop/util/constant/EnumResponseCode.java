@@ -26,8 +26,8 @@ public enum EnumResponseCode {
     //<editor-fold desc="2-PRODUCT">
     CREATED_CATEGORY_SUCCESSFUL("2_1_s", "New category has been added"),
     CREATED_SUBCATEGORY_SUCCESSFUL("2_2_f", "New subcategory has been added"),
-    AB("1_3_f", "Account has been locked"),
-    GG("1_4_f", "You must active your email before log in"),
+    PRODUCT_NOT_FOUND("2_3_f", "Product not found"),
+    ATTRIBUTE_EXISTED("2_4_f", "Attribute existed"),
     EE("1_5_f", "Account has not found"),
     ADS("1_6_f", "Credential error"),
     B("1_7_s", "Log in successfully");
