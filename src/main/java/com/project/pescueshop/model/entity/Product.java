@@ -43,6 +43,8 @@ public class Product {
     @JoinColumn(name = "productId", referencedColumnName = "productId")
     private List<Variety> varieties;
     private String status;
+    @ElementCollection
+    private List<String> images;
 
     public Product(ProductDTO dto){
         this.productId = dto.getProductId();
@@ -59,6 +61,7 @@ public class Product {
                     .map(Variety::new)
                     .toList();
         }
+        this.images = dto.getImages();
         this.status = dto.getStatus();
     }
 

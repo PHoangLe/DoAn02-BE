@@ -5,9 +5,7 @@ import com.project.pescueshop.model.entity.Brand;
 import com.project.pescueshop.model.entity.Product;
 import com.project.pescueshop.model.entity.SubCategory;
 import lombok.*;
-import org.springframework.data.domain.Pageable;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -27,8 +25,7 @@ public class ProductDTO {
     private int petTypeId;
     private String petType;
     private String brandId;
-    private List<String> coverImages;
-    private List<MultipartFile> images;
+    private List<String> images;
     private Brand brand;
     private String detail;
     private String description;
@@ -49,10 +46,8 @@ public class ProductDTO {
         if (product.getVarieties() != null) {
             this.varieties = product.getVarieties().stream()
                     .map(VarietyDTO::new).toList();
-            if (!CollectionUtils.isEmpty(this.varieties)) {
-                this.coverImages = this.varieties.get(0).getImages();
-            }
         }
+        this.images = product.getImages();
         this.status = product.getStatus();
     }
 }

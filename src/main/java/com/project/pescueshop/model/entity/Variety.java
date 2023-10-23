@@ -24,10 +24,8 @@ public class Variety {
     private String varietyId;
     private String productId;
     private String name;
-    @ElementCollection
-    private List<String> images;
     private long price;
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
             name = "VARIETIES_ATTRIBUTES",
             joinColumns = @JoinColumn(name = "varietyId", referencedColumnName = "varietyId"),
@@ -40,25 +38,23 @@ public class Variety {
         this.varietyId = dto.getVarietyId();
         this.productId = dto.getProductId();
         this.name = dto.getName();
-        this.images = dto.getImages();
         this.price = dto.getPrice();
         this.varietyAttributes = dto.getVarietyAttributes();
         this.status = dto.getStatus();
     }
 
-    public Variety(String productId, String name, List<String> images, Long price, String status){
+    public Variety(String productId, String name, Long price, String status){
         this.productId = productId;
         this.name = name;
-        this.images = images;
         this.price = price;
         this.status = status;
     }
 
-    public void addImage(String image){
-        if (this.images == null) {
-            this.images = new ArrayList<>();
+    public void addAttribute(VarietyAttribute attribute){
+        if (this.varietyAttributes == null){
+            this.varietyAttributes = new ArrayList<>();
         }
 
-        this.images.add(image);
+        this.varietyAttributes.add(attribute);
     }
 }
