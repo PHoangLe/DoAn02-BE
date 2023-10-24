@@ -109,6 +109,13 @@ public class ProductController {
 
         return ResponseEntity.ok(result);
     }
+
+    @PostMapping("/variety")
+    public ResponseEntity<ResponseDTO<VarietyDTO>> addVariety(@RequestBody VarietyDTO dto) throws FriendlyException {
+        VarietyDTO varietyDTO = varietyService.addOrUpdateVariety(dto);
+        ResponseDTO<VarietyDTO> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, varietyDTO, "product");
+        return ResponseEntity.ok(result);
+    }
     //</editor-fold>
 
     //<editor-fold desc="Product">
@@ -132,20 +139,10 @@ public class ProductController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/add-variety")
-    public ResponseEntity<ResponseDTO<ProductDTO>> addVariety(@RequestBody VarietyDTO dto) throws FriendlyException {
-        ProductDTO product = productService.addVariety(dto);
-
-        ResponseDTO<ProductDTO> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, product, "product");
-
-        return ResponseEntity.ok(result);
-    }
-
     @PostMapping("/add-attribute/{productId}")
     public ResponseEntity<ResponseDTO<ProductDTO>> addAttribute(@RequestBody VarietyAttribute attribute, @PathVariable String productId) throws FriendlyException {
-        ProductDTO product = productService.addVarietyAttribute(attribute, productId);
-
-        ResponseDTO<ProductDTO> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, product, "product");
+        productService.addVarietyAttribute(attribute, productId);
+        ResponseDTO<ProductDTO> result = new ResponseDTO<>(EnumResponseCode.SUCCESS);
 
         return ResponseEntity.ok(result);
     }

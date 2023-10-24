@@ -33,6 +33,7 @@ public class ProductService {
     private final VarietyService varietyService;
     private final FileUploadService fileUploadService;
     private final VarietyAttributeDAO varietyAttributeRepository;
+    private final ThreadService threadService;
 
     public ProductDTO transformProductToDTO(Product product){
         return new ProductDTO(product);
@@ -64,7 +65,11 @@ public class ProductService {
         if (product == null)
             return;
 
-        Variety variety = new Variety(product.getProductId(), product.getName(), product.getPrice(), product.getStatus());
+        Variety variety = new Variety();
+        variety.setProductId(product.getProductId());
+        variety.setName(product.getName());
+        variety.setPrice(product.getPrice());
+        variety.setStatus(product.getStatus());
         variety = varietyService.addOrUpdateVariety(variety);
 
         product.addVariety(variety);
@@ -85,6 +90,7 @@ public class ProductService {
         return imagesUrl;
     }
 
+    @Transactional(rollbackOn = Exception.class)
     public ProductDTO addVariety(VarietyDTO varietyDTO) {
         varietyDTO = varietyService.addOrUpdateVariety(varietyDTO);
         Product product = findById(varietyDTO.getProductId());
@@ -96,7 +102,7 @@ public class ProductService {
         return varietyAttributeRepository.getAllExistedAttributeByProductId(productId, type);
     }
 
-    public ProductDTO addVarietyAttribute(VarietyAttribute newAttribute, String productId) throws FriendlyException {
+    public void addVarietyAttribute(VarietyAttribute newAttribute, String productId) throws FriendlyException {
         Product product = findById(productId);
         if (product == null)
         {
@@ -124,21 +130,7 @@ public class ProductService {
             varietyList.add(variety);
         }
         else {
-            for (VarietyAttribute varietyAttribute: varietyAttributeList){
-                Variety variety = new Variety();
-                variety.addAttribute(newAttribute);
-                variety.addAttribute(varietyAttribute);
-                variety.setProductId(productId);
-                variety.setStatus(EnumStatus.ACTIVE.getValue());
-                variety.setPrice(product.getPrice());
-
-                variety = varietyService.addOrUpdateVariety(variety);
-                varietyList.add(variety);
-            }
+            threadService.addVarietyByAttribute(product, varietyAttributeList, newAttribute);
         }
-
-        product.setVarieties(varietyList);
-
-        return transformProductToDTO(product);
     }
 }
