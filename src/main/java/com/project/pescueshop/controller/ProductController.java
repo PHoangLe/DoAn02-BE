@@ -82,8 +82,8 @@ public class ProductController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @SecurityRequirement(name = "Bearer Authentication")
     @PostMapping("/brand")
-    public ResponseEntity<ResponseDTO<Brand>> addBrand(@RequestBody Brand brand) throws FriendlyException {
-        brand = brandService.addBrand(brand);
+    public ResponseEntity<ResponseDTO<Brand>> addBrand(@RequestBody Brand brand, @RequestPart("image") MultipartFile image) throws FriendlyException {
+        brand = brandService.addBrand(brand, image);
 
         ResponseDTO<Brand> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, brand);
 
