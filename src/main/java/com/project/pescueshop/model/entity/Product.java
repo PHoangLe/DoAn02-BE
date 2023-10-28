@@ -27,13 +27,13 @@ public class Product {
     @GenericGenerator(name = "CustomIdGenerator", strategy = "com.project.pescueshop.util.CustomIdGenerator")
     private String productId;
     private String name;
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "subCategoryId", referencedColumnName = "subCategoryId", insertable = false)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "subCategoryId", referencedColumnName = "subCategoryId")
     private SubCategory subCategory;
     private long price;
     private String petType;
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "brandId", referencedColumnName = "brandId", insertable = false)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "brandId", referencedColumnName = "brandId")
     private Brand brand;
     private String detail;
     private String description;
