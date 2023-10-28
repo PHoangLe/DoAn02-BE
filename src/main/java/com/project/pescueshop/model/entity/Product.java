@@ -28,12 +28,12 @@ public class Product {
     private String productId;
     private String name;
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "subCategoryId", referencedColumnName = "subCategoryId", insertable = false, updatable = false)
+    @JoinColumn(name = "subCategoryId", referencedColumnName = "subCategoryId", insertable = false)
     private SubCategory subCategory;
     private long price;
     private String petType;
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "brandId", referencedColumnName = "brandId", insertable = false, updatable = false)
+    @JoinColumn(name = "brandId", referencedColumnName = "brandId", insertable = false)
     private Brand brand;
     private String detail;
     private String description;
