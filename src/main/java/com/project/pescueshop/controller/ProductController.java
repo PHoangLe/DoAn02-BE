@@ -76,6 +76,15 @@ public class ProductController {
 
         return ResponseEntity.ok(result);
     }
+
+    @GetMapping("/sub-category/{categoryId}")
+    public ResponseEntity<ResponseDTO<List<SubCategory>>> findAllSubCategoryByCategoryId(@PathVariable String categoryId){
+        List<SubCategory> subCategoryList = categoryService.findAllSubCategoryByCategoryId(categoryId);
+
+        ResponseDTO<List<SubCategory>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, subCategoryList, "subCategoryList");
+
+        return ResponseEntity.ok(result);
+    }
     //</editor-fold>
 
     //<editor-fold desc="Brand">
