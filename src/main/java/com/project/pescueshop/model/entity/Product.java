@@ -27,7 +27,7 @@ public class Product {
     @GenericGenerator(name = "CustomIdGenerator", strategy = "com.project.pescueshop.util.CustomIdGenerator")
     private String productId;
     private String name;
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "subCategoryId", referencedColumnName = "subCategoryId")
     private SubCategory subCategory;
     private long price;
@@ -39,7 +39,7 @@ public class Product {
     private String description;
     @Column(columnDefinition = "0")
     private float avgRating;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "productId", referencedColumnName = "productId")
     private List<Variety> varieties;
     private String status;
