@@ -32,14 +32,14 @@ public class Product {
     private SubCategory subCategory;
     private long price;
     private String petType;
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "brandId", referencedColumnName = "brandId")
     private Brand brand;
     private String detail;
     private String description;
     @Column(columnDefinition = "0")
     private float avgRating;
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "productId", referencedColumnName = "productId")
     private List<Variety> varieties;
     private String status;
