@@ -41,5 +41,11 @@ public class CategoryService {
     public List<SubCategory> findAllSubCategory(){
         return subCategoryRepository.findAll();
     }
+
+    public List<SubCategory> findAllSubCategoryByCategoryId(String categoryId){
+        List<SubCategory> subCategoryList = subCategoryRepository.findSubCategoriesByCategoryId(categoryId);
+
+        return subCategoryList;
+    }
     //</editor-fold>
 }
