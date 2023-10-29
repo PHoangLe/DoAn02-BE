@@ -2,10 +2,7 @@ package com.project.pescueshop.controller;
 
 import com.project.pescueshop.model.dto.*;
 import com.project.pescueshop.model.dto.general.ResponseDTO;
-import com.project.pescueshop.model.entity.Brand;
-import com.project.pescueshop.model.entity.Category;
-import com.project.pescueshop.model.entity.SubCategory;
-import com.project.pescueshop.model.entity.VarietyAttribute;
+import com.project.pescueshop.model.entity.*;
 import com.project.pescueshop.model.exception.FriendlyException;
 import com.project.pescueshop.service.BrandService;
 import com.project.pescueshop.service.CategoryService;
@@ -139,11 +136,41 @@ public class ProductController {
         return ResponseEntity.ok(result);
     }
 
+    @PutMapping("")
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PostMapping("")
+    public ResponseEntity<ResponseDTO<ProductDTO>> updateProduct(@RequestBody ProductDTO productDTO) throws FriendlyException {
+        productDTO = productService.updateProduct(productDTO);
+
+        ResponseDTO<ProductDTO> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, productDTO);
+
+        return ResponseEntity.ok(result);
+    }
+
+    @PutMapping("/product-images/{productId}")
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PostMapping("")
+    public ResponseEntity<ResponseDTO<List<String>>> updateProductImage(@RequestPart("newImages") List<MultipartFile> newImages, @RequestPart List<String> deletedImages, @PathVariable String productId) throws FriendlyException {
+        List<String> imagesUrl = productService.updateProductImage(productId, newImages, deletedImages);
+        ResponseDTO<List<String>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, imagesUrl, "images");
+
+        return ResponseEntity.ok(result);
+    }
+
     @GetMapping("")
-    public ResponseEntity<ResponseDTO<List<ProductDTO>>> findAllProduct() throws FriendlyException {
+    public ResponseEntity<ResponseDTO<List<ProductDTO>>> findAllProduct() {
         List<ProductDTO> productList = productService.findAllProduct();
 
         ResponseDTO<List<ProductDTO>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, productList, "productList");
+
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/{productId}")
+    public ResponseEntity<ResponseDTO<ProductDTO>> getProductDetail(@PathVariable String productId) {
+        ProductDTO dto = productService.getProductDetail(productId);
+
+        ResponseDTO<ProductDTO> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, dto);
 
         return ResponseEntity.ok(result);
     }
@@ -155,5 +182,6 @@ public class ProductController {
 
         return ResponseEntity.ok(result);
     }
+
     //</editor-fold>
 }
