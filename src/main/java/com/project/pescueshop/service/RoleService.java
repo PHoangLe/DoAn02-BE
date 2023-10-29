@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class RoleService {
+public class RoleService extends BaseService {
     private final RoleRepository roleRepository;
 
     public List<Role> getDefaultUserRole(){

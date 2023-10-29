@@ -21,13 +21,15 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
-public class ProductService {
+public class ProductService extends BaseService {
     private final ProductRepository productRepository;
     private final VarietyService varietyService;
     private final FileUploadService fileUploadService;
@@ -63,7 +65,7 @@ public class ProductService {
 
         List<String> imagesUrl = uploadProductImages(product.getProductId(), imagesList);
 
-        addDefaultVariety(product);
+        addDefaultVariety(product, productDTO.getVarietyAttributeList());
 
         product.setImages(imagesUrl);
         productRepository.saveAndFlush(product);
@@ -71,18 +73,30 @@ public class ProductService {
         return transformProductToDTO(product);
     }
 
-    private void addDefaultVariety(Product product) {
+    private void addDefaultVariety(Product product, List<VarietyAttribute> varietyAttributeList) {
         if (product == null)
             return;
 
-        Variety variety = new Variety();
-        variety.setProductId(product.getProductId());
-        variety.setName(product.getName());
-        variety.setPrice(product.getPrice());
-        variety.setStatus(product.getStatus());
-        variety = varietyService.addOrUpdateVariety(variety);
+        if (CollectionUtils.isEmpty(varietyAttributeList)) {
+            Variety variety = new Variety();
+            variety.setProductId(product.getProductId());
+            variety.setName(product.getName());
+            variety.setPrice(product.getPrice());
+            variety.setStatus(product.getStatus());
+            variety = varietyService.addOrUpdateVariety(variety);
+            product.addVariety(variety);
+        }
+        else {
+            Map<String, List<VarietyAttribute>> varietiesAttributeMap = varietyAttributeList.stream()
+                    .collect(Collectors.groupingBy(VarietyAttribute::getType));
 
-        product.addVariety(variety);
+            List<VarietyAttribute> sizeAttribute = varietiesAttributeMap.getOrDefault("SIZE", new ArrayList<>());
+            List<VarietyAttribute> colorAttribute = varietiesAttributeMap.getOrDefault("COLOR", new ArrayList<>());
+
+            List<Variety> varieties = varietyService.addVarietyByListAttribute(product, sizeAttribute, colorAttribute);
+            product.setVarieties(varieties);
+        }
+
     }
 
     public List<ProductDTO> findAllProduct(){

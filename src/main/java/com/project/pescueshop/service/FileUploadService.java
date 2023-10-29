@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class FileUploadService {
+public class FileUploadService extends BaseService {
     private final Cloudinary cloudinaryConfig;
 
     public String uploadFile(MultipartFile file, String path, String fileName) {

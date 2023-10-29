@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class BrandService {
+public class BrandService extends BaseService {
     private final BrandRepository brandRepository;
     private final FileUploadService fileUploadService;
 

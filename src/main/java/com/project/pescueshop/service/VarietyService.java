@@ -1,14 +1,19 @@
 package com.project.pescueshop.service;
 
 
+import com.project.pescueshop.model.dto.ProductDTO;
 import com.project.pescueshop.model.dto.VarietyDTO;
+import com.project.pescueshop.model.entity.Product;
 import com.project.pescueshop.model.entity.Variety;
 import com.project.pescueshop.model.entity.VarietyAttribute;
 import com.project.pescueshop.repository.VarietyAttributeRepository;
 import com.project.pescueshop.repository.VarietyRepository;
+import com.project.pescueshop.util.constant.EnumStatus;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -19,10 +24,12 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class VarietyService {
+public class VarietyService extends BaseService{
     private final VarietyRepository varietyRepository;
     private final VarietyAttributeRepository varietyAttributeRepository;
     private final FileUploadService fileUploadService;
+    @Lazy
+    private final ThreadService threadService;
 
     public VarietyDTO transformVarietyToDTO(Variety variety){
         return new VarietyDTO(variety);
@@ -54,5 +61,31 @@ public class VarietyService {
                 .collect(Collectors.groupingBy(VarietyAttribute::getType));
 
         return varietyAttributeMap;
+    }
+
+    public List<Variety> addVarietyByListAttribute(Product product, List<VarietyAttribute> varietyAttributeList){
+        List<Variety> varietyList = new ArrayList<>();
+        for (VarietyAttribute attribute: varietyAttributeList){
+            Variety variety = new Variety();
+            variety.addAttribute(attribute);
+            variety.setProductId(product.getProductId());
+            variety.setStatus(EnumStatus.ACTIVE.getValue());
+            variety.setPrice(product.getPrice());
+            varietyList.add(addOrUpdateVariety(variety));
+        }
+        return varietyList;
+    }
+
+    public List<Variety> addVarietyByListAttribute(Product product, List<VarietyAttribute> sizeAttributesList, List<VarietyAttribute> colorAttributeList) {
+        if (!CollectionUtils.isEmpty(sizeAttributesList)) {
+            if (!CollectionUtils.isEmpty(colorAttributeList)) {
+                for (VarietyAttribute colorAttribute : colorAttributeList) {
+                    return threadService.addVarietyByAttribute(product, sizeAttributesList, colorAttribute);
+                }
+            } else {
+                return addVarietyByListAttribute(product, sizeAttributesList);
+            }
+        }
+        return addVarietyByListAttribute(product, colorAttributeList);
     }
 }
