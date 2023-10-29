@@ -4,6 +4,7 @@ import com.project.pescueshop.model.annotation.Name;
 import com.project.pescueshop.model.entity.Brand;
 import com.project.pescueshop.model.entity.Product;
 import com.project.pescueshop.model.entity.SubCategory;
+import com.project.pescueshop.model.entity.VarietyAttribute;
 import lombok.*;
 import org.springframework.util.CollectionUtils;
 
@@ -32,6 +33,7 @@ public class ProductDTO {
     private float avgRating;
     private List<VarietyDTO> varieties;
     private String status;
+    private List<VarietyAttribute> varietyAttributeList;
 
     public ProductDTO(Product product){
         this.productId = product.getProductId();
