@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
-public class UserService {
+public class UserService extends BaseService {
     private final UserRepository userRepository;
     private final RoleService roleService;
 
