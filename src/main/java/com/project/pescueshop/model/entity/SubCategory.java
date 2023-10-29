@@ -22,7 +22,7 @@ public class SubCategory {
     private String subCategoryId;
     @Transient
     private String categoryId;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "categoryId", referencedColumnName = "categoryId")
     private Category category;
     private String name;
