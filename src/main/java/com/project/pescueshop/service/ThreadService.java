@@ -4,19 +4,18 @@ import com.project.pescueshop.model.entity.Product;
 import com.project.pescueshop.model.entity.Variety;
 import com.project.pescueshop.model.entity.VarietyAttribute;
 import com.project.pescueshop.util.constant.EnumStatus;
-import jakarta.annotation.PostConstruct;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @Service
 @Slf4j
