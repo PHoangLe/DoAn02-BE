@@ -22,13 +22,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Transactional
 public class ProductService extends BaseService {
     private final ProductRepository productRepository;
     private final VarietyService varietyService;
@@ -53,27 +53,32 @@ public class ProductService extends BaseService {
         return dto;
     }
 
-    @Transactional(rollbackOn = Exception.class)
-    public ProductDTO addProduct(ProductDTO productDTO, MultipartFile[] images){
+
+    public ProductDTO addProduct(ProductDTO productDTO, MultipartFile[] images) throws InterruptedException {
         List<MultipartFile> imagesList = Arrays.stream(images).toList();
         EnumPetType petType = EnumPetType.getById(productDTO.getPetTypeId());
         productDTO.setPetType(petType.getValue());
         productDTO.setStatus(EnumStatus.ACTIVE.getValue());
 
         Product product = new Product(productDTO);
-        productRepository.save(product);
+        productRepository.saveAndFlush(product);
 
         List<String> imagesUrl = uploadProductImages(product.getProductId(), imagesList);
-
-        addDefaultVariety(product, productDTO.getVarietyAttributeList());
-
         product.setImages(imagesUrl);
         productRepository.saveAndFlush(product);
+
+        CompletableFuture.runAsync(() -> {
+            try {
+                addDefaultVariety(product, productDTO.getVarietyAttributeList());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         return transformProductToDTO(product);
     }
 
-    private void addDefaultVariety(Product product, List<VarietyAttribute> varietyAttributeList) {
+    private void addDefaultVariety(Product product, List<VarietyAttribute> varietyAttributeList) throws InterruptedException {
         if (product == null)
             return;
 
@@ -83,8 +88,7 @@ public class ProductService extends BaseService {
             variety.setName(product.getName());
             variety.setPrice(product.getPrice());
             variety.setStatus(product.getStatus());
-            variety = varietyService.addOrUpdateVariety(variety);
-            product.addVariety(variety);
+            varietyService.addOrUpdateVariety(variety);
         }
         else {
             Map<String, List<VarietyAttribute>> varietiesAttributeMap = varietyAttributeList.stream()
@@ -93,8 +97,7 @@ public class ProductService extends BaseService {
             List<VarietyAttribute> sizeAttribute = varietiesAttributeMap.getOrDefault("SIZE", new ArrayList<>());
             List<VarietyAttribute> colorAttribute = varietiesAttributeMap.getOrDefault("COLOR", new ArrayList<>());
 
-            List<Variety> varieties = varietyService.addVarietyByListAttribute(product, sizeAttribute, colorAttribute);
-            product.setVarieties(varieties);
+            varietyService.addVarietyByListAttribute(product, sizeAttribute, colorAttribute);
         }
 
     }
@@ -114,7 +117,6 @@ public class ProductService extends BaseService {
         return imagesUrl;
     }
 
-    @Transactional(rollbackOn = Exception.class)
     public ProductDTO addVariety(VarietyDTO varietyDTO) {
         varietyDTO = varietyService.addOrUpdateVariety(varietyDTO);
         Product product = findById(varietyDTO.getProductId());
@@ -126,7 +128,7 @@ public class ProductService extends BaseService {
         return varietyAttributeDAO.getAllExistedAttributeByProductId(productId, type);
     }
 
-    public void addVarietyAttribute(VarietyAttribute newAttribute, String productId) throws FriendlyException {
+    public void addVarietyAttribute(VarietyAttribute newAttribute, String productId) throws FriendlyException, InterruptedException {
         Product product = findById(productId);
         if (product == null)
         {

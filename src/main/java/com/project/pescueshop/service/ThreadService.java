@@ -9,13 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 @Service
 @Slf4j
@@ -26,46 +20,99 @@ public class ThreadService extends BaseService {
         this.varietyService = varietyService;
     }
 
-    public List<Variety> addVarietyByAttribute(Product product, List<VarietyAttribute> existingAttributes, VarietyAttribute newAttribute) {
-        if (existingAttributes == null || existingAttributes.isEmpty()) {
-            return Collections.emptyList();
-        }
+//    public List<Variety> addVarietyByAttribute(Product product, List<VarietyAttribute> existingAttributes, VarietyAttribute newAttribute) throws InterruptedException {
+//        if (existingAttributes == null || existingAttributes.isEmpty()) {
+//            return Collections.emptyList();
+//        }
+//
+//        int numThreads = existingAttributes.size();
+//        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
+//        List<Future<Variety>> futureList = new ArrayList<>();
+//
+//        for (VarietyAttribute varietyAttribute : existingAttributes) {
+//            Future<Variety> future = executor.submit(() -> processAddVarietyByAttribute(product, varietyAttribute, newAttribute));
+//            futureList.add(future);
+//        }
+//
+//        executor.shutdown();
+//
+//        List<Variety> resultVarieties = new ArrayList<>();
+//
+//        for (Future<Variety> future : futureList) {
+//            try {
+//                Variety variety = future.get();
+//                if (variety != null) {
+//                    resultVarieties.add(variety);
+//                }
+//            } catch (InterruptedException | ExecutionException e) {
+//                log.trace("Error: " + e.getMessage());
+//            }
+//        }
+//
+//        return resultVarieties;
+//    }
+//
+//    public List<Variety> addVarietyByAttribute(Product product, List<VarietyAttribute> colorAttributeList, List<VarietyAttribute> sizeAttributeList) throws InterruptedException {
+//        if (colorAttributeList == null || colorAttributeList.isEmpty()) {
+//            return Collections.emptyList();
+//        }
+//
+//        int numThreads = colorAttributeList.size();
+//        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
+//        List<Future<List<Variety>>> futureList = new ArrayList<>();
+//
+//        for (VarietyAttribute colorAttribute : colorAttributeList) {
+//            Future<List<Variety>> future = executor.submit(() -> addVarietyByAttribute(product, sizeAttributeList, colorAttribute));
+//            futureList.add(future);
+//        }
+//
+//        executor.shutdown();
+//
+//        List<Variety> resultVarieties = new ArrayList<>();
+//
+//        for (Future<List<Variety>> future : futureList) {
+//            try {
+//                List<Variety> variety = future.get();
+//                if (variety != null) {
+//                    resultVarieties.addAll(variety);
+//                }
+//            } catch (InterruptedException | ExecutionException e) {
+//                log.trace("Error: " + e.getMessage());
+//            }
+//        }
+//
+//        return resultVarieties;
+//    }
 
-        int numThreads = existingAttributes.size();
-        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
-        List<Future<Variety>> futureList = new ArrayList<>();
+    public void addVarietyByAttribute(Product product, List<VarietyAttribute> existingAttributes, VarietyAttribute newAttribute) {
+        if (existingAttributes == null || existingAttributes.isEmpty()) {
+            return;
+        }
 
         for (VarietyAttribute varietyAttribute : existingAttributes) {
-            Future<Variety> future = executor.submit(() -> processAddVarietyByAttribute(product, varietyAttribute, newAttribute));
-            futureList.add(future);
+            Thread thread = new Thread(() -> processAddVarietyByAttribute(product, varietyAttribute, newAttribute));
+            thread.start();
         }
-
-        executor.shutdown();
-
-        List<Variety> resultVarieties = new ArrayList<>();
-
-        for (Future<Variety> future : futureList) {
-            try {
-                Variety variety = future.get();
-                if (variety != null) {
-                    resultVarieties.add(variety);
-                }
-            } catch (InterruptedException | ExecutionException e) {
-                log.trace("Error: " + e.getMessage());
-            }
-        }
-
-        return resultVarieties;
     }
 
-    private Variety processAddVarietyByAttribute(Product product, VarietyAttribute existingAttribute, VarietyAttribute newAttribute) {
+    public void addVarietyByAttribute(Product product, List<VarietyAttribute> colorAttributeList, List<VarietyAttribute> sizeAttributeList) {
+        if (colorAttributeList == null || colorAttributeList.isEmpty()) {
+            return;
+        }
+
+        for (VarietyAttribute colorAttribute : colorAttributeList) {
+            Thread thread = new Thread(() -> addVarietyByAttribute(product, sizeAttributeList, colorAttribute));
+            thread.start();
+        }
+    }
+
+    private void processAddVarietyByAttribute(Product product, VarietyAttribute existingAttribute, VarietyAttribute newAttribute) {
         Variety variety = new Variety();
         variety.addAttribute(newAttribute);
         variety.addAttribute(existingAttribute);
         variety.setProductId(product.getProductId());
         variety.setStatus(EnumStatus.ACTIVE.getValue());
         variety.setPrice(product.getPrice());
-
-        return varietyService.addOrUpdateVariety(variety);
+        varietyService.addOrUpdateVariety(variety);
     }
 }

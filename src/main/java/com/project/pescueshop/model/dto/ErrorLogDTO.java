@@ -1,6 +1,6 @@
 package com.project.pescueshop.model.dto;
 
-import com.project.pescueshop.model.general.ErrorLog;
+import com.project.pescueshop.model.entity.ErrorLog;
 import com.project.pescueshop.model.annotation.Name;
 import lombok.*;
 

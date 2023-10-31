@@ -63,7 +63,7 @@ public class VarietyService extends BaseService{
         return varietyAttributeMap;
     }
 
-    public List<Variety> addVarietyByListAttribute(Product product, List<VarietyAttribute> varietyAttributeList){
+    public void addVarietyByListAttribute(Product product, List<VarietyAttribute> varietyAttributeList){
         List<Variety> varietyList = new ArrayList<>();
         for (VarietyAttribute attribute: varietyAttributeList){
             Variety variety = new Variety();
@@ -73,19 +73,16 @@ public class VarietyService extends BaseService{
             variety.setPrice(product.getPrice());
             varietyList.add(addOrUpdateVariety(variety));
         }
-        return varietyList;
     }
 
-    public List<Variety> addVarietyByListAttribute(Product product, List<VarietyAttribute> sizeAttributesList, List<VarietyAttribute> colorAttributeList) {
+    public void addVarietyByListAttribute(Product product, List<VarietyAttribute> sizeAttributesList, List<VarietyAttribute> colorAttributeList) throws InterruptedException {
         if (!CollectionUtils.isEmpty(sizeAttributesList)) {
             if (!CollectionUtils.isEmpty(colorAttributeList)) {
-                for (VarietyAttribute colorAttribute : colorAttributeList) {
-                    return threadService.addVarietyByAttribute(product, sizeAttributesList, colorAttribute);
-                }
+                threadService.addVarietyByAttribute(product, sizeAttributesList, colorAttributeList);
             } else {
-                return addVarietyByListAttribute(product, sizeAttributesList);
+                addVarietyByListAttribute(product, sizeAttributesList);
             }
         }
-        return addVarietyByListAttribute(product, colorAttributeList);
+        addVarietyByListAttribute(product, colorAttributeList);
     }
 }
