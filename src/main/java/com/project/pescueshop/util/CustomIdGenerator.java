@@ -4,6 +4,8 @@ import com.project.pescueshop.model.annotation.Name;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
 
+import java.util.Random;
+
 public class CustomIdGenerator implements IdentifierGenerator {
     @Override
     public String generate(SharedSessionContractImplementor sharedSessionContractImplementor, Object o) {
@@ -21,10 +23,22 @@ public class CustomIdGenerator implements IdentifierGenerator {
     }
 
     private String generateCustomId(String prefix) {
-        return prefix + "_" + generateValue();
+        return prefix + "_" + generateValue() + "_" + getRandomKey();
     }
 
     private Long generateValue() {
         return System.currentTimeMillis();
+    }
+
+    private String getRandomKey() {
+        String dictionary = "aAbB9cCdDeE0fFgGhHiI1jJkKlLmM2nNoOpP3qQrRsStT4uU5vV6wWy7zZ8";
+        StringBuilder builder = new StringBuilder();
+        Random random = new Random();
+
+        for (int i = 0; i < 5; i++){
+            builder.append(dictionary.charAt(random.nextInt(0, dictionary.length())));
+        }
+
+        return builder.toString();
     }
 }

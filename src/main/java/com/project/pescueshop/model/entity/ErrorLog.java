@@ -1,4 +1,4 @@
-package com.project.pescueshop.model.general;
+package com.project.pescueshop.model.entity;
 
 import com.project.pescueshop.model.dto.ErrorLogDTO;
 import com.project.pescueshop.model.annotation.Name;

@@ -128,11 +128,11 @@ public class ProductController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @SecurityRequirement(name = "Bearer Authentication")
     @PostMapping("")
-    public ResponseEntity<ResponseDTO<ProductDTO>> addProduct(@RequestPart ProductDTO productDTO, @RequestPart("images") MultipartFile[] images) throws FriendlyException {
+    public ResponseEntity<ResponseDTO<ProductDTO>> addProduct(@RequestPart ProductDTO productDTO, @RequestPart("images") MultipartFile[] images) throws InterruptedException {
         productDTO = productService.addProduct(productDTO, images);
 
         ResponseDTO<ProductDTO> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, productDTO);
-
+        System.out.println(System.currentTimeMillis());
         return ResponseEntity.ok(result);
     }
 
@@ -176,7 +176,7 @@ public class ProductController {
     }
 
     @PostMapping("/add-attribute/{productId}")
-    public ResponseEntity<ResponseDTO<ProductDTO>> addAttribute(@RequestBody VarietyAttribute attribute, @PathVariable String productId) throws FriendlyException {
+    public ResponseEntity<ResponseDTO<ProductDTO>> addAttribute(@RequestBody VarietyAttribute attribute, @PathVariable String productId) throws FriendlyException, InterruptedException {
         productService.addVarietyAttribute(attribute, productId);
         ResponseDTO<ProductDTO> result = new ResponseDTO<>(EnumResponseCode.SUCCESS);
 
