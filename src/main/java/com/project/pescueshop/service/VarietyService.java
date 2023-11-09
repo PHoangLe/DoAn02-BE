@@ -83,6 +83,8 @@ public class VarietyService extends BaseService{
                 addVarietyByListAttribute(product, sizeAttributesList);
             }
         }
-        addVarietyByListAttribute(product, colorAttributeList);
+        else {
+            addVarietyByListAttribute(product, colorAttributeList);
+        }
     }
 }
