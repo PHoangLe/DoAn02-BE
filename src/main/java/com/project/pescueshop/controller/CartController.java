@@ -10,8 +10,10 @@ import com.project.pescueshop.service.AuthenticationService;
 import com.project.pescueshop.service.CartService;
 import com.project.pescueshop.util.constant.EnumResponseCode;
 import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,6 +26,8 @@ public class CartController {
     private final AuthenticationService authenticationService;
 
     @GetMapping("")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<ResponseDTO<Cart>> getCart() throws FriendlyException {
         User user = authenticationService.getCurrentLoggedInUser();
         Cart cart = cartService.findCartByUserId(user.getUserId());
