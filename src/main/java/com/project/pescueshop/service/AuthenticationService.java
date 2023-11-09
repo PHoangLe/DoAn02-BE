@@ -123,6 +123,10 @@ public class AuthenticationService {
             user.setStatus(EnumStatus.ACTIVE.getValue());
 
             user = userService.addUser(user);
+            String userId = user.getUserId();
+            CompletableFuture.runAsync(() -> {
+                cartService.createCartForNewUser(userId);
+            });
         }
 
         var jwtToken = jwtService.generateJwtToken(user);
