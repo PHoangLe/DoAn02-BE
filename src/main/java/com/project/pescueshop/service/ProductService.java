@@ -88,6 +88,7 @@ public class ProductService extends BaseService {
             variety.setName(product.getName());
             variety.setPrice(product.getPrice());
             variety.setStatus(product.getStatus());
+            variety.setStockAmount(0);
             varietyService.addOrUpdateVariety(variety);
         }
         else {

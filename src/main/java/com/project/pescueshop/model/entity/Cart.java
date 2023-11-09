@@ -1,15 +1,11 @@
 package com.project.pescueshop.model.entity;
 
 import com.project.pescueshop.model.annotation.Name;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,10 +14,14 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "CART")
 @Entity
 @Name(prefix = "CART")
+@Builder
 public class Cart {
     @Id
     @GeneratedValue(generator = "CustomIdGenerator")
     @GenericGenerator(name = "CustomIdGenerator", strategy = "com.project.pescueshop.util.CustomIdGenerator")
     private String cartId;
     private String userId;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "cartId",referencedColumnName = "cartId")
+    private List<CartItem> cartItemList;
 }

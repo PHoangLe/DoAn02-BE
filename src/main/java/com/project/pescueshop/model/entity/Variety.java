@@ -33,6 +33,7 @@ public class Variety {
     )
     private List<VarietyAttribute> varietyAttributes;
     private String status;
+    private Integer stockAmount;
 
     public Variety(VarietyDTO dto){
         this.varietyId = dto.getVarietyId();
@@ -41,6 +42,7 @@ public class Variety {
         this.price = dto.getPrice();
         this.varietyAttributes = dto.getVarietyAttributes();
         this.status = dto.getStatus();
+        this.stockAmount = 0;
     }
 
     public Variety(String productId, String name, Long price, String status){

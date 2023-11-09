@@ -21,6 +21,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.CompletableFuture;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -29,9 +31,15 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+    private final CartService cartService;
 
-    public User getCurrentLoggedInUser(){
-        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public User getCurrentLoggedInUser() throws FriendlyException {
+        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal == null)
+            throw new FriendlyException(EnumResponseCode.NOT_LOGGED_IN);
+
+        return principal;
     }
 
     public ResponseEntity<ResponseDTO<UserDTO>> userRegister(RegisterDTO request) throws FriendlyException {
@@ -54,6 +62,11 @@ public class AuthenticationService {
         user.setStatus(EnumStatus.ACTIVE.getValue());
 
         user = userService.addUser(user);
+
+        String userId = user.getUserId();
+        CompletableFuture.runAsync(() -> {
+            cartService.createCartForNewUser(userId);
+        });
 
         ResponseDTO<UserDTO> response = new ResponseDTO<>(EnumResponseCode.CREATED_ACCOUNT_SUCCESSFUL, new UserDTO(user));
         return ResponseEntity.ok(response);
