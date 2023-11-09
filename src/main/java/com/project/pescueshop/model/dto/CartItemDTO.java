@@ -1,5 +1,6 @@
 package com.project.pescueshop.model.dto;
 
+import com.project.pescueshop.model.annotation.Name;
 import lombok.*;
 
 @Getter
@@ -8,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Name(noun = "item", pluralNoun = "items")
 public class CartItemDTO {
     private String cartItemId;
     private String varietyId;

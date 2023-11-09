@@ -31,8 +31,13 @@ public class CartController {
     public ResponseEntity<ResponseDTO<Cart>> getCart() throws FriendlyException {
         User user = authenticationService.getCurrentLoggedInUser();
         Cart cart = cartService.findCartByUserId(user.getUserId());
-
-        ResponseDTO<Cart> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, cart);
+        ResponseDTO<Cart> result;
+        if (cart == null) {
+             result = new ResponseDTO<>(EnumResponseCode.CART_NOT_FOUND);
+        }
+        else {
+            result = new ResponseDTO<>(EnumResponseCode.SUCCESS, cart);
+        }
         return ResponseEntity.ok(result);
     }
 

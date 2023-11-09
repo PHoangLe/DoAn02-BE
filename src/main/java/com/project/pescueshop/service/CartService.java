@@ -14,10 +14,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CartService extends BaseService {
-    private CartRepository cartRepository;
-    private CartItemRepository cartItemRepository;
-    private VarietyService varietyService;
+public class CartService{
+    private final CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
+    private final VarietyService varietyService;
 
     public void createCartForNewUser(String userId){
         Cart newCart = Cart.builder()
