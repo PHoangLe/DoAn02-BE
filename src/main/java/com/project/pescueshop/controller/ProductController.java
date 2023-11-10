@@ -137,8 +137,8 @@ public class ProductController {
     }
 
     @PutMapping("")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @SecurityRequirement(name = "Bearer Authentication")
-    @PostMapping("")
     public ResponseEntity<ResponseDTO<ProductDTO>> updateProduct(@RequestBody ProductDTO productDTO) throws FriendlyException {
         productDTO = productService.updateProduct(productDTO);
 
@@ -148,8 +148,8 @@ public class ProductController {
     }
 
     @PutMapping("/product-images/{productId}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @SecurityRequirement(name = "Bearer Authentication")
-    @PostMapping("")
     public ResponseEntity<ResponseDTO<List<String>>> updateProductImage(@RequestPart("newImages") List<MultipartFile> newImages, @RequestPart List<String> deletedImages, @PathVariable String productId) throws FriendlyException {
         List<String> imagesUrl = productService.updateProductImage(productId, newImages, deletedImages);
         ResponseDTO<List<String>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, imagesUrl, "images");
@@ -176,8 +176,20 @@ public class ProductController {
     }
 
     @PostMapping("/add-attribute/{productId}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<ResponseDTO<ProductDTO>> addAttribute(@RequestBody VarietyAttribute attribute, @PathVariable String productId) throws FriendlyException, InterruptedException {
         productService.addVarietyAttribute(attribute, productId);
+        ResponseDTO<ProductDTO> result = new ResponseDTO<>(EnumResponseCode.SUCCESS);
+
+        return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping("/delete-attribute/{productId}/{attributeId}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<ResponseDTO<ProductDTO>> deleteAttribute(@PathVariable String attributeId, @PathVariable String productId) {
+        productService.deleteAttribute(attributeId, productId);
         ResponseDTO<ProductDTO> result = new ResponseDTO<>(EnumResponseCode.SUCCESS);
 
         return ResponseEntity.ok(result);

@@ -14,14 +14,14 @@ import org.hibernate.annotations.GenericGenerator;
 @NoArgsConstructor
 @Table(name = "CART_ITEM")
 @Entity
-@Name(prefix = "CAIT")
+@Name(prefix = "CAIT", noun = "cartItem", pluralNoun = "cartItemList")
 public class CartItem {
     @Id
     @GeneratedValue(generator = "CustomIdGenerator")
     @GenericGenerator(name = "CustomIdGenerator", strategy = "com.project.pescueshop.util.CustomIdGenerator")
     private String cartItemId;
     private String cartId;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "varietyId", referencedColumnName = "varietyId")
     private Variety product;
     private int quantity;

@@ -45,10 +45,6 @@ public class ProductDTO {
         this.detail = product.getDetail();
         this.description = product.getDescription();
         this.avgRating = product.getAvgRating();
-        if (product.getVarieties() != null) {
-            this.varieties = product.getVarieties().stream()
-                    .map(VarietyDTO::new).toList();
-        }
         this.images = product.getImages();
         this.status = product.getStatus();
     }

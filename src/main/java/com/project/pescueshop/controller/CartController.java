@@ -41,7 +41,9 @@ public class CartController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("")
+    @PostMapping("/add-cart-item")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<ResponseDTO<CartItem>> addItemToCart(@RequestBody CartItemDTO dto) throws FriendlyException {
         User user = authenticationService.getCurrentLoggedInUser();
         CartItem cart = cartService.addItemToCart(dto, user);

@@ -39,9 +39,6 @@ public class Product {
     private String description;
     @Column(columnDefinition = "0")
     private float avgRating;
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "productId", referencedColumnName = "productId")
-    private List<Variety> varieties;
     private String status;
     @ElementCollection
     private List<String> images;
@@ -56,20 +53,7 @@ public class Product {
         this.detail = dto.getDetail();
         this.description = dto.getDescription();
         this.avgRating = dto.getAvgRating();
-        if (dto.getVarieties()!= null) {
-            this.varieties = dto.getVarieties().stream()
-                    .map(Variety::new)
-                    .toList();
-        }
         this.images = dto.getImages();
         this.status = dto.getStatus();
-    }
-
-    public void addVariety(Variety variety){
-        if (this.varieties == null) {
-            this.varieties = new ArrayList<>();
-        }
-
-        this.varieties.add(variety);
     }
 }

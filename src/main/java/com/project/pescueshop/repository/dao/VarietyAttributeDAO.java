@@ -12,7 +12,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Repository
 public class VarietyAttributeDAO extends BaseDAO{
-
     private final VarietyAttributeRepository varietyAttributeRepository;
 
     public List<VarietyAttribute> getAllExistedAttributeByProductId(String productId, String type) {

@@ -7,11 +7,11 @@ import com.project.pescueshop.model.entity.Variety;
 import com.project.pescueshop.model.entity.VarietyAttribute;
 import com.project.pescueshop.model.exception.FriendlyException;
 import com.project.pescueshop.repository.ProductRepository;
+import com.project.pescueshop.repository.dao.ProductDAO;
 import com.project.pescueshop.repository.dao.VarietyAttributeDAO;
 import com.project.pescueshop.util.constant.EnumPetType;
 import com.project.pescueshop.util.constant.EnumResponseCode;
 import com.project.pescueshop.util.constant.EnumStatus;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,6 +34,7 @@ public class ProductService extends BaseService {
     private final VarietyService varietyService;
     private final FileUploadService fileUploadService;
     private final VarietyAttributeDAO varietyAttributeDAO;
+    private final ProductDAO productDAO;
     private final ThreadService threadService;
 
     public ProductDTO transformProductToDTO(Product product){
@@ -47,14 +48,17 @@ public class ProductService extends BaseService {
         Product product = findById(productId);
         ProductDTO dto = transformProductToDTO(product);
 
+        List<Variety> varietyList = varietyService.findByProductId(productId);
+        List<VarietyDTO> varietyDTOList = varietyService.transformVarietyToDTOList(varietyList);
+        dto.setVarieties(varietyDTOList);
+
         List<VarietyAttribute> varietyAttributeList = varietyAttributeDAO.getAllExistedAttributeByProductId(productId, null);
         dto.setVarietyAttributeList(varietyAttributeList);
 
         return dto;
     }
 
-
-    public ProductDTO addProduct(ProductDTO productDTO, MultipartFile[] images) throws InterruptedException {
+    public ProductDTO addProduct(ProductDTO productDTO, MultipartFile[] images) {
         List<MultipartFile> imagesList = Arrays.stream(images).toList();
         EnumPetType petType = EnumPetType.getById(productDTO.getPetTypeId());
         productDTO.setPetType(petType.getValue());
@@ -129,14 +133,16 @@ public class ProductService extends BaseService {
         return varietyAttributeDAO.getAllExistedAttributeByProductId(productId, type);
     }
 
-    public void addVarietyAttribute(VarietyAttribute newAttribute, String productId) throws FriendlyException, InterruptedException {
+    public void addVarietyAttribute(VarietyAttribute newAttribute, String productId) throws FriendlyException {
         Product product = findById(productId);
         if (product == null)
         {
             throw new FriendlyException(EnumResponseCode.PRODUCT_NOT_FOUND);
         }
 
-        boolean isExisted = product.getVarieties().stream()
+        List<Variety> varieties = varietyService.findByProductId(productId);
+
+        boolean isExisted = varieties.stream()
                 .anyMatch(variety -> variety.getVarietyId() == newAttribute.getAttributeId());
 
         if (isExisted){
@@ -144,7 +150,6 @@ public class ProductService extends BaseService {
         }
 
         List<VarietyAttribute> varietyAttributeList = getAllExistedAttributeByProductId(productId, newAttribute.getType());
-        List<Variety> varietyList = product.getVarieties() == null ? new ArrayList<>() : product.getVarieties();
         if (CollectionUtils.isEmpty(varietyAttributeList))
         {
             Variety variety = new Variety();
@@ -154,7 +159,7 @@ public class ProductService extends BaseService {
             variety.setPrice(product.getPrice());
 
             variety = varietyService.addOrUpdateVariety(variety);
-            varietyList.add(variety);
+            varieties.add(variety);
         }
         else {
             threadService.addVarietyByAttribute(product, varietyAttributeList, newAttribute);
@@ -197,5 +202,9 @@ public class ProductService extends BaseService {
         productRepository.saveAndFlush(product);
 
         return product.getImages();
+    }
+
+    public void deleteAttribute(String productId, String attributeId){
+       productDAO.deleteAttribute(productId, attributeId);
     }
 }

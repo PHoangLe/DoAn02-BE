@@ -27,12 +27,19 @@ import java.util.stream.Collectors;
 public class VarietyService extends BaseService{
     private final VarietyRepository varietyRepository;
     private final VarietyAttributeRepository varietyAttributeRepository;
-    private final FileUploadService fileUploadService;
-    @Lazy
     private final ThreadService threadService;
 
     public VarietyDTO transformVarietyToDTO(Variety variety){
         return new VarietyDTO(variety);
+    }
+
+    public List<VarietyDTO> transformVarietyToDTOList(List<Variety> varietyList){
+        if (CollectionUtils.isEmpty(varietyList)){
+            return new ArrayList<>();
+        }
+
+        return varietyList.stream()
+                .map(this::transformVarietyToDTO).toList();
     }
 
     public Variety findById(String id){
@@ -86,5 +93,9 @@ public class VarietyService extends BaseService{
         else {
             addVarietyByListAttribute(product, colorAttributeList);
         }
+    }
+
+    public List<Variety> findByProductId(String productId){
+        return varietyRepository.findByProductId(productId);
     }
 }
