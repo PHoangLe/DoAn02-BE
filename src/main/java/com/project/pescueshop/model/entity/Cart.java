@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "CART")
 @Entity
-@Name(prefix = "CART")
+@Name(prefix = "CART", noun = "cart", pluralNoun = "cartList")
 @Builder
 public class Cart {
     @Id
