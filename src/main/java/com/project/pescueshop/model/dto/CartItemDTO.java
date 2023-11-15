@@ -12,8 +12,14 @@ import lombok.*;
 @Name(noun = "item", pluralNoun = "items")
 public class CartItemDTO {
     private String cartItemId;
+    private String userId;
+    private String cartId;
     private String varietyId;
+    private String name;
+    private Long unitPrice;
     private Integer quantity;
     private Long totalItemPrice;
     private Boolean isSelected;
+    private String image;
+    private Integer stockAmount;
 }
