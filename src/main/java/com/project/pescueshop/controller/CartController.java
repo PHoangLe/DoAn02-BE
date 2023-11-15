@@ -43,7 +43,7 @@ public class CartController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/add-cart-item")
+    @PostMapping("/update-cart-item")
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<ResponseDTO<CartItem>> addItemToCart(@RequestBody UpdateCartItemDTO dto) throws FriendlyException {
