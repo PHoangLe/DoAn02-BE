@@ -29,7 +29,7 @@ public class CartDAO extends BaseDAO{
         return cartItemRepository.findById(cartItemId).orElse(null);
     }
 
-    public CartItem findByVarietyId(String varietyId){
-        return cartItemRepository.findByVarietyId(varietyId).orElse(new CartItem());
+    public CartItem findByVarietyIdAndCartId(String varietyId, String cartId){
+        return cartItemRepository.findByVarietyIdAndCartId(varietyId, cartId).orElse(null);
     }
 }

@@ -13,7 +13,7 @@ public enum EnumResponseCode {
     FAILED("0_3_f", "Failed"),
     //</editor-fold>
 
-    //<editor-fold desc="1-Authentication">
+    //<editor-fold desc="1-AUTHENTICATION">
     CREATED_ACCOUNT_SUCCESSFUL("1_1_s", "Account has been created"),
     ACCOUNT_EXISTED("1_2_f", "Email existed"),
     ACCOUNT_LOCKED("1_3_f", "Account has been locked"),
@@ -31,7 +31,11 @@ public enum EnumResponseCode {
     ATTRIBUTE_EXISTED("2_4_f", "Attribute existed"),
     VARIETY_NOT_FOUND("2_5_f", "Variety not found"),
     CART_NOT_FOUND("2_6_f", "Cart not found"),
-    B("1_7_s", "Log in successfully");
+    //</editor-fold>
+
+    //<editor-fold desc="3-IMPORT">
+    IMPORT_INVOICE_NOT_FOUND("3_1_f", "Invoice does not exist"),
+    A("1_8_f", "Please log in");
     //</editor-fold>
 
     private static final Map<String, EnumResponseCode> BY_STATUS_CODE = new HashMap<>();
