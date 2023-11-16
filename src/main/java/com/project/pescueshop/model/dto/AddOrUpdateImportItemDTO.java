@@ -9,9 +9,10 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Name(noun = "cartItem", pluralNoun = "itemList")
-public class UpdateCartItemDTO {
+@Name(noun = "importItem", pluralNoun = "itemList")
+public class AddOrUpdateImportItemDTO {
+    private String importInvoiceId;
     private String varietyId;
     private Integer quantity;
-    private Boolean isSelected;
+    private Long importPrice;
 }

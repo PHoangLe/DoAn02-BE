@@ -1,7 +1,7 @@
 package com.project.pescueshop.service;
 
 import com.project.pescueshop.model.dto.CartItemDTO;
-import com.project.pescueshop.model.dto.UpdateCartItemDTO;
+import com.project.pescueshop.model.dto.AddOrUpdateCartItemDTO;
 import com.project.pescueshop.model.entity.*;
 import com.project.pescueshop.model.exception.FriendlyException;
 import com.project.pescueshop.repository.CartItemRepository;
@@ -38,7 +38,7 @@ public class CartService{
         return cartDAO.getCartItemsByUserId(userId);
     }
 
-    public void updateCartItem(UpdateCartItemDTO dto, User user) throws FriendlyException {
+    public void addOrUpdateCartItem(AddOrUpdateCartItemDTO dto, User user) throws FriendlyException {
         Variety variety = varietyService.findById(dto.getVarietyId());
 
         if (variety == null){
@@ -46,17 +46,19 @@ public class CartService{
         }
 
         Cart cart = findCartByUserId(user.getUserId());
-        CartItem cartItem = cartDAO.findByVarietyId(dto.getVarietyId());
+        if (cart == null){
+            throw new FriendlyException(EnumResponseCode.VARIETY_NOT_FOUND);
+        }
 
+        CartItem cartItem = cartDAO.findByVarietyIdAndCartId(dto.getVarietyId(), cart.getCartId());
         if (cartItem != null && dto.getQuantity() == 0){
             cartItemRepository.delete(cartItem);
             return;
         }
 
-        if (cart == null){
-            throw new FriendlyException(EnumResponseCode.VARIETY_NOT_FOUND);
+        if (cartItem == null) {
+            cartItem = new CartItem();
         }
-
         cartItem.setCartId(cart.getCartId());
         cartItem.setProduct(variety);
         cartItem.setSelected(true);

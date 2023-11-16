@@ -1,7 +1,7 @@
 package com.project.pescueshop.controller;
 
 import com.project.pescueshop.model.dto.CartItemDTO;
-import com.project.pescueshop.model.dto.UpdateCartItemDTO;
+import com.project.pescueshop.model.dto.AddOrUpdateCartItemDTO;
 import com.project.pescueshop.model.dto.general.ResponseDTO;
 import com.project.pescueshop.model.entity.CartItem;
 import com.project.pescueshop.model.entity.User;
@@ -46,9 +46,9 @@ public class CartController {
     @PostMapping("/update-cart-item")
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @SecurityRequirement(name = "Bearer Authentication")
-    public ResponseEntity<ResponseDTO<CartItem>> addItemToCart(@RequestBody UpdateCartItemDTO dto) throws FriendlyException {
+    public ResponseEntity<ResponseDTO<CartItem>> addItemToCart(@RequestBody AddOrUpdateCartItemDTO dto) throws FriendlyException {
         User user = authenticationService.getCurrentLoggedInUser();
-        cartService.updateCartItem(dto, user);
+        cartService.addOrUpdateCartItem(dto, user);
 
         ResponseDTO<CartItem> result = new ResponseDTO<>(EnumResponseCode.SUCCESS);
         return ResponseEntity.ok(result);

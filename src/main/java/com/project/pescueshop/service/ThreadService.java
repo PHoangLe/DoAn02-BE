@@ -1,8 +1,8 @@
 package com.project.pescueshop.service;
 
-import com.project.pescueshop.model.entity.Product;
-import com.project.pescueshop.model.entity.Variety;
-import com.project.pescueshop.model.entity.VarietyAttribute;
+import com.project.pescueshop.model.dto.AddOrUpdateImportItemDTO;
+import com.project.pescueshop.model.entity.*;
+import com.project.pescueshop.model.exception.FriendlyException;
 import com.project.pescueshop.util.constant.EnumStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,74 +15,12 @@ import java.util.List;
 @Slf4j
 public class ThreadService extends BaseService {
     private final VarietyService varietyService;
+    private final ImportService importService;
     @Autowired
-    public ThreadService(@Lazy VarietyService varietyService) {
+    public ThreadService(@Lazy VarietyService varietyService,@Lazy ImportService importService) {
         this.varietyService = varietyService;
+        this.importService = importService;
     }
-
-//    public List<Variety> addVarietyByAttribute(Product product, List<VarietyAttribute> existingAttributes, VarietyAttribute newAttribute) throws InterruptedException {
-//        if (existingAttributes == null || existingAttributes.isEmpty()) {
-//            return Collections.emptyList();
-//        }
-//
-//        int numThreads = existingAttributes.size();
-//        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
-//        List<Future<Variety>> futureList = new ArrayList<>();
-//
-//        for (VarietyAttribute varietyAttribute : existingAttributes) {
-//            Future<Variety> future = executor.submit(() -> processAddVarietyByAttribute(product, varietyAttribute, newAttribute));
-//            futureList.add(future);
-//        }
-//
-//        executor.shutdown();
-//
-//        List<Variety> resultVarieties = new ArrayList<>();
-//
-//        for (Future<Variety> future : futureList) {
-//            try {
-//                Variety variety = future.get();
-//                if (variety != null) {
-//                    resultVarieties.add(variety);
-//                }
-//            } catch (InterruptedException | ExecutionException e) {
-//                log.trace("Error: " + e.getMessage());
-//            }
-//        }
-//
-//        return resultVarieties;
-//    }
-//
-//    public List<Variety> addVarietyByAttribute(Product product, List<VarietyAttribute> colorAttributeList, List<VarietyAttribute> sizeAttributeList) throws InterruptedException {
-//        if (colorAttributeList == null || colorAttributeList.isEmpty()) {
-//            return Collections.emptyList();
-//        }
-//
-//        int numThreads = colorAttributeList.size();
-//        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
-//        List<Future<List<Variety>>> futureList = new ArrayList<>();
-//
-//        for (VarietyAttribute colorAttribute : colorAttributeList) {
-//            Future<List<Variety>> future = executor.submit(() -> addVarietyByAttribute(product, sizeAttributeList, colorAttribute));
-//            futureList.add(future);
-//        }
-//
-//        executor.shutdown();
-//
-//        List<Variety> resultVarieties = new ArrayList<>();
-//
-//        for (Future<List<Variety>> future : futureList) {
-//            try {
-//                List<Variety> variety = future.get();
-//                if (variety != null) {
-//                    resultVarieties.addAll(variety);
-//                }
-//            } catch (InterruptedException | ExecutionException e) {
-//                log.trace("Error: " + e.getMessage());
-//            }
-//        }
-//
-//        return resultVarieties;
-//    }
 
     public void addVarietyByAttribute(Product product, List<VarietyAttribute> existingAttributes, VarietyAttribute newAttribute) {
         if (existingAttributes == null || existingAttributes.isEmpty()) {
@@ -90,8 +28,16 @@ public class ThreadService extends BaseService {
         }
 
         for (VarietyAttribute varietyAttribute : existingAttributes) {
-            Thread thread = new Thread(() -> processAddVarietyByAttribute(product, varietyAttribute, newAttribute));
-            thread.start();
+            try {
+                Thread thread = new Thread(() -> processAddVarietyByAttribute(product, varietyAttribute, newAttribute));
+                thread.start();
+            }
+            catch (Exception e){
+                log.trace(e.getMessage());
+                log.trace("Product Id:" + product.getProductId());
+                log.trace("Attribute 1:" + varietyAttribute.getAttributeId());
+                log.trace("Attribute 2:" + newAttribute.getAttributeId());
+            }
         }
     }
 
@@ -115,5 +61,24 @@ public class ThreadService extends BaseService {
         variety.setStatus(EnumStatus.ACTIVE.getValue());
         variety.setPrice(product.getPrice());
         varietyService.addOrUpdateVariety(variety);
+    }
+
+    public void addImportItemToInvoice(ImportInvoice invoice, List<AddOrUpdateImportItemDTO> itemDTOList) {
+        for (AddOrUpdateImportItemDTO dto : itemDTOList) {
+            Thread thread = new Thread(() -> {
+                try {
+                    processAddOrUpdateImportItem(dto);
+                } catch (FriendlyException e) {
+                    log.trace(e.getMessage());
+                    log.trace("Product ID:" + invoice.getImportInvoiceId());
+                    log.trace("Variety ID:" + dto.getVarietyId());
+                }
+            });
+            thread.start();
+        }
+    }
+
+    public void processAddOrUpdateImportItem(AddOrUpdateImportItemDTO dto) throws FriendlyException{
+        importService.addOrUpdateImportItem(dto);
     }
 }
