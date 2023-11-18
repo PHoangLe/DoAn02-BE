@@ -30,7 +30,7 @@ public class ImportService {
                 .filter(dto -> dto.getQuantity() != 0)
                 .toList();
 
-        Long totalPrice = itemDTOList.stream()
+        Long totalPrice = filteredList.stream()
                         .mapToLong(item -> item.getImportPrice() * item.getQuantity())
                         .sum();
 
