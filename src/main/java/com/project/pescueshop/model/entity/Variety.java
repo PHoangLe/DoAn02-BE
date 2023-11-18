@@ -33,7 +33,7 @@ public class Variety {
     )
     private List<VarietyAttribute> varietyAttributes;
     private String status;
-    private Integer stockAmount;
+    private Integer stockAmount = 0;
 
     public Variety(VarietyDTO dto){
         this.varietyId = dto.getVarietyId();

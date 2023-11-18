@@ -26,6 +26,10 @@ public class ImportService {
                 .userId(user.getUserId())
                 .build();
 
+        List<AddOrUpdateImportItemDTO> filteredList = itemDTOList.stream()
+                .filter(dto -> dto.getQuantity() != 0)
+                .toList();
+
         Long totalPrice = itemDTOList.stream()
                         .mapToLong(item -> item.getImportPrice() * item.getQuantity())
                         .sum();
@@ -35,7 +39,7 @@ public class ImportService {
         importDAO.saveAndFlushInvoice(invoice);
 
         CompletableFuture.runAsync(() -> {
-            threadService.addImportItemToInvoice(invoice, itemDTOList);
+            threadService.addImportItemToInvoice(invoice, filteredList);
         });
 
         return invoice;
@@ -49,14 +53,13 @@ public class ImportService {
         return importDAO.findAllImportInvoice();
     }
 
-    public void addOrUpdateImportItem(AddOrUpdateImportItemDTO dto) throws FriendlyException {
+    public void addOrUpdateImportItem(ImportInvoice invoice, AddOrUpdateImportItemDTO dto) throws FriendlyException {
         Variety variety = varietyService.findById(dto.getVarietyId());
 
         if (variety == null){
             throw new FriendlyException(EnumResponseCode.VARIETY_NOT_FOUND);
         }
 
-        ImportInvoice invoice = getImportInvoiceById(dto.getImportInvoiceId());
         ImportItem importItem = importDAO.findImportItemByVarietyIdAndInvoiceId(dto.getVarietyId(), dto.getImportInvoiceId());
 
         if (invoice == null){
@@ -73,6 +76,7 @@ public class ImportService {
         }
         importItem.setImportInvoiceId(invoice.getImportInvoiceId());
         importItem.setVariety(variety);
+        importItem.setVarietyId(variety.getVarietyId());
         importItem.setQuantity(dto.getQuantity());
         importItem.setImportPrice(dto.getImportPrice());
         importItem.setTotalImportPrice(dto.getQuantity() * dto.getImportPrice());
