@@ -24,7 +24,7 @@ public class ImportItem {
     @Id
     private String varietyId;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "varietyId",referencedColumnName = "varietyId")
+    @JoinColumn(name = "varietyId", referencedColumnName = "varietyId", insertable = false, updatable = false)
     private Variety variety;
     private Integer quantity;
     private Long importPrice;

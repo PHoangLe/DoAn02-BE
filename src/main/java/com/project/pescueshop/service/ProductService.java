@@ -156,6 +156,7 @@ public class ProductService extends BaseService {
             variety.addAttribute(newAttribute);
             variety.setProductId(productId);
             variety.setStatus(EnumStatus.ACTIVE.getValue());
+            variety.setStockAmount(0);
             variety.setPrice(product.getPrice());
 
             variety = varietyService.addOrUpdateVariety(variety);

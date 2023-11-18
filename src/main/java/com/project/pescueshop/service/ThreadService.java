@@ -60,6 +60,7 @@ public class ThreadService extends BaseService {
         variety.setProductId(product.getProductId());
         variety.setStatus(EnumStatus.ACTIVE.getValue());
         variety.setPrice(product.getPrice());
+        variety.setStockAmount(0);
         varietyService.addOrUpdateVariety(variety);
     }
 
@@ -67,7 +68,7 @@ public class ThreadService extends BaseService {
         for (AddOrUpdateImportItemDTO dto : itemDTOList) {
             Thread thread = new Thread(() -> {
                 try {
-                    processAddOrUpdateImportItem(dto);
+                    processAddOrUpdateImportItem(invoice, dto);
                 } catch (FriendlyException e) {
                     log.trace(e.getMessage());
                     log.trace("Product ID:" + invoice.getImportInvoiceId());
@@ -78,7 +79,7 @@ public class ThreadService extends BaseService {
         }
     }
 
-    public void processAddOrUpdateImportItem(AddOrUpdateImportItemDTO dto) throws FriendlyException{
-        importService.addOrUpdateImportItem(dto);
+    public void processAddOrUpdateImportItem(ImportInvoice invoice, AddOrUpdateImportItemDTO dto) throws FriendlyException{
+        importService.addOrUpdateImportItem(invoice, dto);
     }
 }

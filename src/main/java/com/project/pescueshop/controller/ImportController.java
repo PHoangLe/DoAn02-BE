@@ -34,7 +34,7 @@ public class ImportController {
         User user = authenticationService.getCurrentLoggedInUser();
         ImportInvoice importInvoice = importService.addNewImportInvoice(user, itemDTOList);
 
-        ResponseDTO<ImportInvoice> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, importInvoice, "invoice");
+        ResponseDTO<ImportInvoice> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, importInvoice, "importInvoice");
 
         return ResponseEntity.ok(result);
     }
