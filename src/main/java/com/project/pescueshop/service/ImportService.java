@@ -1,6 +1,7 @@
 package com.project.pescueshop.service;
 
 import com.project.pescueshop.model.dto.AddOrUpdateImportItemDTO;
+import com.project.pescueshop.model.dto.ImportItemGroupDTO;
 import com.project.pescueshop.model.dto.ImportItemListDTO;
 import com.project.pescueshop.model.entity.*;
 import com.project.pescueshop.model.exception.FriendlyException;
@@ -84,7 +85,11 @@ public class ImportService {
         importDAO.saveAndFlushItem(importItem);
     }
 
-    public List<ImportItemListDTO> getImportItemListByInvoiceId(String invoiceId){
-        return importDAO.getImportItemsByInvoiceId(invoiceId);
+    public List<ImportItemListDTO> getImportItemListByInvoiceId(String invoiceId, String productId){
+        return importDAO.getImportItemsByInvoiceId(invoiceId, productId);
+    }
+
+    public List<ImportItemGroupDTO> getImportItemGroupsByInvoiceId(String invoiceId){
+        return importDAO.getImportItemGroupsByInvoiceId(invoiceId);
     }
 }

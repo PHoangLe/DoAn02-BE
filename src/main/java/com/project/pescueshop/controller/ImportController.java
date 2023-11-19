@@ -1,6 +1,7 @@
 package com.project.pescueshop.controller;
 
 import com.project.pescueshop.model.dto.AddOrUpdateImportItemDTO;
+import com.project.pescueshop.model.dto.ImportItemGroupDTO;
 import com.project.pescueshop.model.dto.ImportItemListDTO;
 import com.project.pescueshop.model.dto.general.ResponseDTO;
 import com.project.pescueshop.model.entity.ImportInvoice;
@@ -49,12 +50,24 @@ public class ImportController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("items/{invoiceId}")
+    @GetMapping("items")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @SecurityRequirement(name = "Bearer Authentication")
-    public ResponseEntity<ResponseDTO<List<ImportItemListDTO>>> getImportItemList(@PathVariable String invoiceId){
-        List<ImportItemListDTO> itemList = importService.getImportItemListByInvoiceId(invoiceId);
+    public ResponseEntity<ResponseDTO<List<ImportItemListDTO>>> getImportItemList(
+            @RequestParam String invoiceId,
+            @RequestParam String productId){
+        List<ImportItemListDTO> itemList = importService.getImportItemListByInvoiceId(invoiceId, productId);
         ResponseDTO<List<ImportItemListDTO>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, itemList, "itemList");
+
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("groups/{invoiceId}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<ResponseDTO<List<ImportItemGroupDTO>>> getImportItemGroupsByInvoiceId(@PathVariable String invoiceId){
+        List<ImportItemGroupDTO> itemList = importService.getImportItemGroupsByInvoiceId(invoiceId);
+        ResponseDTO<List<ImportItemGroupDTO>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, itemList, "itemGroup");
 
         return ResponseEntity.ok(result);
     }
