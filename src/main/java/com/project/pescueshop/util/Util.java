@@ -6,7 +6,7 @@ import java.util.List;
 public class Util {
 
     public static List<String> getListStringFromString(String string){
-        String[] stringArray = string.split("^|");
+        String[] stringArray = string.split("\\\\^\\\\|");
         return Arrays.asList(stringArray);
     }
 }
