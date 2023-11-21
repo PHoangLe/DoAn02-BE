@@ -15,5 +15,6 @@ public class ImportItemGroupDTO {
     private String importInvoiceId;
     private String productName;
     private String brandName;
+    private String productImage;
     private Long totalImport;
 }
