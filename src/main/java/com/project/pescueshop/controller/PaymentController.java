@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RestController
@@ -43,19 +44,16 @@ public class PaymentController {
         vnp_Params.put("vnp_ReturnUrl", dto.getReturnUrl());
         vnp_Params.put("vnp_IpAddr", "127.0.0.1");
 
-        ZonedDateTime zonedDateTime = ZonedDateTime.now(ZoneId.of("Etc/GMT+7"));
-        Calendar cld = Calendar.getInstance();
-        cld.setTimeInMillis(zonedDateTime.toInstant().toEpochMilli());
-        cld.setTimeZone(TimeZone.getTimeZone(zonedDateTime.getZone()));
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-        String vnp_CreateDate = formatter.format(cld.getTime());
-        vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
-        System.out.println(cld.getTime());
+        ZonedDateTime createDate = ZonedDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
 
-        cld.add(Calendar.HOUR, 2);
-        String vnp_ExpireDate = formatter.format(cld.getTime());
+        // Format ZonedDateTime using DateTimeFormatter
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        String vnp_CreateDate = createDate.format(formatter);
+        vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
+
+        ZonedDateTime expireDate = createDate.plusHours(2);
+        String vnp_ExpireDate = expireDate.format(formatter);
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
-        System.out.println(cld.getTime());
 
         List fieldNames = new ArrayList(vnp_Params.keySet());
         Collections.sort(fieldNames);
