@@ -41,14 +41,16 @@ public class PaymentController {
         vnp_Params.put("vnp_ReturnUrl", dto.getReturnUrl());
         vnp_Params.put("vnp_IpAddr", "127.0.0.1");
 
-        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+0"));
+        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
         String vnp_CreateDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
+        System.out.println(cld.getTime());
 
         cld.add(Calendar.HOUR, 2);
         String vnp_ExpireDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
+        System.out.println(cld.getTime());
 
         List fieldNames = new ArrayList(vnp_Params.keySet());
         Collections.sort(fieldNames);

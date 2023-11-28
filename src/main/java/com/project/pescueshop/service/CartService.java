@@ -51,8 +51,10 @@ public class CartService{
         }
 
         CartItem cartItem = cartDAO.findByVarietyIdAndCartId(dto.getVarietyId(), cart.getCartId());
-        if (cartItem != null && dto.getQuantity() == 0){
+        int newQuantity = cartItem.getQuantity() + dto.getQuantity();
+        if (cartItem != null && newQuantity == 0){
             cartItemRepository.delete(cartItem);
+            cartItemRepository.saveAndFlush(cartItem);
             return;
         }
 
@@ -62,7 +64,7 @@ public class CartService{
         cartItem.setCartId(cart.getCartId());
         cartItem.setProduct(variety);
         cartItem.setSelected(true);
-        cartItem.setQuantity(dto.getQuantity());
+        cartItem.setQuantity(newQuantity);
         cartItem.setTotalItemPrice(dto.getQuantity() * variety.getPrice());
 
         cartItemRepository.saveAndFlush(cartItem);
