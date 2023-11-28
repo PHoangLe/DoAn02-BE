@@ -14,6 +14,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.*;
 
 @RestController
@@ -41,7 +42,7 @@ public class PaymentController {
         vnp_Params.put("vnp_ReturnUrl", dto.getReturnUrl());
         vnp_Params.put("vnp_IpAddr", "127.0.0.1");
 
-        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
+        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("Etc/GMT+7")));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
         String vnp_CreateDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
