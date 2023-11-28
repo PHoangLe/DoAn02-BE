@@ -24,7 +24,7 @@ public class CartItem {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "varietyId", referencedColumnName = "varietyId")
     private Variety product;
-    private int quantity;
+    private Integer quantity;
     private long totalItemPrice;
     private boolean isSelected;
 }
