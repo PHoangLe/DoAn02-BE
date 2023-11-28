@@ -53,6 +53,7 @@ public class CartService{
         CartItem cartItem = cartDAO.findByVarietyIdAndCartId(dto.getVarietyId(), cart.getCartId());
         if (cartItem != null && dto.getQuantity() == 0){
             cartItemRepository.delete(cartItem);
+            cartItemRepository.saveAndFlush(cartItem);
             return;
         }
 
