@@ -30,4 +30,9 @@ public class Invoice {
     @OneToOne
     @JoinColumn(name = "voucherId", referencedColumnName = "voucherId")
     private Voucher voucher;
+    private String streetName;
+    private String wardName;
+    private String districtName;
+    private String cityName;
+    private String status;
 }

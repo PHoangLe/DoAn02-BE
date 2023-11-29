@@ -2,10 +2,7 @@ package com.project.pescueshop.model.entity;
 
 import com.project.pescueshop.model.annotation.Name;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 @Getter
@@ -14,6 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 @NoArgsConstructor
 @Table(name = "ADDRESS")
 @Entity
+@Builder
 @Name(prefix = "ADDR")
 public class Address {
     @Id
@@ -25,4 +23,5 @@ public class Address {
     private String wardName;
     private String districtName;
     private String cityName;
+    private String status;
 }
