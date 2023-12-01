@@ -1,10 +1,13 @@
 package com.project.pescueshop.repository.dao;
 
+import com.project.pescueshop.model.entity.Product;
 import com.project.pescueshop.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Repository

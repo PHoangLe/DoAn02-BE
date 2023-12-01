@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Component
-public class ImportItemKey implements Serializable {
-    private String importInvoiceId;
+public class InvoiceItemKey implements Serializable {
+    private String invoiceId;
     private String varietyId;
 }
