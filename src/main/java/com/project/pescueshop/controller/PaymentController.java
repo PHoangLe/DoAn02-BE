@@ -1,6 +1,7 @@
 package com.project.pescueshop.controller;
 
 import com.project.pescueshop.config.PaymentConfig;
+import com.project.pescueshop.model.dto.PaymentInfoDTO;
 import com.project.pescueshop.model.dto.PaymentInputDTO;
 import com.project.pescueshop.model.dto.PaymentOutputDTO;
 import com.project.pescueshop.model.dto.general.ResponseDTO;
@@ -37,10 +38,10 @@ public class PaymentController {
     @PostMapping("/user-cart-checkout")
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @SecurityRequirement(name = "Bearer Authentication")
-    public ResponseEntity<ResponseDTO<String>> createPayment() throws FriendlyException {
+    public ResponseEntity<ResponseDTO<String>> createPayment(@RequestBody PaymentInfoDTO paymentInfoDTO) throws FriendlyException, UnsupportedEncodingException {
         User user = authenticationService.getCurrentLoggedInUser();
-        paymentService.userCartCheckout(user);
-        ResponseDTO<String> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, "", "output");
+        String paymentUrl = paymentService.userCartCheckout(user, paymentInfoDTO);
+        ResponseDTO<String> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, paymentUrl, "output");
         return ResponseEntity.ok(result);
     }
 

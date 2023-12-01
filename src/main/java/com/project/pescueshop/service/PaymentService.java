@@ -1,11 +1,23 @@
 package com.project.pescueshop.service;
 
 import com.project.pescueshop.config.PaymentConfig;
+import com.project.pescueshop.model.dto.PaymentInfoDTO;
 import com.project.pescueshop.model.dto.PaymentOutputDTO;
 import com.project.pescueshop.model.dto.general.ResponseDTO;
+import com.project.pescueshop.model.entity.Address;
+import com.project.pescueshop.model.entity.Invoice;
 import com.project.pescueshop.model.entity.User;
+import com.project.pescueshop.model.entity.Voucher;
+import com.project.pescueshop.repository.dao.CartDAO;
+import com.project.pescueshop.repository.dao.PaymentDAO;
+import com.project.pescueshop.util.Util;
+import com.project.pescueshop.util.constant.EnumPaymentType;
 import com.project.pescueshop.util.constant.EnumResponseCode;
+import com.project.pescueshop.util.constant.EnumStatus;
+import com.project.pescueshop.util.constant.EnumVoucherType;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -14,8 +26,13 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
+@Service
+@RequiredArgsConstructor
 public class PaymentService {
+    private final PaymentDAO paymentDAO;
+    private final CartDAO cartDAO;
 
     public String createPaymentLink(String content, String returnUrl, long value) throws UnsupportedEncodingException {
 
@@ -77,7 +94,60 @@ public class PaymentService {
         return paymentUrl;
     }
 
-    public void userCartCheckout(User user){
+    public String userCartCheckout(User user, PaymentInfoDTO dto) throws UnsupportedEncodingException {
+        EnumPaymentType paymentType = EnumPaymentType.getByValue(dto.getPaymentType());
+        Address address = dto.getAddress();
 
+        Invoice invoice = new Invoice();
+        invoice.setPaymentType(paymentType.getValue());
+        invoice.setUserId(user.getUserId());
+        invoice.setCityName(address.getCityName());
+        invoice.setDistrictName(address.getDistrictName());
+        invoice.setWardName(address.getWardName());
+        invoice.setStreetName(address.getStreetName());
+        invoice.setStatus(EnumStatus.ACTIVE.getValue());
+        invoice.setPhoneNumber(dto.getPhoneNumber());
+        invoice.setCreatedDate(Util.getCurrentDate());
+        invoice.setVoucher(dto.getVoucher());
+
+        long invoiceValue = cartDAO.sumValueOfAllSelectedProductInCart(user.getUserId());
+        invoice.setTotalPrice(invoiceValue);
+        invoice.setFinalPrice(invoiceValue);
+
+        if (invoice.getVoucher() != null){
+            Voucher voucher = invoice.getVoucher();
+            EnumVoucherType voucherType = EnumVoucherType.getByValue(voucher.getType());
+            long discountAmount = 0;
+
+            if (voucherType == EnumVoucherType.PERCENTAGE){
+                discountAmount = (voucher.getValue() * invoice.getTotalPrice()) / 100L;
+            }
+            else {
+                discountAmount = voucher.getValue();
+            }
+
+            discountAmount = Math.min(discountAmount, voucher.getMaxValue());
+            invoice.setDiscountPrice(discountAmount);
+
+            long finalPrice = Math.max(invoice.getTotalPrice() - discountAmount, 0);
+            invoice.setFinalPrice(finalPrice);
+        }
+
+        paymentDAO.saveAndFlushInvoice(invoice);
+
+        CompletableFuture.runAsync(() -> {
+            addInvoiceItemsToInvoice(invoice);
+            cartDAO.removeSelectedCartItem(user.getUserId());
+        });
+
+        if (paymentType == EnumPaymentType.CREDIT_CARD){
+            return createPaymentLink("Invoice ID: " + invoice.getInvoiceId(), dto.getReturnUrl(), invoice.getFinalPrice());
+        }
+
+        return  "";
+    }
+
+    private void addInvoiceItemsToInvoice(Invoice invoice) {
+        cartDAO.addInvoiceItemsToInvoice(invoice);
     }
 }

@@ -34,5 +34,7 @@ public class Invoice {
     private String wardName;
     private String districtName;
     private String cityName;
+    private String phoneNumber;
+    private String paymentType;
     private String status;
 }

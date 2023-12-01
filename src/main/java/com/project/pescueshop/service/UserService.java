@@ -6,6 +6,7 @@ import com.project.pescueshop.model.entity.Role;
 import com.project.pescueshop.model.entity.User;
 import com.project.pescueshop.model.exception.FriendlyException;
 import com.project.pescueshop.repository.dao.UserDAO;
+import com.project.pescueshop.util.constant.EnumStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,7 @@ public class UserService extends BaseService {
                 .cityName(dto.getCityName())
                 .wardName(dto.getWardName())
                 .streetName(dto.getStreetName())
+                .status(EnumStatus.ACTIVE.getValue())
                 .build();
 
         userDAO.saveAndFlushAddress(address);
