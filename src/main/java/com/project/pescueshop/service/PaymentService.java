@@ -1,6 +1,7 @@
 package com.project.pescueshop.service;
 
 import com.project.pescueshop.config.PaymentConfig;
+import com.project.pescueshop.model.dto.InvoiceItemDTO;
 import com.project.pescueshop.model.dto.PaymentInfoDTO;
 import com.project.pescueshop.model.dto.PaymentOutputDTO;
 import com.project.pescueshop.model.dto.general.ResponseDTO;
@@ -11,10 +12,7 @@ import com.project.pescueshop.model.entity.Voucher;
 import com.project.pescueshop.repository.dao.CartDAO;
 import com.project.pescueshop.repository.dao.PaymentDAO;
 import com.project.pescueshop.util.Util;
-import com.project.pescueshop.util.constant.EnumPaymentType;
-import com.project.pescueshop.util.constant.EnumResponseCode;
-import com.project.pescueshop.util.constant.EnumStatus;
-import com.project.pescueshop.util.constant.EnumVoucherType;
+import com.project.pescueshop.util.constant.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -105,7 +103,7 @@ public class PaymentService {
         invoice.setDistrictName(address.getDistrictName());
         invoice.setWardName(address.getWardName());
         invoice.setStreetName(address.getStreetName());
-        invoice.setStatus(EnumStatus.ACTIVE.getValue());
+        invoice.setStatus(EnumInvoiceStatus.PENDING.getValue());
         invoice.setPhoneNumber(dto.getPhoneNumber());
         invoice.setCreatedDate(Util.getCurrentDate());
         invoice.setVoucher(dto.getVoucher());
@@ -143,11 +141,16 @@ public class PaymentService {
         if (paymentType == EnumPaymentType.CREDIT_CARD){
             return createPaymentLink("Invoice ID: " + invoice.getInvoiceId(), dto.getReturnUrl(), invoice.getFinalPrice());
         }
-
+        invoice.setStatus(EnumInvoiceStatus.COMPLETED.getValue());
+        paymentDAO.saveAndFlushInvoice(invoice);
         return  "";
     }
 
-    private void addInvoiceItemsToInvoice(Invoice invoice) {
+    public void addInvoiceItemsToInvoice(Invoice invoice) {
         cartDAO.addInvoiceItemsToInvoice(invoice);
+    }
+
+    public List<InvoiceItemDTO> getInvoiceDetail(String invoiceId){
+        return paymentDAO.getInvoiceDetail(invoiceId);
     }
 }

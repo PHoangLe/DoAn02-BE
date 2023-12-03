@@ -51,7 +51,7 @@ public class CartService{
         }
 
         CartItem cartItem = cartDAO.findByVarietyIdAndCartId(dto.getVarietyId(), cart.getCartId());
-        int newQuantity = cartItem.getQuantity() + dto.getQuantity();
+        int newQuantity = cartItem == null ? dto.getQuantity() : cartItem.getQuantity() + dto.getQuantity();
         if (cartItem != null && newQuantity == 0){
             cartItemRepository.delete(cartItem);
             cartItemRepository.saveAndFlush(cartItem);
@@ -65,7 +65,19 @@ public class CartService{
         cartItem.setProduct(variety);
         cartItem.setSelected(true);
         cartItem.setQuantity(newQuantity);
-        cartItem.setTotalItemPrice(dto.getQuantity() * variety.getPrice());
+        cartItem.setTotalItemPrice(newQuantity * variety.getPrice());
+
+        cartItemRepository.saveAndFlush(cartItem);
+    }
+
+    public void selectCartItem(String cartItemId) throws FriendlyException {
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElse(null);
+
+        if (cartItem == null){
+            throw new FriendlyException(EnumResponseCode.CART_ITEM_NOT_FOUND);
+        }
+
+        cartItem.setSelected(!cartItem.isSelected());
 
         cartItemRepository.saveAndFlush(cartItem);
     }

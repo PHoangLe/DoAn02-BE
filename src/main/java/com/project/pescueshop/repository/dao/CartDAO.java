@@ -39,8 +39,10 @@ public class CartDAO extends BaseDAO{
                 " SELECT COALESCE(SUM(ci.total_item_price), 0) " +
                 " FROM cart_item ci " +
                 " JOIN cart c on ci.cart_id = c.cart_id " +
+                " JOIN variety v on v.variety_id = ci.variety_id " +
                 " WHERE c.user_id = :p_user_id " +
-                " AND ci.is_selected = true ";
+                " AND ci.is_selected = true " +
+                " AND v.stock_amount >= ci.quantity ";
 
         MapSqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("p_user_id", userId);
