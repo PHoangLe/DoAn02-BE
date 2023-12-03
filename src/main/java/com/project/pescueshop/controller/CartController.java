@@ -53,4 +53,14 @@ public class CartController {
         ResponseDTO<CartItem> result = new ResponseDTO<>(EnumResponseCode.SUCCESS);
         return ResponseEntity.ok(result);
     }
+
+    @PostMapping("/select-cart-item/{cartItemId}")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<ResponseDTO<CartItem>> selectCartItem(@PathVariable String cartItemId) throws FriendlyException {
+        cartService.selectCartItem(cartItemId);
+
+        ResponseDTO<CartItem> result = new ResponseDTO<>(EnumResponseCode.SUCCESS);
+        return ResponseEntity.ok(result);
+    }
 }

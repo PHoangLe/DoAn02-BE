@@ -31,6 +31,7 @@ public enum EnumResponseCode {
     ATTRIBUTE_EXISTED("2_4_f", "Attribute existed"),
     VARIETY_NOT_FOUND("2_5_f", "Variety not found"),
     CART_NOT_FOUND("2_6_f", "Cart not found"),
+    CART_ITEM_NOT_FOUND("2_7_f", "Cart item not found"),
     //</editor-fold>
 
     //<editor-fold desc="3-IMPORT">

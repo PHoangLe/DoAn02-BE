@@ -27,6 +27,8 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(FriendlyException.class)
     public ResponseEntity<ResponseDTO<ErrorLogDTO>> friendlyExceptionHandler(FriendlyException ex, WebRequest request) {
+        log.trace(request.getDescription(false));
+        log.trace(ex.getStatusCode().getStatusCode());
         return ResponseEntity.ok(new ResponseDTO<>(ex.getStatusCode()));
     }
 

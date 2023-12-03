@@ -1,9 +1,7 @@
 package com.project.pescueshop.controller;
 
-import com.project.pescueshop.config.PaymentConfig;
+import com.project.pescueshop.model.dto.InvoiceItemDTO;
 import com.project.pescueshop.model.dto.PaymentInfoDTO;
-import com.project.pescueshop.model.dto.PaymentInputDTO;
-import com.project.pescueshop.model.dto.PaymentOutputDTO;
 import com.project.pescueshop.model.dto.general.ResponseDTO;
 import com.project.pescueshop.model.entity.User;
 import com.project.pescueshop.model.exception.FriendlyException;
@@ -18,13 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/payment")
@@ -45,9 +37,11 @@ public class PaymentController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/payment-info")
-    public ResponseEntity<?> transactions(){
+    @GetMapping("/{invoiceId}")
+    public ResponseEntity<ResponseDTO<List<InvoiceItemDTO>>> getInvoiceDetail(@PathVariable String invoiceId){
+        List<InvoiceItemDTO> invoiceItemDTOS = paymentService.getInvoiceDetail(invoiceId);
 
-        return null;
+        ResponseDTO<List<InvoiceItemDTO>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, invoiceItemDTOS, "invoiceItemList");
+        return ResponseEntity.ok(result);
     }
 }
