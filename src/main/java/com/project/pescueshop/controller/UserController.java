@@ -1,6 +1,7 @@
 package com.project.pescueshop.controller;
 
 import com.project.pescueshop.model.dto.AddressInputDTO;
+import com.project.pescueshop.model.dto.UserDTO;
 import com.project.pescueshop.model.dto.general.ResponseDTO;
 import com.project.pescueshop.model.entity.Address;
 import com.project.pescueshop.model.entity.User;
@@ -24,13 +25,12 @@ import java.util.List;
 @Api
 public class UserController {
     private final UserService userService;
-    private final AuthenticationService authenticationService;
 
     @PostMapping("/address")
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<ResponseDTO<Address>> addUserAddress(@RequestBody AddressInputDTO dto) throws FriendlyException {
-        User user = authenticationService.getCurrentLoggedInUser();
+        User user = AuthenticationService.getCurrentLoggedInUser();
         Address address = userService.addUserAddress(user, dto);
         ResponseDTO<Address> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, address, "address");
 
@@ -41,10 +41,20 @@ public class UserController {
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<ResponseDTO<List<Address>>> getUserAddress() throws FriendlyException {
-        User user = authenticationService.getCurrentLoggedInUser();
+        User user = AuthenticationService.getCurrentLoggedInUser();
         List<Address> address = userService.getAddressListByUser(user.getUserId());
         ResponseDTO<List<Address>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, address, "addressList");
 
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/current-user")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<ResponseDTO<UserDTO>> getCurrentUserInfo() throws FriendlyException {
+        User user = AuthenticationService.getCurrentLoggedInUser();
+        UserDTO dto = new UserDTO(user);
+        ResponseDTO<UserDTO> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, dto, "userInfo");
         return ResponseEntity.ok(result);
     }
 }
