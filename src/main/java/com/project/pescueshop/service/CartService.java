@@ -23,7 +23,7 @@ public class CartService{
     private final CartDAO cartDAO;
     private final CartItemRepository cartItemRepository;
     private final VarietyService varietyService;
-    private final AuthenticationService authenticationService;
+    private final UserService userService;
 
     public String createCartForNewUser(String userId){
         Cart newCart = Cart.builder()
@@ -109,7 +109,7 @@ public class CartService{
             return cartDTO;
         }
 
-        User user = authenticationService.getAdminUser();
+        User user = userService.getAdminUser();
         String newCartId = createCartForNewUser(user.getUserId());
 
         return CartDTO.builder()
@@ -124,7 +124,7 @@ public class CartService{
             throw new FriendlyException(EnumResponseCode.CART_NOT_FOUND);
         }
 
-        User user = authenticationService.getAdminUser();
+        User user = userService.getAdminUser();
 
         addOrUpdateCartItem(dto, user, cart);
     }

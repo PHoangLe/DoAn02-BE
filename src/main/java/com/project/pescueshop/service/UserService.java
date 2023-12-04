@@ -6,6 +6,7 @@ import com.project.pescueshop.model.entity.Role;
 import com.project.pescueshop.model.entity.User;
 import com.project.pescueshop.model.exception.FriendlyException;
 import com.project.pescueshop.repository.dao.UserDAO;
+import com.project.pescueshop.util.constant.EnumResponseCode;
 import com.project.pescueshop.util.constant.EnumStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,15 @@ public class UserService extends BaseService {
         user.setUserRoles(userRoles);
         userDAO.saveAndFlushUser(user);
         return user;
+    }
+
+    public User getAdminUser() throws FriendlyException {
+        User admin = findByEmail("admin");
+
+        if (admin == null)
+            throw new FriendlyException(EnumResponseCode.NOT_LOGGED_IN);
+
+        return admin;
     }
 
     public Address addUserAddress(User user, AddressInputDTO dto){
