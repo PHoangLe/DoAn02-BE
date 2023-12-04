@@ -17,11 +17,12 @@ public class CartDAO extends BaseDAO{
     private final CartItemMapper cartItemMapper;
     private final CartItemRepository cartItemRepository;
 
-    public List<CartItemDTO> getCartItemsByUserId(String userId){
-        String sql = "SELECT * FROM get_cart_by_user_id(:p_user_id);";
+    public List<CartItemDTO> getCartItems(String userId, String cartId){
+        String sql = "SELECT * FROM get_cart_items(:p_user_id, :p_cart_id);";
 
         MapSqlParameterSource parameters = new MapSqlParameterSource()
-                .addValue("p_user_id", userId);
+                .addValue("p_user_id", userId)
+                .addValue("p_cart_id", cartId);
 
         return jdbcTemplate.query(sql, parameters, cartItemMapper);
     }
