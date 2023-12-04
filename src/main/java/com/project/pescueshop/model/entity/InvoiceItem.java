@@ -3,10 +3,7 @@ package com.project.pescueshop.model.entity;
 import com.project.pescueshop.model.annotation.Name;
 import com.project.pescueshop.model.key.InvoiceItemKey;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
@@ -14,6 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "INVOICE_ITEM")
 @Entity
+@Builder
 @Name(prefix = "IVIT")
 @IdClass(InvoiceItemKey.class)
 public class InvoiceItem {

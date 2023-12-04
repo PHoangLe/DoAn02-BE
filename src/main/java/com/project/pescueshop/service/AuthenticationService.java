@@ -42,6 +42,15 @@ public class AuthenticationService {
         return principal;
     }
 
+    public User getAdminUser() throws FriendlyException {
+        User admin = userService.findByEmail("admin");
+
+        if (admin == null)
+            throw new FriendlyException(EnumResponseCode.NOT_LOGGED_IN);
+
+        return admin;
+    }
+
     public ResponseEntity<ResponseDTO<UserDTO>> userRegister(RegisterDTO request) throws FriendlyException {
         User user = userService.findByEmail(request.getUserEmail());
         if (user != null){

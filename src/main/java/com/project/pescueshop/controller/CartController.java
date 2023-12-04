@@ -1,5 +1,6 @@
 package com.project.pescueshop.controller;
 
+import com.project.pescueshop.model.dto.CartDTO;
 import com.project.pescueshop.model.dto.CartItemDTO;
 import com.project.pescueshop.model.dto.AddOrUpdateCartItemDTO;
 import com.project.pescueshop.model.dto.general.ResponseDTO;
@@ -43,12 +44,33 @@ public class CartController {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/un-authenticate/{cartId}")
+    public ResponseEntity<ResponseDTO<CartDTO>> getCartUnAuthenticate(@PathVariable String cartId) throws FriendlyException {
+        CartDTO itemList = cartService.getUnAuthenticatedCart(cartId);
+        ResponseDTO<CartDTO> result;
+        if (itemList == null) {
+            result = new ResponseDTO<>(EnumResponseCode.CART_NOT_FOUND);
+        }
+        else {
+            result = new ResponseDTO<>(EnumResponseCode.SUCCESS, itemList, "cart");
+        }
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/un-authenticate/update-cart-item/{cartId}")
+    public ResponseEntity<ResponseDTO<CartItem>> addItemToCartUnAuthenticate(@RequestBody AddOrUpdateCartItemDTO dto, @PathVariable String cartId) throws FriendlyException {
+        cartService.addOrUpdateUnAuthenticatedCartItem(dto, cartId);
+
+        ResponseDTO<CartItem> result = new ResponseDTO<>(EnumResponseCode.SUCCESS);
+        return ResponseEntity.ok(result);
+    }
+
     @PostMapping("/update-cart-item")
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<ResponseDTO<CartItem>> addItemToCart(@RequestBody AddOrUpdateCartItemDTO dto) throws FriendlyException {
         User user = authenticationService.getCurrentLoggedInUser();
-        cartService.addOrUpdateCartItem(dto, user);
+        cartService.addOrUpdateCartItem(dto, user, null);
 
         ResponseDTO<CartItem> result = new ResponseDTO<>(EnumResponseCode.SUCCESS);
         return ResponseEntity.ok(result);
