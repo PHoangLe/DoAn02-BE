@@ -3,18 +3,14 @@ package com.project.pescueshop.service;
 import com.project.pescueshop.config.PaymentConfig;
 import com.project.pescueshop.model.dto.InvoiceItemDTO;
 import com.project.pescueshop.model.dto.PaymentInfoDTO;
-import com.project.pescueshop.model.dto.PaymentOutputDTO;
 import com.project.pescueshop.model.dto.SingleItemCheckOutInfoDTO;
-import com.project.pescueshop.model.dto.general.ResponseDTO;
 import com.project.pescueshop.model.entity.*;
 import com.project.pescueshop.model.exception.FriendlyException;
-import com.project.pescueshop.repository.VarietyRepository;
 import com.project.pescueshop.repository.dao.CartDAO;
 import com.project.pescueshop.repository.dao.PaymentDAO;
 import com.project.pescueshop.util.Util;
 import com.project.pescueshop.util.constant.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -32,7 +28,7 @@ public class PaymentService {
     private final PaymentDAO paymentDAO;
     private final CartDAO cartDAO;
     private final VarietyService varietyService;
-    private final AuthenticationService authenticationService;
+    private final UserService userService;
 
     public String createPaymentLink(String content, String returnUrl, long value) throws UnsupportedEncodingException {
 
@@ -217,12 +213,12 @@ public class PaymentService {
     }
 
     public String userCartCheckoutUnAuthenticate(PaymentInfoDTO paymentInfoDTO) throws FriendlyException, UnsupportedEncodingException {
-        User user = authenticationService.getAdminUser();
+        User user = userService.getAdminUser();
         return userCartCheckout(user, paymentInfoDTO);
     }
 
     public String singleItemCheckOutUnAuthenticate(SingleItemCheckOutInfoDTO singleItemCheckOutInfoDTO) throws FriendlyException, UnsupportedEncodingException {
-        User user = authenticationService.getAdminUser();
+        User user = userService.getAdminUser();
         return singleItemCheckOut(user, singleItemCheckOutInfoDTO);
     }
 }

@@ -33,22 +33,13 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final CartService cartService;
 
-    public User getCurrentLoggedInUser() throws FriendlyException {
+    public static User getCurrentLoggedInUser() throws FriendlyException {
         User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (principal == null)
             throw new FriendlyException(EnumResponseCode.NOT_LOGGED_IN);
 
         return principal;
-    }
-
-    public User getAdminUser() throws FriendlyException {
-        User admin = userService.findByEmail("admin");
-
-        if (admin == null)
-            throw new FriendlyException(EnumResponseCode.NOT_LOGGED_IN);
-
-        return admin;
     }
 
     public ResponseEntity<ResponseDTO<UserDTO>> userRegister(RegisterDTO request) throws FriendlyException {

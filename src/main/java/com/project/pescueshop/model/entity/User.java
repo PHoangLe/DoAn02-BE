@@ -9,10 +9,7 @@ import com.project.pescueshop.model.entity.Address;
 import com.project.pescueshop.model.entity.Role;
 import com.project.pescueshop.util.constant.EnumStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,6 +25,7 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "USERS")
 @Entity
+@Builder
 @Name(prefix = "USER")
 public class User implements UserDetails {
     @Id
