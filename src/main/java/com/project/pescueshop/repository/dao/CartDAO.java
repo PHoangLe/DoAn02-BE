@@ -8,6 +8,7 @@ import com.project.pescueshop.repository.mapper.CartItemMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -51,16 +52,17 @@ public class CartDAO extends BaseDAO{
         return jdbcTemplate.queryForObject(sql, parameters, Long.class);
     }
 
-    public void removeSelectedCartItem(String userId) {
+    public void removeSelectedCartItem(String cartId) {
         String sql =
                 " DELETE " +
                 " FROM cart_item ci " +
-                " JOIN cart c on ci.cart_id = c.cart_id " +
-                " WHERE c.user_id = :p_user_id " +
+                " USING cart c " +
+                " WHERE ci.cart_id = c.cart_id " +
+                " AND c.cart_id = :p_cart_id " +
                 " AND ci.is_selected = true ";
 
         MapSqlParameterSource parameters = new MapSqlParameterSource()
-                .addValue("p_user_id", userId);
+                .addValue("p_cart_id", cartId);
 
         jdbcTemplate.update(sql, parameters);
     }
@@ -73,5 +75,15 @@ public class CartDAO extends BaseDAO{
                 .addValue("p_invoice_id", invoice.getInvoiceId());
 
         jdbcTemplate.update(sql, parameters);
+    }
+
+    public void deleteCartItem(CartItem cartItem){
+//        String sql = "DELETE FROM cart_item WHERE cart_item_id = :p_cart_item_id;";
+//
+//        MapSqlParameterSource parameters = new MapSqlParameterSource()
+//                .addValue("p_cart_item_id", cartItem.getCartId());
+//
+//        jdbcTemplate.update(sql, parameters);
+        cartItemRepository.delete(cartItem);
     }
 }

@@ -65,8 +65,10 @@ public class CartService{
         CartItem cartItem = cartDAO.findByVarietyIdAndCartId(dto.getVarietyId(), cart.getCartId());
         int newQuantity = cartItem == null ? dto.getQuantity() : cartItem.getQuantity() + dto.getQuantity();
         if (cartItem != null && newQuantity == 0){
-            cartItemRepository.delete(cartItem);
-            cartItemRepository.saveAndFlush(cartItem);
+            cart.getCartItemList().remove(cartItem);
+            cartRepository.saveAndFlush(cart);
+            return;
+        } else if (newQuantity < 0) {
             return;
         }
 

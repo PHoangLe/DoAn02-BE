@@ -1,5 +1,6 @@
 package com.project.pescueshop.controller;
 
+import com.project.pescueshop.model.dto.CartCheckOutInfoDTO;
 import com.project.pescueshop.model.dto.InvoiceItemDTO;
 import com.project.pescueshop.model.dto.PaymentInfoDTO;
 import com.project.pescueshop.model.dto.SingleItemCheckOutInfoDTO;
@@ -25,15 +26,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @Api
 public class PaymentController {
-    private final AuthenticationService authenticationService;
     private final PaymentService paymentService;
 
     @PostMapping("/user-cart-checkout")
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @SecurityRequirement(name = "Bearer Authentication")
-    public ResponseEntity<ResponseDTO<String>> cartCheckout(@RequestBody PaymentInfoDTO paymentInfoDTO) throws FriendlyException, UnsupportedEncodingException {
-        User user = authenticationService.getCurrentLoggedInUser();
-        String paymentUrl = paymentService.userCartCheckout(user, paymentInfoDTO);
+    public ResponseEntity<ResponseDTO<String>> cartCheckout(@RequestBody CartCheckOutInfoDTO cartCheckOutInfoDTO) throws FriendlyException, UnsupportedEncodingException {
+        User user = AuthenticationService.getCurrentLoggedInUser();
+        String paymentUrl = paymentService.userCartCheckoutAuthenticate(user, cartCheckOutInfoDTO);
         ResponseDTO<String> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, paymentUrl, "output");
         return ResponseEntity.ok(result);
     }
@@ -42,15 +42,15 @@ public class PaymentController {
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<ResponseDTO<String>> singleItemCheckout(@RequestBody SingleItemCheckOutInfoDTO singleItemCheckOutInfoDTO) throws FriendlyException, UnsupportedEncodingException {
-        User user = authenticationService.getCurrentLoggedInUser();
-        String paymentUrl = paymentService.singleItemCheckOut(user, singleItemCheckOutInfoDTO);
+        User user = AuthenticationService.getCurrentLoggedInUser();
+        String paymentUrl = paymentService.singleItemCheckOutAuthenticate(user, singleItemCheckOutInfoDTO);
         ResponseDTO<String> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, paymentUrl, "output");
         return ResponseEntity.ok(result);
     }
 
     @PostMapping("/un-authenticate/user-cart-checkout")
-    public ResponseEntity<ResponseDTO<String>> cartCheckoutUnAuthenticate(@RequestBody PaymentInfoDTO paymentInfoDTO) throws FriendlyException, UnsupportedEncodingException {
-        String paymentUrl = paymentService.userCartCheckoutUnAuthenticate(paymentInfoDTO);
+    public ResponseEntity<ResponseDTO<String>> cartCheckoutUnAuthenticate(@RequestBody CartCheckOutInfoDTO cartCheckOutInfoDTO, @PathVariable String cartId) throws FriendlyException, UnsupportedEncodingException {
+        String paymentUrl = paymentService.userCartCheckoutUnAuthenticate(cartCheckOutInfoDTO);
         ResponseDTO<String> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, paymentUrl, "output");
         return ResponseEntity.ok(result);
     }
@@ -65,7 +65,6 @@ public class PaymentController {
     @GetMapping("/{invoiceId}")
     public ResponseEntity<ResponseDTO<List<InvoiceItemDTO>>> getInvoiceDetail(@PathVariable String invoiceId){
         List<InvoiceItemDTO> invoiceItemDTOS = paymentService.getInvoiceDetail(invoiceId);
-
         ResponseDTO<List<InvoiceItemDTO>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, invoiceItemDTOS, "invoiceItemList");
         return ResponseEntity.ok(result);
     }

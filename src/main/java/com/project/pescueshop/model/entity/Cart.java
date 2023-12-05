@@ -21,7 +21,7 @@ public class Cart {
     @GenericGenerator(name = "CustomIdGenerator", strategy = "com.project.pescueshop.util.CustomIdGenerator")
     private String cartId;
     private String userId;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "cartId",referencedColumnName = "cartId")
     private List<CartItem> cartItemList;
 }
