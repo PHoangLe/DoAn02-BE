@@ -1,6 +1,7 @@
 package com.project.pescueshop.config;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.context.annotation.Configuration;
 
 import javax.crypto.Mac;
 import java.io.UnsupportedEncodingException;
@@ -10,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
+@Configuration
 public class PaymentConfig {
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
     public static String vnp_ReturnUrl = "http://localhost:8080/vnpay_jsp/vnpay_return.jsp";

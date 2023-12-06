@@ -78,12 +78,6 @@ public class CartDAO extends BaseDAO{
     }
 
     public void deleteCartItem(CartItem cartItem){
-//        String sql = "DELETE FROM cart_item WHERE cart_item_id = :p_cart_item_id;";
-//
-//        MapSqlParameterSource parameters = new MapSqlParameterSource()
-//                .addValue("p_cart_item_id", cartItem.getCartId());
-//
-//        jdbcTemplate.update(sql, parameters);
         cartItemRepository.delete(cartItem);
     }
 }

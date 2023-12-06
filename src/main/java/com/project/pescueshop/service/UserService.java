@@ -29,6 +29,10 @@ public class UserService extends BaseService {
         return userDAO.findUserByEmail(email);
     }
 
+    public User findById(String userId){
+        return userDAO.findUserByUserId(userId);
+    }
+
     public User addUser(User user){
         List<Role> userRoles = roleService.getDefaultUserRole();
         user.setUserRoles(userRoles);
