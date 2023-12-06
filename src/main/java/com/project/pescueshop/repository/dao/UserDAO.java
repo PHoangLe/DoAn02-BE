@@ -47,4 +47,8 @@ public class UserDAO extends BaseDAO{
         address.setStatus(EnumStatus.DELETED.getValue());
         saveAndFlushAddress(address);
     }
+
+    public User findUserByUserId(String userId) {
+        return userRepository.findById(userId).orElse(null);
+    }
 }
