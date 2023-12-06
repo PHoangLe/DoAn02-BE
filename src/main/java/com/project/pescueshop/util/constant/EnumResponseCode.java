@@ -36,16 +36,14 @@ public enum EnumResponseCode {
 
     //<editor-fold desc="3-IMPORT">
     IMPORT_INVOICE_NOT_FOUND("3_1_f", "Invoice does not exist"),
-    A("1_8_f", "Please log in"),
     //</editor-fold>
 
     //<editor-fold desc="4-USER">
     ADDRESS_NOT_FOUND("4_1_f", "Address not found"),
-    FD("2_2_f", "New subcategory has been added"),
-    RE("2_3_f", "Product not found"),
-    QW("2_4_f", "Attribute existed"),
-    BG("2_5_f", "Variety not found"),
-    DE("2_6_f", "Cart not found");
+    //</editor-fold>
+
+    //<editor-fold desc="5-INVOICE">
+    INVOICE_NOT_FOUND("5_1_f", "Invoice not found");
     //</editor-fold>
 
     private static final Map<String, EnumResponseCode> BY_STATUS_CODE = new HashMap<>();

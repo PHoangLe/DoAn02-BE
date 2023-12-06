@@ -61,11 +61,4 @@ public class PaymentController {
         ResponseDTO<String> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, paymentUrl, "output");
         return ResponseEntity.ok(result);
     }
-
-    @GetMapping("/{invoiceId}")
-    public ResponseEntity<ResponseDTO<List<InvoiceItemDTO>>> getInvoiceDetail(@PathVariable String invoiceId){
-        List<InvoiceItemDTO> invoiceItemDTOS = paymentService.getInvoiceDetail(invoiceId);
-        ResponseDTO<List<InvoiceItemDTO>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, invoiceItemDTOS, "invoiceItemList");
-        return ResponseEntity.ok(result);
-    }
 }

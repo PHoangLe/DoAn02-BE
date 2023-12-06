@@ -2,7 +2,6 @@ package com.project.pescueshop.service;
 
 import com.project.pescueshop.config.PaymentConfig;
 import com.project.pescueshop.model.dto.CartCheckOutInfoDTO;
-import com.project.pescueshop.model.dto.InvoiceItemDTO;
 import com.project.pescueshop.model.dto.PaymentInfoDTO;
 import com.project.pescueshop.model.dto.SingleItemCheckOutInfoDTO;
 import com.project.pescueshop.model.entity.*;
@@ -10,7 +9,10 @@ import com.project.pescueshop.model.exception.FriendlyException;
 import com.project.pescueshop.repository.dao.CartDAO;
 import com.project.pescueshop.repository.dao.PaymentDAO;
 import com.project.pescueshop.util.Util;
-import com.project.pescueshop.util.constant.*;
+import com.project.pescueshop.util.constant.EnumInvoiceStatus;
+import com.project.pescueshop.util.constant.EnumPaymentType;
+import com.project.pescueshop.util.constant.EnumResponseCode;
+import com.project.pescueshop.util.constant.EnumVoucherType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +44,7 @@ public class PaymentService {
         vnp_Params.put("vnp_Amount", String.valueOf(amount));
         vnp_Params.put("vnp_CurrCode", "VND");
         vnp_Params.put("vnp_BankCode", "NCB");
-        vnp_Params.put("vnp_Locale", "vn");
+        vnp_Params.put("vnp_Locale", "en");
         vnp_Params.put("vnp_TxnRef", content);
         vnp_Params.put("vnp_OrderInfo", content);
         vnp_Params.put("vnp_OrderType", PaymentConfig.orderType);
@@ -146,7 +148,6 @@ public class PaymentService {
         if (paymentType == EnumPaymentType.CREDIT_CARD){
             return createPaymentLink("Invoice ID: " + invoice.getInvoiceId(), paymentInfo.getReturnUrl(), invoice.getFinalPrice());
         }
-        invoice.setStatus(EnumInvoiceStatus.COMPLETED.getValue());
         paymentDAO.saveAndFlushInvoice(invoice);
         return  "";
     }
@@ -207,17 +208,12 @@ public class PaymentService {
         if (paymentType == EnumPaymentType.CREDIT_CARD){
             return createPaymentLink("Invoice ID: " + invoice.getInvoiceId(), dto.getReturnUrl(), invoice.getFinalPrice());
         }
-        invoice.setStatus(EnumInvoiceStatus.COMPLETED.getValue());
         paymentDAO.saveAndFlushInvoice(invoice);
         return "";
     }
 
     public void addInvoiceItemsToInvoice(Invoice invoice) {
         cartDAO.addInvoiceItemsToInvoice(invoice);
-    }
-
-    public List<InvoiceItemDTO> getInvoiceDetail(String invoiceId){
-        return paymentDAO.getInvoiceDetail(invoiceId);
     }
 
     public String userCartCheckoutUnAuthenticate(CartCheckOutInfoDTO cartCheckOutInfoDTO) throws FriendlyException, UnsupportedEncodingException {

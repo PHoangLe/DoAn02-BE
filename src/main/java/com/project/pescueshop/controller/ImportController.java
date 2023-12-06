@@ -26,13 +26,11 @@ import java.util.List;
 @Api
 public class ImportController {
     private final ImportService importService;
-    private final AuthenticationService authenticationService;
-
     @PostMapping("")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<ResponseDTO<ImportInvoice>> addNewImportInvoice(@RequestBody List<AddOrUpdateImportItemDTO> itemDTOList) throws FriendlyException {
-        User user = authenticationService.getCurrentLoggedInUser();
+        User user = AuthenticationService.getCurrentLoggedInUser();
         ImportInvoice importInvoice = importService.addNewImportInvoice(user, itemDTOList);
 
         ResponseDTO<ImportInvoice> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, importInvoice, "importInvoice");
