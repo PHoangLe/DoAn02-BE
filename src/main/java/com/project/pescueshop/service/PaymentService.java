@@ -28,6 +28,7 @@ import java.util.concurrent.CompletableFuture;
 @Service
 @RequiredArgsConstructor
 public class PaymentService {
+    private final static long MEMBER_POINT_RATE = 20L;
     private final PaymentDAO paymentDAO;
     private final CartDAO cartDAO;
     private final VarietyService varietyService;
@@ -142,7 +143,7 @@ public class PaymentService {
 
         CompletableFuture.runAsync(() -> {
             addInvoiceItemsToInvoice(invoice);
-            userService.addMemberPoint(user, invoice.getFinalPrice() / 20);
+            userService.addMemberPoint(user, invoice.getFinalPrice() / MEMBER_POINT_RATE);
             cartDAO.removeSelectedCartItem(cartCheckOutInfoDTO.getCartId());
         });
 
@@ -197,7 +198,7 @@ public class PaymentService {
         paymentDAO.saveAndFlushInvoice(invoice);
 
         CompletableFuture.runAsync(() -> {
-            userService.addMemberPoint(user, invoice.getFinalPrice() / 20);
+            userService.addMemberPoint(user, invoice.getFinalPrice() / MEMBER_POINT_RATE);
 
             InvoiceItem item = InvoiceItem.builder()
                     .variety(variety)
