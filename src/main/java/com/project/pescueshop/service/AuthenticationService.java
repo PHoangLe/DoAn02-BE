@@ -58,7 +58,7 @@ public class AuthenticationService {
         //Set default for new User
         user.setUserPassword(passwordEncoder.encode(request.getUserPassword()));
         user.setIsSocial(false);
-        user.setMemberPoint(0);
+        user.setMemberPoint(0L);
         user.setStatus(EnumStatus.ACTIVE.getValue());
 
         user = userService.addUser(user);
@@ -119,7 +119,7 @@ public class AuthenticationService {
             user = new User(request);
 
             user.setIsSocial(true);
-            user.setMemberPoint(0);
+            user.setMemberPoint(0L);
             user.setStatus(EnumStatus.ACTIVE.getValue());
 
             user = userService.addUser(user);
