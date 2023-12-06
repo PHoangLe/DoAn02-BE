@@ -29,6 +29,10 @@ public class PaymentDAO extends BaseDAO{
         invoiceItemRepository.saveAndFlush(item);
     }
 
+    public Invoice findInvoiceById(String invoiceId){
+        return invoiceRepository.findById(invoiceId).orElse(null);
+    }
+
     public List<InvoiceItemDTO> getInvoiceDetail(String invoiceId){
         String sql = "SELECT * FROM get_invoice_detail(:p_invoice_id);";
 
@@ -36,5 +40,9 @@ public class PaymentDAO extends BaseDAO{
                 .addValue("p_invoice_id", invoiceId);
 
         return jdbcTemplate.query(sql, parameters, invoiceItemMapper);
+    }
+
+    public List<Invoice> findAllInvoice(){
+        return invoiceRepository.findAll();
     }
 }

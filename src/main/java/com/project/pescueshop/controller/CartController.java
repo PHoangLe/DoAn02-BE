@@ -26,13 +26,12 @@ import java.util.List;
 @Api
 public class CartController {
     private final CartService cartService;
-    private final AuthenticationService authenticationService;
 
     @GetMapping("")
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<ResponseDTO<List<CartItemDTO>>> getCart() throws FriendlyException {
-        User user = authenticationService.getCurrentLoggedInUser();
+        User user = AuthenticationService.getCurrentLoggedInUser();
         List<CartItemDTO> itemList = cartService.getCartItemByUserId(user.getUserId());
         ResponseDTO<List<CartItemDTO>> result;
         if (itemList == null) {
@@ -69,7 +68,7 @@ public class CartController {
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<ResponseDTO<CartItem>> addItemToCart(@RequestBody AddOrUpdateCartItemDTO dto) throws FriendlyException {
-        User user = authenticationService.getCurrentLoggedInUser();
+        User user = AuthenticationService.getCurrentLoggedInUser();
         cartService.addOrUpdateCartItem(dto, user, null);
 
         ResponseDTO<CartItem> result = new ResponseDTO<>(EnumResponseCode.SUCCESS);

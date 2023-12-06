@@ -8,8 +8,8 @@ import java.util.Map;
 @Getter
 public enum EnumInvoiceStatus {
     PENDING(1, "PENDING"),
-    COMPLETED(2, "PAID"),
-    REFUND(3, "REFUND");
+    COMPLETED(2, "COMPLETED"),
+    RETURN(3, "RETURN");
 
     private static final Map<Integer, EnumInvoiceStatus> BY_ID = new HashMap<>();
     private static final Map<String, EnumInvoiceStatus> BY_LABEL = new HashMap<>();
@@ -24,7 +24,7 @@ public enum EnumInvoiceStatus {
     private final Integer id;
     private final String value;
 
-    private EnumInvoiceStatus(Integer id, String value) {
+    EnumInvoiceStatus(Integer id, String value) {
         this.id = id;
         this.value = value;
     }
