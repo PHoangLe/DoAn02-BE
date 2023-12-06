@@ -10,6 +10,7 @@ import com.project.pescueshop.util.constant.EnumResponseCode;
 import com.project.pescueshop.util.constant.EnumStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ import java.util.List;
 public class UserService extends BaseService {
     private final UserDAO userDAO;
     private final RoleService roleService;
+    private final PasswordEncoder passwordEncoder;
 
     public User findByEmail(String email){
         return userDAO.findUserByEmail(email);
@@ -72,6 +74,16 @@ public class UserService extends BaseService {
 
     public void removeMemberPoint(User user, long price) {
         user.setMemberPoint(user.getMemberPoint() - price);
+        userDAO.saveAndFlushUser(user);
+    }
+
+    public void unlockUser(User user) {
+        user.setStatus(EnumStatus.ACTIVE.getValue());
+        userDAO.saveAndFlushUser(user);
+    }
+
+    public void resetPassword(User user, String newPassword) {
+        user.setUserPassword(passwordEncoder.encode(newPassword));
         userDAO.saveAndFlushUser(user);
     }
 }
