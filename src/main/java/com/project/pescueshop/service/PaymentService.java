@@ -137,6 +137,10 @@ public class PaymentService {
 
             long finalPrice = Math.max(invoice.getTotalPrice() - discountAmount, 0);
             invoice.setFinalPrice(finalPrice);
+
+            CompletableFuture.runAsync(() -> {
+                userService.removeMemberPoint(user, voucher.getPrice());
+            });
         }
 
         paymentDAO.saveAndFlushInvoice(invoice);
@@ -193,6 +197,10 @@ public class PaymentService {
 
             long finalPrice = Math.max(invoice.getTotalPrice() - discountAmount, 0);
             invoice.setFinalPrice(finalPrice);
+
+            CompletableFuture.runAsync(() -> {
+                userService.removeMemberPoint(user, voucher.getPrice());
+            });
         }
 
         paymentDAO.saveAndFlushInvoice(invoice);
