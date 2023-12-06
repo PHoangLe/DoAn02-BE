@@ -17,4 +17,10 @@ public class Util {
         ZonedDateTime zonedDateTime = ZonedDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
         return Date.from(zonedDateTime.toInstant());
     }
+
+    public static Date getCurrentDatePlusSeconds(long seconds){
+        ZonedDateTime zonedDateTime = ZonedDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
+        zonedDateTime.plusSeconds(seconds);
+        return Date.from(zonedDateTime.toInstant());
+    }
 }

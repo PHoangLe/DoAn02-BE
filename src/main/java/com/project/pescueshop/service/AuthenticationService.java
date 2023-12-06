@@ -59,7 +59,7 @@ public class AuthenticationService {
         user.setUserPassword(passwordEncoder.encode(request.getUserPassword()));
         user.setIsSocial(false);
         user.setMemberPoint(0L);
-        user.setStatus(EnumStatus.ACTIVE.getValue());
+        user.setStatus(EnumStatus.INACTIVE.getValue());
 
         user = userService.addUser(user);
 

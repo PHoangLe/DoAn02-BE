@@ -11,6 +11,7 @@ public enum EnumResponseCode {
     SYSTEM_ERROR("0_1_f", "System Error"),
     SUCCESS("0_2_s", "Succeed"),
     FAILED("0_3_f", "Failed"),
+    MAIL_SENT_FAIL("0_4_f", "Mail sent failed"),
     //</editor-fold>
 
     //<editor-fold desc="1-AUTHENTICATION">
@@ -22,6 +23,10 @@ public enum EnumResponseCode {
     BAD_CREDENTIAL("1_6_f", "Credential error"),
     AUTHENTICATE_SUCCESSFUL("1_7_s", "Log in successfully"),
     NOT_LOGGED_IN("1_8_f", "Please log in"),
+    USER_NOT_FOUND("1_9_f", "User Not Found"),
+    OTP_INVALID("1_9_f", "Invalid Otp"),
+    OTP_EXPIRED("1_9_f", "Otp expired"),
+    OTP_INCORRECT("1_9_f", "Incorrect Otp"),
     //</editor-fold>
 
     //<editor-fold desc="2-PRODUCT">

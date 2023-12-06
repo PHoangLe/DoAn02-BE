@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
-    private final RoleRepository roleRepository;
 
     @PostMapping("/authenticate")
     public ResponseEntity<ResponseDTO<UserDTO>> authenticate(@RequestBody AuthenticationDTO request) throws FriendlyException {
@@ -40,12 +39,5 @@ public class AuthenticationController {
     public ResponseEntity<ResponseDTO<UserDTO>> googleUserAuthenticate(@RequestBody RegisterDTO request){
         request.setIsSocial(true);
         return authenticationService.googleUserAuthenticate(request);
-    }
-
-    @GetMapping("/test")
-    public ResponseEntity<Object> test(@AuthenticationPrincipal User user) throws Exception {
-        roleRepository.save(new Role("ROLE_ADMIN"));
-        roleRepository.save(new Role("ROLE_CUSTOMER"));
-        return null;
     }
 }
