@@ -64,4 +64,9 @@ public class UserService extends BaseService {
     public void deleteUserAddress(String addressId) throws FriendlyException {
         userDAO.deleteAddress(addressId);
     }
+
+    public void addMemberPoint(User user, long point) {
+        user.setMemberPoint(user.getMemberPoint() + point);
+        userDAO.saveAndFlushUser(user);
+    }
 }

@@ -42,7 +42,7 @@ public class User implements UserDetails {
     private Boolean isSocial;
     private String status = "IN_ACTIVE";
     private Integer mainAddressId;
-    private Integer memberPoint;
+    private Long memberPoint;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "USERS_ROLES",
@@ -73,7 +73,7 @@ public class User implements UserDetails {
         this.userPhoneNumber = dto.getUserPhoneNumber();
         this.userAvatar = dto.getUserAvatar();
         this.status = EnumStatus.INACTIVE.getValue();
-        this.memberPoint = 0;
+        this.memberPoint = 0L;
     }
 
     @Override

@@ -31,7 +31,7 @@ public class UserDTO {
     private String status;
     private String jwtToken;
     private Integer mainAddressId;
-    private Integer memberPoint;
+    private Long memberPoint;
     private List<Address> addressList;
     private List<Role> userRoles;
 
