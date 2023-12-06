@@ -5,10 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
@@ -19,6 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Table(name = "VOUCHER")
 @Entity
+@Builder
 @Name(prefix = "VOCH")
 public class Voucher {
     @Id
@@ -30,6 +28,6 @@ public class Voucher {
     private long value;
     private long price;
     private long maxValue;
-    private Date expiry;
+    private long minInvoiceValue;
     private String status;
 }

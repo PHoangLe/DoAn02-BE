@@ -1,8 +1,11 @@
 package com.project.pescueshop.util.constant;
 
+import lombok.Getter;
+
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
 public enum EnumVoucherType {
     PERCENTAGE(1, "PERCENTAGE"),
     FLAT(2, "FLAT");

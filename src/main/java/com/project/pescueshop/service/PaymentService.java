@@ -28,6 +28,7 @@ import java.util.concurrent.CompletableFuture;
 @Service
 @RequiredArgsConstructor
 public class PaymentService {
+    private final static long MEMBER_POINT_RATE = 20L;
     private final PaymentDAO paymentDAO;
     private final CartDAO cartDAO;
     private final VarietyService varietyService;
@@ -136,13 +137,17 @@ public class PaymentService {
 
             long finalPrice = Math.max(invoice.getTotalPrice() - discountAmount, 0);
             invoice.setFinalPrice(finalPrice);
+
+            CompletableFuture.runAsync(() -> {
+                userService.removeMemberPoint(user, voucher.getPrice());
+            });
         }
 
         paymentDAO.saveAndFlushInvoice(invoice);
 
         CompletableFuture.runAsync(() -> {
             addInvoiceItemsToInvoice(invoice);
-            userService.addMemberPoint(user, invoice.getFinalPrice() / 20);
+            userService.addMemberPoint(user, invoice.getFinalPrice() / MEMBER_POINT_RATE);
             cartDAO.removeSelectedCartItem(cartCheckOutInfoDTO.getCartId());
         });
 
@@ -192,12 +197,16 @@ public class PaymentService {
 
             long finalPrice = Math.max(invoice.getTotalPrice() - discountAmount, 0);
             invoice.setFinalPrice(finalPrice);
+
+            CompletableFuture.runAsync(() -> {
+                userService.removeMemberPoint(user, voucher.getPrice());
+            });
         }
 
         paymentDAO.saveAndFlushInvoice(invoice);
 
         CompletableFuture.runAsync(() -> {
-            userService.addMemberPoint(user, invoice.getFinalPrice() / 20);
+            userService.addMemberPoint(user, invoice.getFinalPrice() / MEMBER_POINT_RATE);
 
             InvoiceItem item = InvoiceItem.builder()
                     .variety(variety)

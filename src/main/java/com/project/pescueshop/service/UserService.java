@@ -69,4 +69,9 @@ public class UserService extends BaseService {
         user.setMemberPoint(user.getMemberPoint() + point);
         userDAO.saveAndFlushUser(user);
     }
+
+    public void removeMemberPoint(User user, long price) {
+        user.setMemberPoint(user.getMemberPoint() - price);
+        userDAO.saveAndFlushUser(user);
+    }
 }
