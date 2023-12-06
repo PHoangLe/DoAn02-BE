@@ -142,6 +142,7 @@ public class PaymentService {
 
         CompletableFuture.runAsync(() -> {
             addInvoiceItemsToInvoice(invoice);
+            userService.addMemberPoint(user, invoice.getFinalPrice() / 20);
             cartDAO.removeSelectedCartItem(cartCheckOutInfoDTO.getCartId());
         });
 
@@ -195,15 +196,19 @@ public class PaymentService {
 
         paymentDAO.saveAndFlushInvoice(invoice);
 
-        InvoiceItem item = InvoiceItem.builder()
-                .variety(variety)
-                .quantity(info.getQuantity())
-                .invoiceId(invoice.getInvoiceId())
-                .varietyId(variety.getVarietyId())
-                .totalPrice(variety.getPrice() * info.getQuantity())
-                .build();
+        CompletableFuture.runAsync(() -> {
+            userService.addMemberPoint(user, invoice.getFinalPrice() / 20);
 
-        paymentDAO.saveAndFlushItem(item);
+            InvoiceItem item = InvoiceItem.builder()
+                    .variety(variety)
+                    .quantity(info.getQuantity())
+                    .invoiceId(invoice.getInvoiceId())
+                    .varietyId(variety.getVarietyId())
+                    .totalPrice(variety.getPrice() * info.getQuantity())
+                    .build();
+
+            paymentDAO.saveAndFlushItem(item);
+        });
 
         if (paymentType == EnumPaymentType.CREDIT_CARD){
             return createPaymentLink("Invoice ID: " + invoice.getInvoiceId(), dto.getReturnUrl(), invoice.getFinalPrice());
