@@ -38,7 +38,7 @@ public class Product {
     private String detail;
     private String description;
     @Column(columnDefinition = "0")
-    private float avgRating;
+    private Integer avgRating;
     private String status;
     @ElementCollection
     private List<String> images;

@@ -38,6 +38,7 @@ public class ProductService extends BaseService {
     private final FileUploadService fileUploadService;
     private final VarietyAttributeDAO varietyAttributeDAO;
     private final ProductDAO productDAO;
+    private final RatingService ratingService;
     private final ThreadService threadService;
 
     public ProductDTO transformProductToDTO(Product product){

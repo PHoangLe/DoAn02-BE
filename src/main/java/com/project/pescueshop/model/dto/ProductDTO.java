@@ -30,7 +30,7 @@ public class ProductDTO {
     private Brand brand;
     private String detail;
     private String description;
-    private float avgRating;
+    private Integer avgRating;
     private List<VarietyDTO> varieties;
     private String status;
     private List<VarietyAttribute> varietyAttributeList;
