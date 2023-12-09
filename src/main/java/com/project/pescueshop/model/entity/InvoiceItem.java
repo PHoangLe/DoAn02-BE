@@ -7,11 +7,11 @@ import lombok.*;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "INVOICE_ITEM")
 @Entity
 @Builder
+@AllArgsConstructor
 @Name(prefix = "IVIT")
 @IdClass(InvoiceItemKey.class)
 public class InvoiceItem {

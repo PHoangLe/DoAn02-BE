@@ -12,10 +12,10 @@ import java.util.Date;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "VOUCHER")
 @Entity
+@AllArgsConstructor
 @Builder
 @Name(prefix = "VOCH")
 public class Voucher {

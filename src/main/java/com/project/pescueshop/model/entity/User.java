@@ -5,8 +5,6 @@ import com.project.pescueshop.model.dto.RegisterDTO;
 import com.project.pescueshop.model.dto.UserDTO;
 
 import com.project.pescueshop.model.annotation.Name;
-import com.project.pescueshop.model.entity.Address;
-import com.project.pescueshop.model.entity.Role;
 import com.project.pescueshop.util.constant.EnumStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,11 +19,11 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "USERS")
 @Entity
 @Builder
+@AllArgsConstructor
 @Name(prefix = "USER")
 public class User implements UserDetails {
     @Id

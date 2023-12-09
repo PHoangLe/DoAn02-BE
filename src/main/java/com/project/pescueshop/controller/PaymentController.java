@@ -5,6 +5,7 @@ import com.project.pescueshop.model.dto.InvoiceItemDTO;
 import com.project.pescueshop.model.dto.PaymentInfoDTO;
 import com.project.pescueshop.model.dto.SingleItemCheckOutInfoDTO;
 import com.project.pescueshop.model.dto.general.ResponseDTO;
+import com.project.pescueshop.model.entity.Invoice;
 import com.project.pescueshop.model.entity.User;
 import com.project.pescueshop.model.exception.FriendlyException;
 import com.project.pescueshop.service.AuthenticationService;

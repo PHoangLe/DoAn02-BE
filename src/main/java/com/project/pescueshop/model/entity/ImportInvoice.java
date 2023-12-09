@@ -12,10 +12,10 @@ import java.util.Date;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "IMPORT_INVOICE")
 @Entity
+@AllArgsConstructor
 @Builder
 @Name(prefix = "IMIV")
 public class ImportInvoice {

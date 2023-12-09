@@ -11,8 +11,8 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "VARIETY")
 @Entity
 @Name(prefix = "VARI")
