@@ -20,6 +20,7 @@ public class RatingService {
     public Rating addRating(User user, CreateRatingDTO dto){
         Rating rating = Rating.builder()
                 .score(dto.getScore())
+                .productId(dto.getProductId())
                 .date(Util.getCurrentDate())
                 .userId(user.getUserId())
                 .message(dto.getMessage())

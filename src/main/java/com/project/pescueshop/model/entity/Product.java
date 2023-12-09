@@ -37,7 +37,6 @@ public class Product {
     private Brand brand;
     private String detail;
     private String description;
-    @Column(columnDefinition = "0")
     private Integer avgRating;
     private String status;
     @ElementCollection

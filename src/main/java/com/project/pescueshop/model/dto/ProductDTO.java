@@ -1,10 +1,7 @@
 package com.project.pescueshop.model.dto;
 
 import com.project.pescueshop.model.annotation.Name;
-import com.project.pescueshop.model.entity.Brand;
-import com.project.pescueshop.model.entity.Product;
-import com.project.pescueshop.model.entity.SubCategory;
-import com.project.pescueshop.model.entity.VarietyAttribute;
+import com.project.pescueshop.model.entity.*;
 import lombok.*;
 import org.springframework.util.CollectionUtils;
 
@@ -34,6 +31,7 @@ public class ProductDTO {
     private List<VarietyDTO> varieties;
     private String status;
     private List<VarietyAttribute> varietyAttributeList;
+    private List<Rating> ratingList;
 
     public ProductDTO(Product product){
         this.productId = product.getProductId();
