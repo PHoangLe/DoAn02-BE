@@ -9,12 +9,12 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "CART")
 @Entity
 @Name(prefix = "CART", noun = "cart", pluralNoun = "cartList")
 @Builder
+@AllArgsConstructor
 public class Cart {
     @Id
     @GeneratedValue(generator = "CustomIdGenerator")

@@ -3,7 +3,9 @@ package com.project.pescueshop.controller;
 import com.project.pescueshop.model.dto.InvoiceItemDTO;
 import com.project.pescueshop.model.dto.general.ResponseDTO;
 import com.project.pescueshop.model.entity.Invoice;
+import com.project.pescueshop.model.entity.User;
 import com.project.pescueshop.model.exception.FriendlyException;
+import com.project.pescueshop.service.AuthenticationService;
 import com.project.pescueshop.service.InvoiceService;
 import com.project.pescueshop.util.constant.EnumResponseCode;
 import io.swagger.annotations.Api;
@@ -50,6 +52,26 @@ public class InvoiceController {
     ) throws FriendlyException {
         Invoice invoice = invoiceService.updateInvoiceStatus(invoiceId, status);
         ResponseDTO<Invoice> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, invoice, "invoice");
+        return ResponseEntity.ok(result);
+    }
+
+
+    @GetMapping("/user-invoice-info")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<ResponseDTO<List<Invoice>>> getOrderInfo() throws FriendlyException {
+        User user = AuthenticationService.getCurrentLoggedInUser();
+        List<Invoice> invoiceList = invoiceService.getOrderInfoByUser(user);
+        ResponseDTO<List<Invoice>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, invoiceList, "invoiceList");
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/{invoicedId}")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<ResponseDTO<List<InvoiceItemDTO>>> getOrderDetail(@PathVariable String invoicedId) {
+        List<InvoiceItemDTO> invoiceList = invoiceService.getInvoiceDetail(invoicedId);
+        ResponseDTO<List<InvoiceItemDTO>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, invoiceList, "invoiceList");
         return ResponseEntity.ok(result);
     }
 }

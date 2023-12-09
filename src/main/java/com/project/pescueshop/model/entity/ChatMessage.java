@@ -12,11 +12,11 @@ import java.util.Date;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "CHAT_MESSAGE")
 @Entity
 @Builder
+@AllArgsConstructor
 @Name(prefix = "CHME", noun = "chatMessage", pluralNoun = "chatMessageList")
 public class ChatMessage {
     @Id

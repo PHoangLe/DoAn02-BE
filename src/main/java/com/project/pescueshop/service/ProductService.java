@@ -5,15 +5,19 @@ import com.project.pescueshop.model.dto.VarietyDTO;
 import com.project.pescueshop.model.entity.Product;
 import com.project.pescueshop.model.entity.Variety;
 import com.project.pescueshop.model.entity.VarietyAttribute;
+import com.project.pescueshop.model.entity.ViewAuditLog;
 import com.project.pescueshop.model.exception.FriendlyException;
 import com.project.pescueshop.repository.ProductRepository;
 import com.project.pescueshop.repository.dao.ProductDAO;
 import com.project.pescueshop.repository.dao.VarietyAttributeDAO;
+import com.project.pescueshop.repository.dao.ViewAuditLogDAO;
+import com.project.pescueshop.util.constant.EnumObjectType;
 import com.project.pescueshop.util.constant.EnumPetType;
 import com.project.pescueshop.util.constant.EnumResponseCode;
 import com.project.pescueshop.util.constant.EnumStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.apache.bcel.generic.ObjectType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,7 +34,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class ProductService extends BaseService {
-    private final ProductRepository productRepository;
     private final VarietyService varietyService;
     private final FileUploadService fileUploadService;
     private final VarietyAttributeDAO varietyAttributeDAO;
@@ -40,8 +43,9 @@ public class ProductService extends BaseService {
     public ProductDTO transformProductToDTO(Product product){
         return new ProductDTO(product);
     }
+
     public Product findById(String id){
-        return productRepository.findByProductId(id).orElse(null);
+        return productDAO.findProductById(id);
     }
 
     public ProductDTO getProductDetail(String productId){
@@ -55,6 +59,10 @@ public class ProductService extends BaseService {
         List<VarietyAttribute> varietyAttributeList = varietyAttributeDAO.getAllExistedAttributeByProductId(productId, null);
         dto.setVarietyAttributeList(varietyAttributeList);
 
+        CompletableFuture.runAsync(() -> {
+            ViewAuditLogDAO.saveAndFLushAudit(productId, EnumObjectType.PRODUCT);
+        });
+
         return dto;
     }
 
@@ -65,11 +73,11 @@ public class ProductService extends BaseService {
         productDTO.setStatus(EnumStatus.ACTIVE.getValue());
 
         Product product = new Product(productDTO);
-        productRepository.saveAndFlush(product);
+        productDAO.saveAndFlushProduct(product);
 
         List<String> imagesUrl = uploadProductImages(product.getProductId(), imagesList);
         product.setImages(imagesUrl);
-        productRepository.saveAndFlush(product);
+        productDAO.saveAndFlushProduct(product);
 
         CompletableFuture.runAsync(() -> {
             try {
@@ -108,7 +116,7 @@ public class ProductService extends BaseService {
     }
 
     public List<ProductDTO> findAllProduct(){
-        List<Product> productList = productRepository.findAll();
+        List<Product> productList = productDAO.findAll();
 
         return productList.stream()
                 .map(this::transformProductToDTO)
@@ -120,13 +128,6 @@ public class ProductService extends BaseService {
         images.forEach(image -> imagesUrl.add(fileUploadService.uploadFile(image, "product/", productId + "_" + System.currentTimeMillis())));
 
         return imagesUrl;
-    }
-
-    public ProductDTO addVariety(VarietyDTO varietyDTO) {
-        varietyDTO = varietyService.addOrUpdateVariety(varietyDTO);
-        Product product = findById(varietyDTO.getProductId());
-
-        return transformProductToDTO(product);
     }
 
     public List<VarietyAttribute> getAllExistedAttributeByProductId(String productId, String type){
@@ -180,7 +181,7 @@ public class ProductService extends BaseService {
         product.setDescription(dto.getDescription());
         product.setDetail(dto.getDetail());
         product.setPetType(dto.getPetType());
-        productRepository.saveAndFlush(product);
+        productDAO.saveAndFlushProduct(product);
 
         return transformProductToDTO(product);
     }
@@ -200,12 +201,20 @@ public class ProductService extends BaseService {
                 .toList()
         );
 
-        productRepository.saveAndFlush(product);
+        productDAO.saveAndFlushProduct(product);
 
         return product.getImages();
     }
 
     public void deleteAttribute(String productId, String attributeId){
        productDAO.deleteAttribute(productId, attributeId);
+    }
+
+    public List<ProductDTO> getNRandomProducts(Integer n){
+        List<Product> productList = productDAO.getRandomNProduct(n);
+
+        return productList.stream()
+                .map(this::transformProductToDTO)
+                .toList();
     }
 }

@@ -166,6 +166,15 @@ public class ProductController {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/random")
+    public ResponseEntity<ResponseDTO<List<ProductDTO>>> getNProducts(@RequestParam Integer n) {
+        List<ProductDTO> productList = productService.getNRandomProducts(n);
+
+        ResponseDTO<List<ProductDTO>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, productList, "productList");
+
+        return ResponseEntity.ok(result);
+    }
+
     @GetMapping("/{productId}")
     public ResponseEntity<ResponseDTO<ProductDTO>> getProductDetail(@PathVariable String productId) {
         ProductDTO dto = productService.getProductDetail(productId);

@@ -32,4 +32,25 @@ public class ProductDAO extends BaseDAO{
 
         return jdbcTemplate.queryForObject(sql, parameters, String.class);
     }
+
+    public List<Product> getRandomNProduct(Integer n){
+        String sql = "SELECT * FROM get_n_random_product(:p_n_product);";
+
+        MapSqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("p_n_product", n);
+
+        return jdbcTemplate.queryForList(sql, parameters, Product.class);
+    }
+
+    public void saveAndFlushProduct(Product product){
+        productRepository.saveAndFlush(product);
+    }
+
+    public Product findProductById(String id){
+        return productRepository.findById(id).orElse(null);
+    }
+
+    public List<Product> findAll() {
+        return productRepository.findAll();
+    }
 }

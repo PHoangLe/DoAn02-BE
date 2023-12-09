@@ -10,10 +10,10 @@ import java.util.Date;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "ERROR_LOG")
 @Entity
+@AllArgsConstructor
 @Builder
 @Name(prefix = "ERRL")
 public class ErrorLog {

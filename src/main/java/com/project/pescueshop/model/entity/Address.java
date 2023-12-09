@@ -7,10 +7,10 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "ADDRESS")
 @Entity
+@AllArgsConstructor
 @Builder
 @Name(prefix = "ADDR")
 public class Address {

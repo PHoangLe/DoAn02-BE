@@ -7,11 +7,11 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "CHAT_ROOM")
 @Entity
 @Builder
+@AllArgsConstructor
 @Name(prefix = "CHRO", noun = "chatRoom", pluralNoun = "chatRoomList")
 public class ChatRoom {
     @Id

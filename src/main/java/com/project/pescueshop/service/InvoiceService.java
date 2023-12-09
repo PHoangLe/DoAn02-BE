@@ -2,6 +2,7 @@ package com.project.pescueshop.service;
 
 import com.project.pescueshop.model.dto.InvoiceItemDTO;
 import com.project.pescueshop.model.entity.Invoice;
+import com.project.pescueshop.model.entity.User;
 import com.project.pescueshop.model.exception.FriendlyException;
 import com.project.pescueshop.repository.dao.PaymentDAO;
 import com.project.pescueshop.util.constant.EnumInvoiceStatus;
@@ -39,5 +40,9 @@ public class InvoiceService {
         }
 
         return updateInvoiceStatus(invoice, enumInvoiceStatus);
+    }
+
+    public List<Invoice> getOrderInfoByUser(User user) {
+        return paymentDAO.findAllInvoiceByUserId(user.getUserId());
     }
 }

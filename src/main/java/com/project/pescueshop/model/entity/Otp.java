@@ -12,11 +12,11 @@ import java.util.Date;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "OTP")
 @Entity
 @Builder
+@AllArgsConstructor
 @Name(prefix = "OTPC")
 public class Otp {
     @Id
