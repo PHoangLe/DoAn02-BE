@@ -6,13 +6,13 @@ import lombok.*;
 
 import java.util.Date;
 
-@Data
-@Builder
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Name(noun = "error", pluralNoun = "errorList")
+@Name(noun = "error", pluralNoun = "errorList")@Data
+@Builder
+
 public class ErrorLogDTO {
     private String errorLogId;
     private String message;

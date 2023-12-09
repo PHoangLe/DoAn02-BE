@@ -1,6 +1,8 @@
 package com.project.pescueshop.service;
 
 import com.project.pescueshop.model.dto.AddOrUpdateImportItemDTO;
+import com.project.pescueshop.model.dto.ProductDTO;
+import com.project.pescueshop.model.dto.VarietyDTO;
 import com.project.pescueshop.model.entity.*;
 import com.project.pescueshop.model.exception.FriendlyException;
 import com.project.pescueshop.util.constant.EnumStatus;
@@ -10,16 +12,28 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @Service
 @Slf4j
 public class ThreadService extends BaseService {
     private final VarietyService varietyService;
     private final ImportService importService;
+    private final RatingService ratingService;
+    private final ProductService productService;
     @Autowired
-    public ThreadService(@Lazy VarietyService varietyService,@Lazy ImportService importService) {
+    public ThreadService(
+            @Lazy VarietyService varietyService,
+            @Lazy ImportService importService,
+            @Lazy RatingService ratingService,
+            @Lazy ProductService productService) {
         this.varietyService = varietyService;
         this.importService = importService;
+        this.ratingService = ratingService;
+        this.productService = productService;
     }
 
     public void addVarietyByAttribute(Product product, List<VarietyAttribute> existingAttributes, VarietyAttribute newAttribute) {
@@ -81,5 +95,34 @@ public class ThreadService extends BaseService {
 
     public void processAddOrUpdateImportItem(ImportInvoice invoice, AddOrUpdateImportItemDTO dto) throws FriendlyException{
         importService.addOrUpdateImportItem(invoice, dto);
+    }
+
+    public void retrieveExternalInfoForProductDTO(ProductDTO dto){
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+
+        Future<List<Variety>> varietyFuture = executorService.submit(() ->
+                varietyService.findByProductId(dto.getProductId()));
+
+        Future<List<VarietyAttribute>> attributeFuture = executorService.submit(() ->
+                productService.getAllExistedAttributeByProductId(dto.getProductId(), null));
+
+        Future<List<Rating>> ratingFuture = executorService.submit(() ->
+                ratingService.getRatingByProductId(dto.getProductId()));
+
+        executorService.shutdown();
+
+        try {
+            List<Variety> varietyList = varietyFuture.get();
+            List<VarietyDTO> varietyDTOList = varietyService.transformVarietyToDTOList(varietyList);
+            dto.setVarieties(varietyDTOList);
+
+            List<VarietyAttribute> varietyAttributeList = attributeFuture.get();
+            dto.setVarietyAttributeList(varietyAttributeList);
+
+            List<Rating> ratingList = ratingFuture.get();
+            dto.setRatingList(ratingList);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 }

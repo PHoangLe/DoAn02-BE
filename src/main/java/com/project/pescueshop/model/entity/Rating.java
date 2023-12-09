@@ -5,10 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
@@ -17,6 +14,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "RATING")
 @Entity
 @Name(prefix = "RATE")
@@ -27,7 +25,8 @@ public class Rating {
     private String ratingId;
     private String productId;
     private String userId;
-    private float value;
+    private Integer score;
     private Date date;
     private String message;
+    private Boolean isBought;
 }

@@ -99,4 +99,5 @@ public class VarietyService extends BaseService{
     public List<Variety> findByProductId(String productId){
         return varietyRepository.findByProductId(productId);
     }
+
 }
