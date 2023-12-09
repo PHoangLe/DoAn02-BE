@@ -111,7 +111,7 @@ public class PaymentService {
         invoice.setCreatedDate(Util.getCurrentDate());
         invoice.setVoucher(paymentInfo.getVoucher());
 
-        long invoiceValue = cartDAO.sumValueOfAllSelectedProductInCart(user.getUserId());
+        long invoiceValue = cartDAO.sumValueOfAllSelectedProductInCart(cartCheckOutInfoDTO.getCartId(), user.getUserId());
 
         if (invoiceValue == 0){
             throw new FriendlyException(EnumResponseCode.CART_NOT_FOUND);

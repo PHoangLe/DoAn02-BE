@@ -36,17 +36,18 @@ public class CartDAO extends BaseDAO{
         return cartItemRepository.findByVarietyIdAndCartId(varietyId, cartId).orElse(null);
     }
 
-    public Long sumValueOfAllSelectedProductInCart(String userId){
+    public Long sumValueOfAllSelectedProductInCart(String cartId, String userId){
         String sql =
                 " SELECT COALESCE(SUM(ci.total_item_price), 0) " +
                 " FROM cart_item ci " +
                 " JOIN cart c on ci.cart_id = c.cart_id " +
                 " JOIN variety v on v.variety_id = ci.variety_id " +
-                " WHERE c.user_id = :p_user_id " +
+                " WHERE (c.cart_id = :p_cart_id OR c.user_id = :p_user_id) " +
                 " AND ci.is_selected = true " +
                 " AND v.stock_amount >= ci.quantity ";
 
         MapSqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("p_cart_id", cartId)
                 .addValue("p_user_id", userId);
 
         return jdbcTemplate.queryForObject(sql, parameters, Long.class);

@@ -49,8 +49,8 @@ public class PaymentController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/un-authenticate/user-cart-checkout/{cartId}")
-    public ResponseEntity<ResponseDTO<String>> cartCheckoutUnAuthenticate(@RequestBody CartCheckOutInfoDTO cartCheckOutInfoDTO, @PathVariable String cartId) throws FriendlyException, UnsupportedEncodingException {
+    @PostMapping("/un-authenticate/user-cart-checkout")
+    public ResponseEntity<ResponseDTO<String>> cartCheckoutUnAuthenticate(@RequestBody CartCheckOutInfoDTO cartCheckOutInfoDTO) throws FriendlyException, UnsupportedEncodingException {
         String paymentUrl = paymentService.userCartCheckoutUnAuthenticate(cartCheckOutInfoDTO);
         ResponseDTO<String> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, paymentUrl, "output");
         return ResponseEntity.ok(result);
