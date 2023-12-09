@@ -114,7 +114,7 @@ public class PaymentService {
         long invoiceValue = cartDAO.sumValueOfAllSelectedProductInCart(cartCheckOutInfoDTO.getCartId(), user.getUserId());
 
         if (invoiceValue == 0){
-            throw new FriendlyException(EnumResponseCode.CART_NOT_FOUND);
+            throw new FriendlyException(EnumResponseCode.NO_ITEM_TO_CHECKOUT);
         }
 
         invoice.setTotalPrice(invoiceValue);
@@ -147,7 +147,13 @@ public class PaymentService {
 
         CompletableFuture.runAsync(() -> {
             addInvoiceItemsToInvoice(invoice);
+        });
+
+        CompletableFuture.runAsync(() -> {
             userService.addMemberPoint(user, invoice.getFinalPrice() / MEMBER_POINT_RATE);
+        });
+
+        CompletableFuture.runAsync(() -> {
             cartDAO.removeSelectedCartItem(cartCheckOutInfoDTO.getCartId());
         });
 
