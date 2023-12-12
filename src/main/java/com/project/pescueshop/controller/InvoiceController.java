@@ -66,12 +66,4 @@ public class InvoiceController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/{invoicedId}")
-    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
-    @SecurityRequirement(name = "Bearer Authentication")
-    public ResponseEntity<ResponseDTO<List<InvoiceItemDTO>>> getOrderDetail(@PathVariable String invoicedId) {
-        List<InvoiceItemDTO> invoiceList = invoiceService.getInvoiceDetail(invoicedId);
-        ResponseDTO<List<InvoiceItemDTO>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, invoiceList, "invoiceList");
-        return ResponseEntity.ok(result);
-    }
 }
