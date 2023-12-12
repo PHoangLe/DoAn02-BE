@@ -26,7 +26,7 @@ public class InvoiceController {
     private final InvoiceService invoiceService;
 
     @GetMapping("/{invoiceId}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<ResponseDTO<List<InvoiceItemDTO>>> getInvoiceDetail(@PathVariable String invoiceId){
         List<InvoiceItemDTO> invoiceItemDTOS = invoiceService.getInvoiceDetail(invoiceId);
