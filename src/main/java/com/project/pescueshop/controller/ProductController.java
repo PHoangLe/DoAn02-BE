@@ -158,19 +158,28 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public ResponseEntity<ResponseDTO<List<ProductDTO>>> findAllProduct() {
-        List<ProductDTO> productList = productService.findAllProduct();
+    public ResponseEntity<ResponseDTO<List<Product>>> findAllProduct() {
+        List<Product> productList = productService.findAllProduct();
 
-        ResponseDTO<List<ProductDTO>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, productList, "productList");
+        ResponseDTO<List<Product>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, productList, "productList");
 
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/random")
-    public ResponseEntity<ResponseDTO<List<ProductDTO>>> getNProducts(@RequestParam Integer n) {
-        List<ProductDTO> productList = productService.getNRandomProducts(n);
+    public ResponseEntity<ResponseDTO<List<Product>>> getNProducts(@RequestParam Integer n) {
+        List<Product> productList = productService.getNRandomProducts(n);
 
-        ResponseDTO<List<ProductDTO>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, productList, "productList");
+        ResponseDTO<List<Product>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, productList, "productList");
+
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/most-views")
+    public ResponseEntity<ResponseDTO<List<Product>>> getMostViewsProduct(@RequestParam Integer n) {
+        List<Product> productList = productService.getMostViewsProducts(n);
+
+        ResponseDTO<List<Product>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, productList, "productList");
 
         return ResponseEntity.ok(result);
     }
