@@ -203,4 +203,12 @@ public class ProductService extends BaseService {
     public List<Product> getMostViewsProducts(Integer n) {
         return productDAO.getMostViewsProducts(n);
     }
+
+    public List<Product> getProductByBrandId(String brandId) {
+        return productDAO.getProductByBrandId(brandId);
+    }
+
+    public List<Product> getProductByCategoryId(String categoryId) {
+        return productDAO.getProductByCategoryId(categoryId);
+    }
 }

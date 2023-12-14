@@ -12,7 +12,6 @@ import java.util.Date;
 @NoArgsConstructor
 @Name(noun = "error", pluralNoun = "errorList")@Data
 @Builder
-
 public class ErrorLogDTO {
     private String errorLogId;
     private String message;
