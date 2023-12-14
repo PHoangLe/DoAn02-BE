@@ -32,6 +32,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final CartService cartService;
+    private final ThreadService threadService;
 
     public static User getCurrentLoggedInUser() throws FriendlyException {
         User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -63,10 +64,7 @@ public class AuthenticationService {
 
         user = userService.addUser(user);
 
-        String userId = user.getUserId();
-        CompletableFuture.runAsync(() -> {
-            cartService.createCartForNewUser(userId);
-        });
+        threadService.createNeededInfoForNewUser(user);
 
         ResponseDTO<UserDTO> response = new ResponseDTO<>(EnumResponseCode.CREATED_ACCOUNT_SUCCESSFUL, new UserDTO(user));
         return ResponseEntity.ok(response);
