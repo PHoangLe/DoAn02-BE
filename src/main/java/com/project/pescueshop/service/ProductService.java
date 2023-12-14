@@ -105,12 +105,8 @@ public class ProductService extends BaseService {
 
     }
 
-    public List<ProductDTO> findAllProduct(){
-        List<Product> productList = productDAO.findAll();
-
-        return productList.stream()
-                .map(this::transformProductToDTO)
-                .toList();
+    public List<Product> findAllProduct(){
+        return productDAO.findAll();
     }
 
     public List<String> uploadProductImages(String productId, final List<MultipartFile> images){
@@ -200,11 +196,11 @@ public class ProductService extends BaseService {
        productDAO.deleteAttribute(productId, attributeId);
     }
 
-    public List<ProductDTO> getNRandomProducts(Integer n){
-        List<Product> productList = productDAO.getRandomNProduct(n);
+    public List<Product> getNRandomProducts(Integer n){
+        return productDAO.getRandomNProduct(n);
+    }
 
-        return productList.stream()
-                .map(this::transformProductToDTO)
-                .toList();
+    public List<Product> getMostViewsProducts(Integer n) {
+        return productDAO.getMostViewsProducts(n);
     }
 }

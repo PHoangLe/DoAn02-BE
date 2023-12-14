@@ -42,6 +42,15 @@ public class ProductDAO extends BaseDAO{
         return jdbcTemplate.queryForList(sql, parameters, Product.class);
     }
 
+    public List<Product> getMostViewsProducts(Integer n){
+        String sql = "SELECT * from get_n_most_views_products(:p_n_product);";
+
+        MapSqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("p_n_product", n);
+
+        return jdbcTemplate.queryForList(sql, parameters, Product.class);
+    }
+
     public void saveAndFlushProduct(Product product){
         productRepository.saveAndFlush(product);
     }
