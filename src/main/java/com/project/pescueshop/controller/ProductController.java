@@ -167,8 +167,8 @@ public class ProductController {
     }
 
     @GetMapping("/random")
-    public ResponseEntity<ResponseDTO<List<Product>>> getNProducts(@RequestParam Integer n) {
-        List<Product> productList = productService.getNRandomProducts(n);
+    public ResponseEntity<ResponseDTO<List<Product>>> getNProducts(@RequestParam Integer quantity) {
+        List<Product> productList = productService.getNRandomProducts(quantity);
 
         ResponseDTO<List<Product>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, productList, "productList");
 
@@ -176,8 +176,26 @@ public class ProductController {
     }
 
     @GetMapping("/most-views")
-    public ResponseEntity<ResponseDTO<List<Product>>> getMostViewsProduct(@RequestParam Integer n) {
-        List<Product> productList = productService.getMostViewsProducts(n);
+    public ResponseEntity<ResponseDTO<List<Product>>> getMostViewsProduct(@RequestParam Integer quantity) {
+        List<Product> productList = productService.getMostViewsProducts(quantity);
+
+        ResponseDTO<List<Product>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, productList, "productList");
+
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/categories/{categoryId}")
+    public ResponseEntity<ResponseDTO<List<Product>>> getByCategoryId(@PathVariable String categoryId) {
+        List<Product> productList = productService.getProductByCategoryId(categoryId);
+
+        ResponseDTO<List<Product>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, productList, "productList");
+
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/brands/{brandId}")
+    public ResponseEntity<ResponseDTO<List<Product>>> getByBrandId(@PathVariable String brandId) {
+        List<Product> productList = productService.getProductByBrandId(brandId);
 
         ResponseDTO<List<Product>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, productList, "productList");
 

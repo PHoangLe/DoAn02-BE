@@ -51,6 +51,14 @@ public class ProductDAO extends BaseDAO{
         return jdbcTemplate.queryForList(sql, parameters, Product.class);
     }
 
+    public List<Product> getProductByBrandId(String brandId) {
+        return productRepository.getProductByBrandId(brandId);
+    }
+
+    public List<Product> getProductByCategoryId(String categoryId) {
+        return productRepository.getProductByCategoryId(categoryId);
+    }
+
     public void saveAndFlushProduct(Product product){
         productRepository.saveAndFlush(product);
     }
