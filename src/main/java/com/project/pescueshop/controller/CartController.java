@@ -43,8 +43,8 @@ public class CartController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/un-authenticate/{cartId}")
-    public ResponseEntity<ResponseDTO<CartDTO>> getCartUnAuthenticate(@PathVariable String cartId) throws FriendlyException {
+    @GetMapping("/un-authenticate")
+    public ResponseEntity<ResponseDTO<CartDTO>> getCartUnAuthenticate(@RequestParam String cartId) throws FriendlyException {
         CartDTO itemList = cartService.getUnAuthenticatedCart(cartId);
         ResponseDTO<CartDTO> result;
         if (itemList == null) {

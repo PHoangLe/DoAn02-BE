@@ -3,6 +3,7 @@ package com.project.pescueshop.service;
 import com.project.pescueshop.model.entity.ChatMessage;
 import com.project.pescueshop.model.entity.ChatRoom;
 import com.project.pescueshop.model.entity.User;
+import com.project.pescueshop.model.exception.FriendlyException;
 import com.project.pescueshop.repository.dao.ChatDAO;
 import com.project.pescueshop.util.constant.EnumMessageStatus;
 import lombok.RequiredArgsConstructor;
@@ -56,5 +57,16 @@ public class ChatRoomService {
     public List<ChatMessage> findAllMessageBySenderIDAndRecipientID(String senderId, String recipientId) {
         updateStatus(recipientId, senderId, EnumMessageStatus.RECEIVED.getValue());
         return chatDAO.findAllMessageBySenderIdAndRecipientId(senderId, recipientId);
+    }
+
+    public void createChatRoomForNewUser(User user) {
+        User adminUser = userService.getAdminUser();
+
+        ChatRoom chatRoom = ChatRoom.builder()
+                .firstUser(user)
+                .secondUser(adminUser)
+                .build();
+
+        chatDAO.saveAndFlushRoom(chatRoom);
     }
 }

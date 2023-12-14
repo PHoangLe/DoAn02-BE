@@ -24,16 +24,23 @@ public class ThreadService extends BaseService {
     private final ImportService importService;
     private final RatingService ratingService;
     private final ProductService productService;
+    private final CartService cartService;
+    private final ChatRoomService chatRoomService;
+
     @Autowired
     public ThreadService(
             @Lazy VarietyService varietyService,
             @Lazy ImportService importService,
             @Lazy RatingService ratingService,
-            @Lazy ProductService productService) {
+            @Lazy ProductService productService,
+            @Lazy CartService cartService,
+            @Lazy ChatRoomService chatRoomService) {
         this.varietyService = varietyService;
         this.importService = importService;
         this.ratingService = ratingService;
         this.productService = productService;
+        this.cartService = cartService;
+        this.chatRoomService = chatRoomService;
     }
 
     public void addVarietyByAttribute(Product product, List<VarietyAttribute> existingAttributes, VarietyAttribute newAttribute) {
@@ -124,5 +131,14 @@ public class ThreadService extends BaseService {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    public void createNeededInfoForNewUser(User user) {
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+
+        executorService.submit(() -> cartService.createCartForNewUser(user.getUserId()));
+        executorService.submit(() -> chatRoomService.createChatRoomForNewUser(user));
+
+        executorService.shutdown();
     }
 }

@@ -63,7 +63,7 @@ public class OtpService {
         Otp otpConfirmEmail = Otp.builder()
                 .code(otp)
                 .createdDate(Util.getCurrentDate())
-                .createdDate(Util.getCurrentDatePlusSeconds(OTP_EXPIRATION_TIME))
+                .expiry(Util.getCurrentDatePlusSeconds(OTP_EXPIRATION_TIME))
                 .userId(user.getUserId())
                 .type(EnumOtpType.CONFIRM_EMAIL.getValue())
                 .build();
@@ -86,7 +86,7 @@ public class OtpService {
         Otp otpConfirmEmail = Otp.builder()
                 .code(otp)
                 .createdDate(Util.getCurrentDate())
-                .createdDate(Util.getCurrentDatePlusSeconds(OTP_EXPIRATION_TIME))
+                .expiry(Util.getCurrentDatePlusSeconds(OTP_EXPIRATION_TIME))
                 .userId(user.getUserId())
                 .type(EnumOtpType.FORGOT_PASSWORD.getValue())
                 .build();

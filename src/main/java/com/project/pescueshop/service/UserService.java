@@ -40,13 +40,8 @@ public class UserService extends BaseService {
         return user;
     }
 
-    public User getAdminUser() throws FriendlyException {
-        User admin = findByEmail("admin");
-
-        if (admin == null)
-            throw new FriendlyException(EnumResponseCode.NOT_LOGGED_IN);
-
-        return admin;
+    public User getAdminUser() {
+        return findByEmail("admin");
     }
 
     public Address addUserAddress(User user, AddressInputDTO dto){
