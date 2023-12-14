@@ -4,6 +4,7 @@ import com.project.pescueshop.model.entity.Product;
 import com.project.pescueshop.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
@@ -34,21 +35,34 @@ public class ProductDAO extends BaseDAO{
     }
 
     public List<Product> getRandomNProduct(Integer n){
-        String sql = "SELECT * FROM get_n_random_product(:p_n_product);";
+        n = n == null ? 5 : n;
+
+        String sql = "SELECT *" +
+                "    FROM product " +
+                "    ORDER BY RANDOM() " +
+                "    LIMIT :p_n_product; ";
 
         MapSqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("p_n_product", n);
 
-        return jdbcTemplate.queryForList(sql, parameters, Product.class);
+        return jdbcTemplate.query(sql, parameters, BeanPropertyRowMapper.newInstance(Product.class));
     }
 
     public List<Product> getMostViewsProducts(Integer n){
-        String sql = "SELECT * from get_n_most_views_products(:p_n_product);";
+        n = n == null ? 5 : n;
+
+        String sql = "SELECT p.* " +
+                "FROM product p " +
+                "JOIN view_audit_log val ON p.product_id = val.object_id " +
+                "WHERE val.object_type = 'PRODUCT' " +
+                "GROUP BY (p.product_id, val.object_id) " +
+                "ORDER BY COUNT(val.view_audit_log_id) " +
+                "LIMIT :p_n_product; ";
 
         MapSqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("p_n_product", n);
 
-        return jdbcTemplate.queryForList(sql, parameters, Product.class);
+        return jdbcTemplate.query(sql, parameters, BeanPropertyRowMapper.newInstance(Product.class));
     }
 
     public List<Product> getProductByBrandId(String brandId) {

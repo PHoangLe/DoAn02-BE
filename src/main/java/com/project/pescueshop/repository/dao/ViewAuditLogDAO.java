@@ -12,11 +12,15 @@ import org.springframework.stereotype.Repository;
 public class ViewAuditLogDAO {
     private final ViewAuditLogRepository viewAuditLogRepository;
 
-    public static void saveAndFLushAudit(String objectId, EnumObjectType objectType){
+    public String saveAndFLushAudit(String objectId, EnumObjectType objectType){
         ViewAuditLog auditLog = ViewAuditLog.builder()
                 .objectId(objectId)
                 .objectType(objectType.toString())
                 .date(Util.getCurrentDate())
                 .build();
+
+        viewAuditLogRepository.saveAndFlush(auditLog);
+
+        return auditLog.getViewAuditLogId();
     }
 }

@@ -49,10 +49,6 @@ public class ProductService extends BaseService {
 
         threadService.retrieveExternalInfoForProductDTO(dto);
 
-        CompletableFuture.runAsync(() -> {
-            ViewAuditLogDAO.saveAndFLushAudit(productId, EnumObjectType.PRODUCT);
-        });
-
         return dto;
     }
 
