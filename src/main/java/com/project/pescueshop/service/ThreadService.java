@@ -5,6 +5,8 @@ import com.project.pescueshop.model.dto.ProductDTO;
 import com.project.pescueshop.model.dto.VarietyDTO;
 import com.project.pescueshop.model.entity.*;
 import com.project.pescueshop.model.exception.FriendlyException;
+import com.project.pescueshop.repository.dao.ViewAuditLogDAO;
+import com.project.pescueshop.util.constant.EnumObjectType;
 import com.project.pescueshop.util.constant.EnumStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ public class ThreadService extends BaseService {
     private final ProductService productService;
     private final CartService cartService;
     private final ChatRoomService chatRoomService;
+    private final ViewAuditLogDAO viewAuditLogDAO;
 
     @Autowired
     public ThreadService(
@@ -34,13 +37,15 @@ public class ThreadService extends BaseService {
             @Lazy RatingService ratingService,
             @Lazy ProductService productService,
             @Lazy CartService cartService,
-            @Lazy ChatRoomService chatRoomService) {
+            @Lazy ChatRoomService chatRoomService,
+            @Lazy ViewAuditLogDAO viewAuditLogDAO) {
         this.varietyService = varietyService;
         this.importService = importService;
         this.ratingService = ratingService;
         this.productService = productService;
         this.cartService = cartService;
         this.chatRoomService = chatRoomService;
+        this.viewAuditLogDAO = viewAuditLogDAO;
     }
 
     public void addVarietyByAttribute(Product product, List<VarietyAttribute> existingAttributes, VarietyAttribute newAttribute) {
@@ -105,7 +110,7 @@ public class ThreadService extends BaseService {
     }
 
     public void retrieveExternalInfoForProductDTO(ProductDTO dto){
-        ExecutorService executorService = Executors.newFixedThreadPool(3);
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
 
         Future<List<Variety>> varietyFuture = executorService.submit(() ->
                 varietyService.findByProductId(dto.getProductId()));
@@ -115,6 +120,8 @@ public class ThreadService extends BaseService {
 
         Future<List<Rating>> ratingFuture = executorService.submit(() ->
                 ratingService.getRatingByProductId(dto.getProductId()));
+
+        Future<String> auditId = executorService.submit(() -> viewAuditLogDAO.saveAndFLushAudit(dto.getProductId(), EnumObjectType.PRODUCT));
 
         executorService.shutdown();
 
@@ -128,7 +135,10 @@ public class ThreadService extends BaseService {
 
             List<Rating> ratingList = ratingFuture.get();
             dto.setRatingList(ratingList);
+
+            System.out.println(auditId.get());
         } catch (InterruptedException | ExecutionException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
