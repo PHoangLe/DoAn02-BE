@@ -17,6 +17,7 @@ public class InvoiceItemDTO {
     private Long total_price;
     private String varietyId;
     private String name;
+    private String productId;
     private Long unitPrice;
     private String image;
     private Integer stock_amount;
