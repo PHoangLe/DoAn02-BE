@@ -2,6 +2,7 @@ package com.project.pescueshop.service;
 
 import com.project.pescueshop.model.dto.AddOrUpdateImportItemDTO;
 import com.project.pescueshop.model.dto.ProductDTO;
+import com.project.pescueshop.model.dto.RatingResultDTO;
 import com.project.pescueshop.model.dto.VarietyDTO;
 import com.project.pescueshop.model.entity.*;
 import com.project.pescueshop.model.exception.FriendlyException;
@@ -118,7 +119,7 @@ public class ThreadService extends BaseService {
         Future<List<VarietyAttribute>> attributeFuture = executorService.submit(() ->
                 productService.getAllExistedAttributeByProductId(dto.getProductId(), null));
 
-        Future<List<Rating>> ratingFuture = executorService.submit(() ->
+        Future<List<RatingResultDTO>> ratingFuture = executorService.submit(() ->
                 ratingService.getRatingByProductId(dto.getProductId()));
 
         Future<String> auditId = executorService.submit(() -> viewAuditLogDAO.saveAndFLushAudit(dto.getProductId(), EnumObjectType.PRODUCT));
@@ -133,7 +134,7 @@ public class ThreadService extends BaseService {
             List<VarietyAttribute> varietyAttributeList = attributeFuture.get();
             dto.setVarietyAttributeList(varietyAttributeList);
 
-            List<Rating> ratingList = ratingFuture.get();
+            List<RatingResultDTO> ratingList = ratingFuture.get();
             dto.setRatingList(ratingList);
 
             System.out.println(auditId.get());

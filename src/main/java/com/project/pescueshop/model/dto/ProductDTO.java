@@ -31,7 +31,7 @@ public class ProductDTO {
     private List<VarietyDTO> varieties;
     private String status;
     private List<VarietyAttribute> varietyAttributeList;
-    private List<Rating> ratingList;
+    private List<RatingResultDTO> ratingList;
 
     public ProductDTO(Product product){
         this.productId = product.getProductId();
