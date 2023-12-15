@@ -18,6 +18,7 @@ public class InvoiceItemMapper implements RowMapper<InvoiceItemDTO> {
                 .total_price(rs.getLong("total_price"))
                 .varietyId(rs.getString("variety_id"))
                 .name(rs.getString("name"))
+                .productId(rs.getString("product_id"))
                 .unitPrice(rs.getLong("unit_price"))
                 .image(rs.getString("image"))
                 .stock_amount(rs.getInt("stock_amount"))
