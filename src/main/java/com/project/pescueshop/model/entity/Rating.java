@@ -1,10 +1,7 @@
 package com.project.pescueshop.model.entity;
 
 import com.project.pescueshop.model.annotation.Name;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -24,7 +21,11 @@ public class Rating {
     @GenericGenerator(name = "CustomIdGenerator", strategy = "com.project.pescueshop.util.CustomIdGenerator")
     private String ratingId;
     private String productId;
+    @Transient
     private String userId;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "userId", referencedColumnName = "userId")
+    private User user;
     private Integer score;
     private Date date;
     private String message;

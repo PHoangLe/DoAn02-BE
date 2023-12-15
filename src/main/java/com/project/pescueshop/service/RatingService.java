@@ -1,6 +1,7 @@
 package com.project.pescueshop.service;
 
 import com.project.pescueshop.model.dto.CreateRatingDTO;
+import com.project.pescueshop.model.dto.RatingResultDTO;
 import com.project.pescueshop.model.entity.Rating;
 import com.project.pescueshop.model.entity.User;
 import com.project.pescueshop.repository.dao.RatingDAO;
@@ -32,7 +33,21 @@ public class RatingService {
         return rating;
     }
 
-    public List<Rating> getRatingByProductId(String productId){
-        return ratingDAO.getRatingByProductId(productId);
+    public List<RatingResultDTO> getRatingByProductId(String productId){
+        List<Rating> ratingList = ratingDAO.getRatingByProductId(productId);
+
+        return ratingList.stream()
+                .map(rating -> RatingResultDTO.builder()
+                        .ratingId(rating.getRatingId())
+                        .productId(rating.getProductId())
+                        .userId(rating.getUser().getUserId())
+                        .userFirstName(rating.getUser().getUserFirstName())
+                        .userLastName(rating.getUser().getUserLastName())
+                        .score(rating.getScore())
+                        .date(rating.getDate())
+                        .message(rating.getMessage())
+                        .isBought(rating.getIsBought())
+                        .build())
+                .toList();
     }
 }
