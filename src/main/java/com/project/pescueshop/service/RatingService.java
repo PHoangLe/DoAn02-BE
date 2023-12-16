@@ -43,6 +43,7 @@ public class RatingService {
                         .userId(rating.getUser().getUserId())
                         .userFirstName(rating.getUser().getUserFirstName())
                         .userLastName(rating.getUser().getUserLastName())
+                        .userAvatar(rating.getUser().getUserAvatar())
                         .score(rating.getScore())
                         .date(rating.getDate())
                         .message(rating.getMessage())

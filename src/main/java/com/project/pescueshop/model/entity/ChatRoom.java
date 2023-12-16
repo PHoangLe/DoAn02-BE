@@ -18,11 +18,11 @@ public class ChatRoom {
     @GeneratedValue(generator = "CustomIdGenerator")
     @GenericGenerator(name = "CustomIdGenerator", strategy = "com.project.pescueshop.util.CustomIdGenerator")
     private String chatRoomId;
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "firstUserId", referencedColumnName = "userId", insertable = false, updatable = false)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "firstUserId", referencedColumnName = "userId")
     private User firstUser;
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "secondUserId", referencedColumnName = "userId", insertable = false, updatable = false)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "secondUserId", referencedColumnName = "userId")
     private User secondUser;
 
     public ChatRoom(User user1, User user2){
