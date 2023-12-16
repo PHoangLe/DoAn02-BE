@@ -23,7 +23,7 @@ public class RatingService {
                 .score(dto.getScore())
                 .productId(dto.getProductId())
                 .date(Util.getCurrentDate())
-                .userId(user.getUserId())
+                .user(user)
                 .message(dto.getMessage())
                 .isBought(true)
                 .build();
