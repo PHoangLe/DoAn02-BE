@@ -26,6 +26,7 @@ public class Invoice {
     private Date createdDate;
     private long totalPrice;
     private long discountPrice;
+    private Long shippingFee;
     private long finalPrice;
     @OneToOne
     @JoinColumn(name = "voucherId", referencedColumnName = "voucherId")
