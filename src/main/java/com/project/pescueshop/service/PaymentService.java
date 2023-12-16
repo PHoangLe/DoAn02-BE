@@ -110,8 +110,9 @@ public class PaymentService {
         invoice.setPhoneNumber(paymentInfo.getPhoneNumber());
         invoice.setCreatedDate(Util.getCurrentDate());
         invoice.setVoucher(paymentInfo.getVoucher());
+        invoice.setShippingFee(paymentInfo.getShippingFee());
 
-        long invoiceValue = cartDAO.sumValueOfAllSelectedProductInCart(cartCheckOutInfoDTO.getCartId(), user.getUserId());
+        long invoiceValue = cartDAO.sumValueOfAllSelectedProductInCart(cartCheckOutInfoDTO.getCartId(), user.getUserId()) + paymentInfo.getShippingFee();
 
         if (invoiceValue == 0){
             throw new FriendlyException(EnumResponseCode.NO_ITEM_TO_CHECKOUT);
@@ -165,9 +166,9 @@ public class PaymentService {
     }
 
     public String singleItemCheckOut(User user, SingleItemCheckOutInfoDTO info) throws UnsupportedEncodingException {
-        PaymentInfoDTO dto = info.getPaymentInfoDTO();
-        EnumPaymentType paymentType = EnumPaymentType.getByValue(dto.getPaymentType());
-        Address address = dto.getAddress();
+        PaymentInfoDTO paymentInfo = info.getPaymentInfoDTO();
+        EnumPaymentType paymentType = EnumPaymentType.getByValue(paymentInfo.getPaymentType());
+        Address address = paymentInfo.getAddress();
 
         Invoice invoice = new Invoice();
         invoice.setPaymentType(paymentType.getValue());
@@ -177,12 +178,13 @@ public class PaymentService {
         invoice.setWardName(address.getWardName());
         invoice.setStreetName(address.getStreetName());
         invoice.setStatus(EnumInvoiceStatus.PENDING.getValue());
-        invoice.setPhoneNumber(dto.getPhoneNumber());
+        invoice.setPhoneNumber(paymentInfo.getPhoneNumber());
         invoice.setCreatedDate(Util.getCurrentDate());
-        invoice.setVoucher(dto.getVoucher());
+        invoice.setVoucher(paymentInfo.getVoucher());
+        invoice.setShippingFee(paymentInfo.getShippingFee());
 
         Variety variety = varietyService.findById(info.getVarietyId());
-        long invoiceValue = variety.getPrice();
+        long invoiceValue = variety.getPrice() + paymentInfo.getShippingFee();
         invoice.setTotalPrice(invoiceValue);
         invoice.setFinalPrice(invoiceValue);
 
@@ -226,7 +228,7 @@ public class PaymentService {
         });
 
         if (paymentType == EnumPaymentType.CREDIT_CARD){
-            return createPaymentLink("Invoice ID: " + invoice.getInvoiceId(), dto.getReturnUrl(), invoice.getFinalPrice());
+            return createPaymentLink("Invoice ID: " + invoice.getInvoiceId(), paymentInfo.getReturnUrl(), invoice.getFinalPrice());
         }
         paymentDAO.saveAndFlushInvoice(invoice);
         return "";
