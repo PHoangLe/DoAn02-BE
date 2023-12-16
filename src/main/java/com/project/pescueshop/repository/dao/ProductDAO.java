@@ -3,6 +3,8 @@ package com.project.pescueshop.repository.dao;
 import com.project.pescueshop.model.entity.Product;
 import com.project.pescueshop.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -26,7 +28,7 @@ public class ProductDAO extends BaseDAO{
     }
 
     public String getProductImage(String productId){
-        String sql = "SELECT images FROM products_images WHERE product_product_id = ?";
+        String sql = "SELECT images FROM products_images WHERE product_product_id = :p_productId";
 
         MapSqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("p_productId", productId);
@@ -37,32 +39,15 @@ public class ProductDAO extends BaseDAO{
     public List<Product> getRandomNProduct(Integer n){
         n = n == null ? 5 : n;
 
-        String sql = "SELECT *" +
-                "    FROM product " +
-                "    ORDER BY RANDOM() " +
-                "    LIMIT :p_n_product; ";
-
-        MapSqlParameterSource parameters = new MapSqlParameterSource()
-                .addValue("p_n_product", n);
-
-        return jdbcTemplate.query(sql, parameters, BeanPropertyRowMapper.newInstance(Product.class));
+        Pageable pageable = PageRequest.of(0, n);
+        return productRepository.getRandomNProduct(pageable);
     }
 
     public List<Product> getMostViewsProducts(Integer n){
         n = n == null ? 5 : n;
 
-        String sql = "SELECT p.* " +
-                "FROM product p " +
-                "JOIN view_audit_log val ON p.product_id = val.object_id " +
-                "WHERE val.object_type = 'PRODUCT' " +
-                "GROUP BY (p.product_id, val.object_id) " +
-                "ORDER BY COUNT(val.view_audit_log_id) " +
-                "LIMIT :p_n_product; ";
-
-        MapSqlParameterSource parameters = new MapSqlParameterSource()
-                .addValue("p_n_product", n);
-
-        return jdbcTemplate.query(sql, parameters, BeanPropertyRowMapper.newInstance(Product.class));
+        Pageable pageable = PageRequest.of(0, n);
+        return productRepository.getMostViewsProducts(pageable);
     }
 
     public List<Product> getProductByBrandId(String brandId) {
