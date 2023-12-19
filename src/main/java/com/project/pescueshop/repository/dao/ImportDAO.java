@@ -5,6 +5,7 @@ import com.project.pescueshop.model.dto.ImportItemGroupDTO;
 import com.project.pescueshop.model.dto.ImportItemListDTO;
 import com.project.pescueshop.model.entity.ImportInvoice;
 import com.project.pescueshop.model.entity.ImportItem;
+import com.project.pescueshop.model.entity.Invoice;
 import com.project.pescueshop.repository.ImportInvoiceRepository;
 import com.project.pescueshop.repository.ImportItemRepository;
 import com.project.pescueshop.repository.mapper.ImportItemGroupListMapper;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -33,6 +35,10 @@ public class ImportDAO extends BaseDAO{
 
     public ImportInvoice findImportInvoiceById(String invoiceId){
         return importInvoiceRepository.findById(invoiceId).orElse(null);
+    }
+
+    public List<ImportInvoice> findImportInvoiceByDateRange(Date fromDate, Date toDate){
+        return importInvoiceRepository.findImportInvoiceByDateRange(fromDate, toDate);
     }
 
     public ImportItem findImportItemByVarietyIdAndInvoiceId(String varietyId, String importInvoiceId) {
