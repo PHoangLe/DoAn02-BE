@@ -12,7 +12,7 @@ public class ReportResultMapper implements RowMapper<ReportResultDTO> {
     @Override
     public ReportResultDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
         return ReportResultDTO.builder()
-                .reportTime(rs.getTime("report_date"))
+                .reportTime(rs.getDate("report_date"))
                 .totalSell(rs.getLong("total_final_price"))
                 .totalImport(rs.getLong("total_import_price"))
                 .build();
