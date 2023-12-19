@@ -15,7 +15,7 @@ public class StatisticDAO extends BaseDAO{
     private final ReportResultMapper reportResultMapper;
 
     public List<ReportResultDTO> getReportByDateRange(Date fromDate, Date toDate, String groupType){
-        String sql = "SELECT * FROM generate_report(:p_key_word);";
+        String sql = "SELECT * FROM generate_report(:fromDate, :toDate, :granularity);";
 
         MapSqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("fromDate", fromDate)
