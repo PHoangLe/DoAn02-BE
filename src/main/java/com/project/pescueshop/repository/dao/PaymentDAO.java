@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -31,6 +32,10 @@ public class PaymentDAO extends BaseDAO{
 
     public Invoice findInvoiceById(String invoiceId){
         return invoiceRepository.findById(invoiceId).orElse(null);
+    }
+
+    public List<Invoice> findInvoiceByDateRange(Date fromDate, Date toDate){
+        return invoiceRepository.findInvoiceByDateRange(fromDate, toDate);
     }
 
     public List<InvoiceItemDTO> getInvoiceDetail(String invoiceId){
