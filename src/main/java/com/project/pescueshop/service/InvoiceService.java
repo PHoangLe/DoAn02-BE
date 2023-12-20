@@ -10,6 +10,7 @@ import com.project.pescueshop.util.constant.EnumResponseCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -17,8 +18,14 @@ import java.util.List;
 public class InvoiceService {
     private final PaymentDAO paymentDAO;
 
-    public List<Invoice> findAllInvoice(){
-        return paymentDAO.findAllInvoice();
+    public List<Invoice> findAllInvoice(Date fromDate, Date toDate){
+        if (fromDate == null && toDate == null){
+            return paymentDAO.findAllInvoice();
+        }
+
+        return paymentDAO.findAllInvoice().stream()
+                .filter(invoice -> invoice.getCreatedDate().before(toDate) && invoice.getCreatedDate().after(fromDate))
+                .toList();
     }
 
     public List<InvoiceItemDTO> getInvoiceDetail(String invoiceId){
