@@ -9,7 +9,8 @@ import java.util.Map;
 public enum EnumInvoiceStatus {
     PENDING(1, "PENDING"),
     COMPLETED(2, "COMPLETED"),
-    RETURN(3, "RETURN");
+    CANCEL(3, "CANCEL"),
+    RETURN(4, "RETURN");
 
     private static final Map<Integer, EnumInvoiceStatus> BY_ID = new HashMap<>();
     private static final Map<String, EnumInvoiceStatus> BY_LABEL = new HashMap<>();
