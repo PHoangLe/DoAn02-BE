@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -41,8 +42,8 @@ public class ImportController {
     @GetMapping("")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @SecurityRequirement(name = "Bearer Authentication")
-    public ResponseEntity<ResponseDTO<List<ImportInvoice>>> getAllImportInvoice(){
-        List<ImportInvoice> itemList = importService.getAllImportInvoice();
+    public ResponseEntity<ResponseDTO<List<ImportInvoice>>> getAllImportInvoice(@RequestParam(required = false) Date fromDate, @RequestParam(required = false) Date toDate){
+        List<ImportInvoice> itemList = importService.getAllImportInvoice(fromDate, toDate);
         ResponseDTO<List<ImportInvoice>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, itemList, "invoiceList");
 
         return ResponseEntity.ok(result);

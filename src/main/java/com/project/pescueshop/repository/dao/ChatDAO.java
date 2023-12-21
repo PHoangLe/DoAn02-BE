@@ -34,7 +34,17 @@ public class ChatDAO extends BaseDAO{
     }
 
     public void updateChatStatus(String senderId, String recipientId, String status) {
-        chatMessageRepository.updateChatStatus(senderId, recipientId, status);
+        String sql = "UPDATE chat_message " +
+                "SET status = :p_status " +
+                "WHERE sender_id = :p_sender_id " +
+                "AND recipient_id = :p_recipient_id ";
+
+        MapSqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("p_status", status)
+                .addValue("p_sender_id", senderId)
+                .addValue("p_recipient_id", recipientId);
+
+        jdbcTemplate.update(sql, parameters);
     }
 
     public List<ChatMessage> findAllMessageBySenderIdAndRecipientId(String senderId, String recipientId) {
