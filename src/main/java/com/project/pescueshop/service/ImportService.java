@@ -50,8 +50,14 @@ public class ImportService {
         return importDAO.findImportInvoiceById(importInvoiceId);
     }
 
-    public List<ImportInvoice> getAllImportInvoice(){
-        return importDAO.findAllImportInvoice();
+    public List<ImportInvoice> getAllImportInvoice(Date fromDate, Date toDate){
+        if (fromDate == null || toDate == null){
+            return importDAO.findAllImportInvoice();
+        }
+
+        return importDAO.findAllImportInvoice().stream()
+                .filter(invoice -> invoice.getCreatedDate().after(fromDate) && invoice.getCreatedDate().before(toDate))
+                .toList();
     }
 
     public void addOrUpdateImportItem(ImportInvoice invoice, AddOrUpdateImportItemDTO dto) throws FriendlyException {
