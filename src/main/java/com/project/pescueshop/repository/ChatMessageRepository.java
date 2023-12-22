@@ -12,7 +12,8 @@ import java.util.List;
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, String> {
     @Query(value = "SELECT * " +
             "FROM chat_message cm " +
-            "WHERE cm.chat_room_id = ?1 ", nativeQuery = true)
+            "WHERE cm.chat_room_id = ?1 " +
+            "ORDER BY cm.timestamp ASC ", nativeQuery = true)
     List<ChatMessage> findAllMessageByRoomId(String chatRoomId);
 
     @Modifying
