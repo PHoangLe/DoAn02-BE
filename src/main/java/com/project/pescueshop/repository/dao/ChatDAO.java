@@ -57,7 +57,7 @@ public class ChatDAO extends BaseDAO{
 
     public Long countNewMessage(String senderId, String recipientId) {
         String sql =
-                " SELECT COALESCE(COUNT(ci.total_item_price), 0) " +
+                " SELECT COALESCE(COUNT(cs.message_id), 0) " +
                         " FROM chat_message cs " +
                         " WHERE cs.sender_id = :p_sender_id " +
                         " AND cs.recipient_id = :p_recipient_id " +
