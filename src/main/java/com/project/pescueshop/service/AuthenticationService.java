@@ -64,7 +64,7 @@ public class AuthenticationService {
 
         user = userService.addUser(user);
 
-        threadService.createNeededInfoForNewUser(user);
+        threadService.createNeededInfoForNewUser(user, false);
 
         ResponseDTO<UserDTO> response = new ResponseDTO<>(EnumResponseCode.CREATED_ACCOUNT_SUCCESSFUL, new UserDTO(user));
         return ResponseEntity.ok(response);
@@ -122,9 +122,7 @@ public class AuthenticationService {
 
             user = userService.addUser(user);
             String userId = user.getUserId();
-            CompletableFuture.runAsync(() -> {
-                cartService.createCartForNewUser(userId);
-            });
+            threadService.createNeededInfoForNewUser(user, true);
         }
 
         var jwtToken = jwtService.generateJwtToken(user);

@@ -184,7 +184,7 @@ public class PaymentService {
         invoice.setShippingFee(paymentInfo.getShippingFee());
 
         Variety variety = varietyService.findById(info.getVarietyId());
-        long invoiceValue = variety.getPrice() + paymentInfo.getShippingFee();
+        long invoiceValue = (variety.getPrice() * info.getQuantity()) + paymentInfo.getShippingFee();
         invoice.setTotalPrice(invoiceValue);
         invoice.setFinalPrice(invoiceValue);
 
