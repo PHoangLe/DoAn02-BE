@@ -44,7 +44,7 @@ public class CartController {
     }
 
     @GetMapping("/un-authenticate")
-    public ResponseEntity<ResponseDTO<CartDTO>> getCartUnAuthenticate(@RequestParam String cartId) throws FriendlyException {
+    public ResponseEntity<ResponseDTO<CartDTO>> getCartUnAuthenticate(@RequestParam(required = false) String cartId) throws FriendlyException {
         CartDTO itemList = cartService.getUnAuthenticatedCart(cartId);
         ResponseDTO<CartDTO> result;
         if (itemList == null) {

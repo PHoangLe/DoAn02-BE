@@ -96,7 +96,7 @@ public class CartService{
         cartItemRepository.saveAndFlush(cartItem);
     }
 
-    public CartDTO getUnAuthenticatedCart(String cartId) throws FriendlyException {
+    public CartDTO getUnAuthenticatedCart(String cartId) {
         if (cartId != null) {
             List<CartItemDTO> cartItemDTOS = cartDAO.getCartItems(null, cartId);
 

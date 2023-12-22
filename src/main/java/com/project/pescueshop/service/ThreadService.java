@@ -147,18 +147,20 @@ public class ThreadService extends BaseService {
         }
     }
 
-    public void createNeededInfoForNewUser(User user) {
+    public void createNeededInfoForNewUser(User user, boolean isGoogle) {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
 
         executorService.submit(() -> cartService.createCartForNewUser(user.getUserId()));
         executorService.submit(() -> chatRoomService.createChatRoomForNewUser(user));
-        executorService.submit(() -> {
-            try {
-                otpService.sendOtpConfirmEmail(user.getUserEmail());
-            } catch (FriendlyException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        if (!isGoogle) {
+            executorService.submit(() -> {
+                try {
+                    otpService.sendOtpConfirmEmail(user.getUserEmail());
+                } catch (FriendlyException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
 
         executorService.shutdown();
     }
