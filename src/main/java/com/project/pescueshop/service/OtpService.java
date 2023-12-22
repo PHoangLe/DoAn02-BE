@@ -103,7 +103,7 @@ public class OtpService {
             throw new FriendlyException(EnumResponseCode.OTP_INCORRECT);
         }
 
-        if (correctOtp.getExpiry().before(new Date(System.currentTimeMillis()))) {
+        if (correctOtp.getExpiry().before(Util.getCurrentDate())) {
             throw new FriendlyException(EnumResponseCode.OTP_EXPIRED);
         }
     }

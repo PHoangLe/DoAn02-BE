@@ -20,7 +20,7 @@ public class Util {
 
     public static Date getCurrentDatePlusSeconds(long seconds){
         ZonedDateTime zonedDateTime = ZonedDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
-        zonedDateTime.plusSeconds(seconds);
+        zonedDateTime = zonedDateTime.plusSeconds(seconds);
         return Date.from(zonedDateTime.toInstant());
     }
 }
