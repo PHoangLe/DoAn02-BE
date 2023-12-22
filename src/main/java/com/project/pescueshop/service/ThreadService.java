@@ -30,6 +30,7 @@ public class ThreadService extends BaseService {
     private final CartService cartService;
     private final ChatRoomService chatRoomService;
     private final ViewAuditLogDAO viewAuditLogDAO;
+    private final OtpService otpService;
 
     @Autowired
     public ThreadService(
@@ -38,6 +39,7 @@ public class ThreadService extends BaseService {
             @Lazy RatingService ratingService,
             @Lazy ProductService productService,
             @Lazy CartService cartService,
+            @Lazy OtpService otpService,
             @Lazy ChatRoomService chatRoomService,
             @Lazy ViewAuditLogDAO viewAuditLogDAO) {
         this.varietyService = varietyService;
@@ -46,6 +48,7 @@ public class ThreadService extends BaseService {
         this.productService = productService;
         this.cartService = cartService;
         this.chatRoomService = chatRoomService;
+        this.otpService = otpService;
         this.viewAuditLogDAO = viewAuditLogDAO;
     }
 
@@ -145,10 +148,17 @@ public class ThreadService extends BaseService {
     }
 
     public void createNeededInfoForNewUser(User user) {
-        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
 
         executorService.submit(() -> cartService.createCartForNewUser(user.getUserId()));
         executorService.submit(() -> chatRoomService.createChatRoomForNewUser(user));
+        executorService.submit(() -> {
+            try {
+                otpService.sendOtpConfirmEmail(user.getUserEmail());
+            } catch (FriendlyException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         executorService.shutdown();
     }
