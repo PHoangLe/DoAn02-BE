@@ -1,6 +1,8 @@
 package com.project.pescueshop.service;
 
 import com.project.pescueshop.model.dto.AddressInputDTO;
+import com.project.pescueshop.model.dto.UpdateUserProfileDTO;
+import com.project.pescueshop.model.dto.UserDTO;
 import com.project.pescueshop.model.entity.Address;
 import com.project.pescueshop.model.entity.Role;
 import com.project.pescueshop.model.entity.User;
@@ -84,5 +86,22 @@ public class UserService extends BaseService {
     public void resetPassword(User user, String newPassword) {
         user.setUserPassword(passwordEncoder.encode(newPassword));
         userDAO.saveAndFlushUser(user);
+    }
+
+    public UserDTO updateUserProfile(UpdateUserProfileDTO dto) throws FriendlyException {
+        User user = findById(dto.getUserId());
+
+        if (user == null){
+            throw new FriendlyException(EnumResponseCode.ACCOUNT_NOT_FOUND);
+        }
+
+        user.setUserAvatar(dto.getUserAvatar());
+        user.setUserFirstName(dto.getUserFirstName());
+        user.setUserLastName(dto.getUserLastName());
+        user.setUserPhoneNumber(dto.getUserPhoneNumber());
+
+        userDAO.saveAndFlushUser(user);
+
+        return new UserDTO(user);
     }
 }
