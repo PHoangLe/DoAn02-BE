@@ -1,6 +1,7 @@
 package com.project.pescueshop.controller;
 
 import com.project.pescueshop.model.dto.AddressInputDTO;
+import com.project.pescueshop.model.dto.UpdateUserProfileDTO;
 import com.project.pescueshop.model.dto.UserDTO;
 import com.project.pescueshop.model.dto.general.ResponseDTO;
 import com.project.pescueshop.model.entity.Address;
@@ -55,6 +56,15 @@ public class UserController {
         User user = AuthenticationService.getCurrentLoggedInUser();
         UserDTO dto = new UserDTO(user);
         ResponseDTO<UserDTO> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, dto, "userInfo");
+        return ResponseEntity.ok(result);
+    }
+
+    @PutMapping("")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<ResponseDTO<UserDTO>> updateUserInfo(@RequestBody UpdateUserProfileDTO updateUserProfileDTO) throws FriendlyException {
+        UserDTO user = userService.updateUserProfile(updateUserProfileDTO);
+        ResponseDTO<UserDTO> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, user, "userInfo");
         return ResponseEntity.ok(result);
     }
 }
