@@ -57,10 +57,7 @@ public class ProductDAO extends BaseDAO{
         List<ProductDashboardResult> results = new ArrayList<>();
 
         for (Object[] object : products){
-            results.add(ProductDashboardResult.builder()
-                    .product((Product) object[0])
-                    .views((Long) object[1])
-                    .build());
+            results.add(new ProductDashboardResult((Product) object[0] , (Long) object[1], null));
         }
 
         return results;
@@ -77,10 +74,7 @@ public class ProductDAO extends BaseDAO{
         List<ProductDashboardResult> results = new ArrayList<>();
 
         for (Object[] object : products){
-            results.add(ProductDashboardResult.builder()
-                    .product((Product) object[0])
-                    .buyCount((Long) object[1])
-                    .build());
+            results.add(new ProductDashboardResult((Product) object[0] , null, (Long) object[1]));
         }
 
         return results;
