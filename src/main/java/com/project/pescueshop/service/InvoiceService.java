@@ -25,7 +25,7 @@ public class InvoiceService {
         }
 
         return paymentDAO.findAllInvoice().stream()
-                .filter(invoice -> invoice.getInvoice().getCreatedDate().before(toDate) && invoice.getInvoice().getCreatedDate().after(fromDate))
+                .filter(invoice -> invoice.getCreatedDate().before(toDate) && invoice.getCreatedDate().after(fromDate))
                 .toList();
     }
 

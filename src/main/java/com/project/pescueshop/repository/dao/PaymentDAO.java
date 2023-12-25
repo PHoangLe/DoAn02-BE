@@ -54,10 +54,7 @@ public class PaymentDAO extends BaseDAO{
         List<InvoiceListResultDTO> results = new ArrayList<>();
 
         for (Object[] object : invoices){
-            results.add(InvoiceListResultDTO.builder()
-                    .invoice((Invoice) object[0])
-                    .userName(object[1] + " " + object[2])
-                    .build());
+            results.add(new InvoiceListResultDTO((Invoice) object[0], object[1] + " " + object[2]));
         }
 
         return results;
