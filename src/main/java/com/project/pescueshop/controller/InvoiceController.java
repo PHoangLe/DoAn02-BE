@@ -1,6 +1,7 @@
 package com.project.pescueshop.controller;
 
 import com.project.pescueshop.model.dto.InvoiceItemDTO;
+import com.project.pescueshop.model.dto.InvoiceListResultDTO;
 import com.project.pescueshop.model.dto.general.ResponseDTO;
 import com.project.pescueshop.model.entity.Invoice;
 import com.project.pescueshop.model.entity.User;
@@ -38,9 +39,9 @@ public class InvoiceController {
     @GetMapping("")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @SecurityRequirement(name = "Bearer Authentication")
-    public ResponseEntity<ResponseDTO<List<Invoice>>> getAllInvoice(@RequestParam(required = false) Date fromDate, @RequestParam(required = false) Date toDate){
-        List<Invoice> invoice = invoiceService.findAllInvoice(fromDate, toDate);
-        ResponseDTO<List<Invoice>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, invoice, "invoiceList");
+    public ResponseEntity<ResponseDTO<List<InvoiceListResultDTO>>> getAllInvoice(@RequestParam(required = false) Date fromDate, @RequestParam(required = false) Date toDate){
+        List<InvoiceListResultDTO> invoice = invoiceService.findAllInvoice(fromDate, toDate);
+        ResponseDTO<List<InvoiceListResultDTO>> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, invoice, "invoiceList");
         return ResponseEntity.ok(result);
     }
 

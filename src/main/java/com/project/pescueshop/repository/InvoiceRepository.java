@@ -16,4 +16,11 @@ public interface InvoiceRepository extends JpaRepository<Invoice, String> {
 
     @Query("select i from Invoice i where i.createdDate >= ?1 and i.createdDate <= ?2")
     List<Invoice> findInvoiceByDateRange(Date fromDate, Date toDate);
+
+    @Query(
+            "select i, u.userFirstName, u.userLastName " +
+            "from Invoice i " +
+            "join User u on i.userId = u.userId "
+    )
+    List<Object[]> findAllInvoice();
 }

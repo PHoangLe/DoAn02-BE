@@ -1,6 +1,7 @@
 package com.project.pescueshop.service;
 
 import com.project.pescueshop.model.dto.InvoiceItemDTO;
+import com.project.pescueshop.model.dto.InvoiceListResultDTO;
 import com.project.pescueshop.model.entity.Invoice;
 import com.project.pescueshop.model.entity.User;
 import com.project.pescueshop.model.exception.FriendlyException;
@@ -18,13 +19,13 @@ import java.util.List;
 public class InvoiceService {
     private final PaymentDAO paymentDAO;
 
-    public List<Invoice> findAllInvoice(Date fromDate, Date toDate){
+    public List<InvoiceListResultDTO> findAllInvoice(Date fromDate, Date toDate){
         if (fromDate == null && toDate == null){
             return paymentDAO.findAllInvoice();
         }
 
         return paymentDAO.findAllInvoice().stream()
-                .filter(invoice -> invoice.getCreatedDate().before(toDate) && invoice.getCreatedDate().after(fromDate))
+                .filter(invoice -> invoice.getInvoice().getCreatedDate().before(toDate) && invoice.getInvoice().getCreatedDate().after(fromDate))
                 .toList();
     }
 
