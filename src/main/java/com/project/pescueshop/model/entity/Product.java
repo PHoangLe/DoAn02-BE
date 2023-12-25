@@ -51,8 +51,8 @@ public class Product {
         this.brand = dto.getBrand();
         this.detail = dto.getDetail();
         this.description = dto.getDescription();
-        this.avgRating = dto.getAvgRating();
         this.images = dto.getImages();
         this.status = dto.getStatus();
+        this.avgRating = 0;
     }
 }
