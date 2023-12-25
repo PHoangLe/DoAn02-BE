@@ -6,6 +6,7 @@ import com.project.pescueshop.service.ChatRoomService;
 import com.project.pescueshop.service.FileUploadService;
 import com.project.pescueshop.service.PaymentService;
 import com.project.pescueshop.service.ProductService;
+import com.project.pescueshop.util.Util;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +22,13 @@ import java.io.UnsupportedEncodingException;
 @Api
 public class TestController {
 
-    private final ChatRoomService chatRoomService;
+    private final PaymentService paymentService;
 
     @GetMapping("")
     public Object findAllProduct() throws FriendlyException, UnsupportedEncodingException {
 //        ProductDTO url = productService.addVarietyAttribute(null, null);
-        String chatRoomId = chatRoomService.getChatId("USER_1699792351661_gmNWp", "USER_1697033158735", true).orElse("123");
+        String key = Util.getRandomKey();
+        String chatRoomId = paymentService.createPaymentLink(key, "abc" , 100000);
         return ResponseEntity.ok(chatRoomId);
     }
 }

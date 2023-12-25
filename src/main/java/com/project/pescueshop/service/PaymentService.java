@@ -2,6 +2,7 @@ package com.project.pescueshop.service;
 
 import com.project.pescueshop.config.PaymentConfig;
 import com.project.pescueshop.model.dto.CartCheckOutInfoDTO;
+import com.project.pescueshop.model.dto.CheckoutResultDTO;
 import com.project.pescueshop.model.dto.PaymentInfoDTO;
 import com.project.pescueshop.model.dto.SingleItemCheckOutInfoDTO;
 import com.project.pescueshop.model.entity.*;
@@ -94,7 +95,7 @@ public class PaymentService {
         return paymentUrl;
     }
 
-    public String userCartCheckout(User user, CartCheckOutInfoDTO cartCheckOutInfoDTO) throws UnsupportedEncodingException, FriendlyException {
+    public CheckoutResultDTO userCartCheckout(User user, CartCheckOutInfoDTO cartCheckOutInfoDTO) throws UnsupportedEncodingException, FriendlyException {
         PaymentInfoDTO paymentInfo = cartCheckOutInfoDTO.getPaymentInfoDTO();
         EnumPaymentType paymentType = EnumPaymentType.getByValue(paymentInfo.getPaymentType());
         Address address = paymentInfo.getAddress();
@@ -159,13 +160,18 @@ public class PaymentService {
         });
 
         if (paymentType == EnumPaymentType.CREDIT_CARD){
-            return createPaymentLink("Invoice ID: " + invoice.getInvoiceId(), paymentInfo.getReturnUrl(), invoice.getFinalPrice());
+            return CheckoutResultDTO.builder()
+                    .paymentUrl(createPaymentLink("Invoice ID: " + invoice.getInvoiceId(), paymentInfo.getReturnUrl(), invoice.getFinalPrice()))
+                    .invoiceId(invoice.getInvoiceId())
+                    .build();
         }
         paymentDAO.saveAndFlushInvoice(invoice);
-        return  "";
+        return CheckoutResultDTO.builder()
+                .invoiceId(invoice.getInvoiceId())
+                .build();
     }
 
-    public String singleItemCheckOut(User user, SingleItemCheckOutInfoDTO info) throws UnsupportedEncodingException {
+    public CheckoutResultDTO singleItemCheckOut(User user, SingleItemCheckOutInfoDTO info) throws UnsupportedEncodingException {
         PaymentInfoDTO paymentInfo = info.getPaymentInfoDTO();
         EnumPaymentType paymentType = EnumPaymentType.getByValue(paymentInfo.getPaymentType());
         Address address = paymentInfo.getAddress();
@@ -228,31 +234,36 @@ public class PaymentService {
         });
 
         if (paymentType == EnumPaymentType.CREDIT_CARD){
-            return createPaymentLink("Invoice ID: " + invoice.getInvoiceId(), paymentInfo.getReturnUrl(), invoice.getFinalPrice());
+            return CheckoutResultDTO.builder()
+                    .invoiceId(invoice.getInvoiceId())
+                    .paymentUrl(createPaymentLink("Invoice ID: " + invoice.getInvoiceId(), paymentInfo.getReturnUrl(), invoice.getFinalPrice()))
+                    .build();
         }
         paymentDAO.saveAndFlushInvoice(invoice);
-        return "";
+        return CheckoutResultDTO.builder()
+                .invoiceId(invoice.getInvoiceId())
+                .build();
     }
 
     public void addInvoiceItemsToInvoice(Invoice invoice) {
         cartDAO.addInvoiceItemsToInvoice(invoice);
     }
 
-    public String userCartCheckoutUnAuthenticate(CartCheckOutInfoDTO cartCheckOutInfoDTO) throws FriendlyException, UnsupportedEncodingException {
+    public CheckoutResultDTO userCartCheckoutUnAuthenticate(CartCheckOutInfoDTO cartCheckOutInfoDTO) throws FriendlyException, UnsupportedEncodingException {
         User user = userService.getAdminUser();
         return userCartCheckout(user, cartCheckOutInfoDTO);
     }
 
-    public String singleItemCheckOutUnAuthenticate(SingleItemCheckOutInfoDTO singleItemCheckOutInfoDTO) throws FriendlyException, UnsupportedEncodingException {
+    public CheckoutResultDTO singleItemCheckOutUnAuthenticate(SingleItemCheckOutInfoDTO singleItemCheckOutInfoDTO) throws FriendlyException, UnsupportedEncodingException {
         User user = userService.getAdminUser();
         return singleItemCheckOut(user, singleItemCheckOutInfoDTO);
     }
 
-    public String userCartCheckoutAuthenticate(User user, CartCheckOutInfoDTO cartCheckOutInfoDTO) throws UnsupportedEncodingException, FriendlyException {
+    public CheckoutResultDTO userCartCheckoutAuthenticate(User user, CartCheckOutInfoDTO cartCheckOutInfoDTO) throws UnsupportedEncodingException, FriendlyException {
         return userCartCheckout(user, cartCheckOutInfoDTO);
     }
 
-    public String singleItemCheckOutAuthenticate(User user, SingleItemCheckOutInfoDTO singleItemCheckOutInfoDTO) throws UnsupportedEncodingException {
+    public CheckoutResultDTO singleItemCheckOutAuthenticate(User user, SingleItemCheckOutInfoDTO singleItemCheckOutInfoDTO) throws UnsupportedEncodingException {
         return singleItemCheckOut(user, singleItemCheckOutInfoDTO);
     }
 }
