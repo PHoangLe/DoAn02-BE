@@ -36,4 +36,10 @@ public class Util {
 
         return builder.toString();
     }
+
+    public static Date getCurrentDateMinusDays(long day) {
+        ZonedDateTime zonedDateTime = ZonedDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
+        zonedDateTime = zonedDateTime.minusDays(day);
+        return Date.from(zonedDateTime.toInstant());
+    }
 }

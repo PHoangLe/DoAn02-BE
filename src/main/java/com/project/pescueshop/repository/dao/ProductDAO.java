@@ -1,7 +1,9 @@
 package com.project.pescueshop.repository.dao;
 
+import com.project.pescueshop.model.dto.ProductDashboardResult;
 import com.project.pescueshop.model.entity.Product;
 import com.project.pescueshop.repository.ProductRepository;
+import com.project.pescueshop.util.Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +12,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -43,11 +46,44 @@ public class ProductDAO extends BaseDAO{
         return productRepository.getRandomNProduct(pageable);
     }
 
-    public List<Product> getMostViewsProducts(Integer n){
+    public List<ProductDashboardResult> getMostViewsProducts(Integer n, Long daysAmount){
         n = n == null ? 5 : n;
+        daysAmount = daysAmount == null ? 30 : daysAmount;
 
         Pageable pageable = PageRequest.of(0, n);
-        return productRepository.getMostViewsProducts(pageable);
+
+        List<Object[]> products = productRepository.getMostViewsProducts(pageable, Util.getCurrentDateMinusDays(daysAmount));
+
+        List<ProductDashboardResult> results = new ArrayList<>();
+
+        for (Object[] object : products){
+            results.add(ProductDashboardResult.builder()
+                    .product((Product) object[0])
+                    .views((Long) object[1])
+                    .build());
+        }
+
+        return results;
+    }
+
+    public List<ProductDashboardResult> getMostBuyProducts(Integer n, Long daysAmount){
+        n = n == null ? 5 : n;
+        daysAmount = daysAmount == null ? 30 : daysAmount;
+
+        Pageable pageable = PageRequest.of(0, n);
+
+        List<Object[]> products = productRepository.getMostBuyProduct(pageable, Util.getCurrentDateMinusDays(daysAmount));
+
+        List<ProductDashboardResult> results = new ArrayList<>();
+
+        for (Object[] object : products){
+            results.add(ProductDashboardResult.builder()
+                    .product((Product) object[0])
+                    .buyCount((Long) object[1])
+                    .build());
+        }
+
+        return results;
     }
 
     public List<Product> getProductByBrandId(String brandId) {

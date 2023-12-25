@@ -1,17 +1,18 @@
 package com.project.pescueshop.repository.dao;
 
 import com.project.pescueshop.model.dto.InvoiceItemDTO;
-import com.project.pescueshop.model.entity.ImportInvoice;
-import com.project.pescueshop.model.entity.ImportItem;
-import com.project.pescueshop.model.entity.Invoice;
-import com.project.pescueshop.model.entity.InvoiceItem;
+import com.project.pescueshop.model.dto.InvoiceListResultDTO;
+import com.project.pescueshop.model.dto.ProductDashboardResult;
+import com.project.pescueshop.model.entity.*;
 import com.project.pescueshop.repository.InvoiceItemRepository;
 import com.project.pescueshop.repository.InvoiceRepository;
 import com.project.pescueshop.repository.mapper.InvoiceItemMapper;
+import com.project.pescueshop.util.Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -47,8 +48,19 @@ public class PaymentDAO extends BaseDAO{
         return jdbcTemplate.query(sql, parameters, invoiceItemMapper);
     }
 
-    public List<Invoice> findAllInvoice(){
-        return invoiceRepository.findAll();
+    public List<InvoiceListResultDTO> findAllInvoice(){
+        List<Object[]> invoices = invoiceRepository.findAllInvoice();
+
+        List<InvoiceListResultDTO> results = new ArrayList<>();
+
+        for (Object[] object : invoices){
+            results.add(InvoiceListResultDTO.builder()
+                    .invoice((Invoice) object[0])
+                    .userName(object[1] + " " + object[2])
+                    .build());
+        }
+
+        return results;
     }
 
     public List<Invoice> findAllInvoiceByUserId(String userId) {

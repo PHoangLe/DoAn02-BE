@@ -1,6 +1,7 @@
 package com.project.pescueshop.service;
 
 import com.project.pescueshop.model.dto.ProductDTO;
+import com.project.pescueshop.model.dto.ProductDashboardResult;
 import com.project.pescueshop.model.entity.*;
 import com.project.pescueshop.model.exception.FriendlyException;
 import com.project.pescueshop.repository.dao.ProductDAO;
@@ -195,8 +196,12 @@ public class ProductService extends BaseService {
         return productDAO.getRandomNProduct(n);
     }
 
-    public List<Product> getMostViewsProducts(Integer n) {
-        return productDAO.getMostViewsProducts(n);
+    public List<ProductDashboardResult> getMostViewsProducts(Integer n, Long daysAmount) {
+        return productDAO.getMostViewsProducts(n, daysAmount);
+    }
+
+    public List<ProductDashboardResult> getMostBuyProducts(Integer n, Long daysAmount) {
+        return productDAO.getMostBuyProducts(n, daysAmount);
     }
 
     public List<Product> getProductByBrandId(String brandId) {
