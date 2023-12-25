@@ -6,6 +6,7 @@ import com.project.pescueshop.model.entity.User;
 import com.project.pescueshop.model.exception.FriendlyException;
 import com.project.pescueshop.repository.dao.ChatDAO;
 import com.project.pescueshop.util.constant.EnumMessageStatus;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -59,14 +60,17 @@ public class ChatRoomService {
         return chatDAO.findAllMessageBySenderIdAndRecipientId(senderId, recipientId);
     }
 
-    public void createChatRoomForNewUser(User user) {
-        User adminUser = userService.getAdminUser();
+    @Transactional
+    public void createChatRoomForNewUser(String userId) {
+        try {
+            User adminUser = userService.getAdminUser();
+            User newUser = userService.findById(userId);
 
-        ChatRoom chatRoom = ChatRoom.builder()
-                .firstUser(user)
-                .secondUser(adminUser)
-                .build();
-
-        chatDAO.saveAndFlushRoom(chatRoom);
+            ChatRoom newChatRoom = new ChatRoom(newUser, adminUser);
+            chatDAO.saveAndFlushRoom(newChatRoom);
+        }
+        catch (Exception e){
+            log.error(e.getMessage());
+        }
     }
 }

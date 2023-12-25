@@ -35,11 +35,10 @@ public class UserService extends BaseService {
         return userDAO.findUserByUserId(userId);
     }
 
-    public User addUser(User user){
+    public void addUser(User user){
         List<Role> userRoles = roleService.getDefaultUserRole();
         user.setUserRoles(userRoles);
         userDAO.saveAndFlushUser(user);
-        return user;
     }
 
     public User getAdminUser() {
