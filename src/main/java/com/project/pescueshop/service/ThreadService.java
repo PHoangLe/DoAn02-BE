@@ -151,7 +151,7 @@ public class ThreadService extends BaseService {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
 
         executorService.submit(() -> cartService.createCartForNewUser(user.getUserId()));
-        executorService.submit(() -> chatRoomService.createChatRoomForNewUser(user));
+        executorService.submit(() -> chatRoomService.createChatRoomForNewUser(user.getUserId()));
         if (!isGoogle) {
             executorService.submit(() -> {
                 try {

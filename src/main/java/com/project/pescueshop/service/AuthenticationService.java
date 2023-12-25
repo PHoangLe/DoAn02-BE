@@ -62,7 +62,7 @@ public class AuthenticationService {
         user.setMemberPoint(0L);
         user.setStatus(EnumStatus.INACTIVE.getValue());
 
-        user = userService.addUser(user);
+        userService.addUser(user);
 
         threadService.createNeededInfoForNewUser(user, false);
 
@@ -120,8 +120,7 @@ public class AuthenticationService {
             user.setMemberPoint(0L);
             user.setStatus(EnumStatus.ACTIVE.getValue());
 
-            user = userService.addUser(user);
-            String userId = user.getUserId();
+            userService.addUser(user);
             threadService.createNeededInfoForNewUser(user, true);
         }
 
