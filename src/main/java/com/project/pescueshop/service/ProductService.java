@@ -17,10 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
@@ -126,7 +123,7 @@ public class ProductService extends BaseService {
         List<Variety> varieties = varietyService.findByProductId(productId);
 
         boolean isExisted = varieties.stream()
-                .anyMatch(variety -> variety.getVarietyId() == newAttribute.getAttributeId());
+                .anyMatch(variety -> Objects.equals(variety.getVarietyId(), newAttribute.getAttributeId()));
 
         if (isExisted){
             throw new FriendlyException(EnumResponseCode.ATTRIBUTE_EXISTED);
