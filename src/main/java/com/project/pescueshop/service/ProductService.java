@@ -123,7 +123,8 @@ public class ProductService extends BaseService {
         List<Variety> varieties = varietyService.findByProductId(productId);
 
         boolean isExisted = varieties.stream()
-                .anyMatch(variety -> Objects.equals(variety.getVarietyId(), newAttribute.getAttributeId()));
+                .anyMatch(variety -> variety.getVarietyAttributes().stream()
+                        .anyMatch(varietyAttribute -> Objects.equals(varietyAttribute.getAttributeId(), newAttribute.getAttributeId())));
 
         if (isExisted){
             throw new FriendlyException(EnumResponseCode.ATTRIBUTE_EXISTED);
