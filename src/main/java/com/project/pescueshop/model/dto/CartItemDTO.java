@@ -3,6 +3,8 @@ package com.project.pescueshop.model.dto;
 import com.project.pescueshop.model.annotation.Name;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Data
@@ -22,4 +24,5 @@ public class CartItemDTO {
     private Boolean isSelected;
     private String image;
     private Integer stockAmount;
+    private List<String> listAttributeName;
 }
