@@ -36,6 +36,7 @@ public class Invoice {
     private String districtName;
     private String cityName;
     private String phoneNumber;
+    private String userEmail;
     private String paymentType;
     private String status;
 }

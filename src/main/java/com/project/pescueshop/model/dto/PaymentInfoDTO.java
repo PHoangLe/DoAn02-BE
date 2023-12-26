@@ -20,4 +20,5 @@ public class PaymentInfoDTO {
     private String paymentType;
     private String returnUrl;
     private Long shippingFee;
+    private String userEmail;
 }

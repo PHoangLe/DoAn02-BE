@@ -112,6 +112,7 @@ public class PaymentService {
         invoice.setCreatedDate(Util.getCurrentDate());
         invoice.setVoucher(paymentInfo.getVoucher());
         invoice.setShippingFee(paymentInfo.getShippingFee());
+        invoice.setUserEmail(paymentInfo.getUserEmail());
 
         long invoiceValue = cartDAO.sumValueOfAllSelectedProductInCart(cartCheckOutInfoDTO.getCartId(), user.getUserId()) + paymentInfo.getShippingFee();
 
@@ -188,6 +189,7 @@ public class PaymentService {
         invoice.setCreatedDate(Util.getCurrentDate());
         invoice.setVoucher(paymentInfo.getVoucher());
         invoice.setShippingFee(paymentInfo.getShippingFee());
+        invoice.setUserEmail(paymentInfo.getUserEmail());
 
         Variety variety = varietyService.findById(info.getVarietyId());
         long invoiceValue = (variety.getPrice() * info.getQuantity()) + paymentInfo.getShippingFee();
