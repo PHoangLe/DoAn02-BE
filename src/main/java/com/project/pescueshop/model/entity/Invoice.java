@@ -39,4 +39,5 @@ public class Invoice {
     private String userEmail;
     private String paymentType;
     private String status;
+    private String recipientName;
 }

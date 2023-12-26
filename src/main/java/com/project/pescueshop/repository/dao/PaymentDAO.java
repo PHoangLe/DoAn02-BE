@@ -63,4 +63,8 @@ public class PaymentDAO extends BaseDAO{
     public List<Invoice> findAllInvoiceByUserId(String userId) {
         return invoiceRepository.findAllInvoiceByUserId(userId);
     }
+
+    public List<InvoiceItem> findInvoiceItemByInvoiceId(String invoiceId) {
+        return invoiceItemRepository.findInvoiceItemByInvoiceId(invoiceId);
+    }
 }

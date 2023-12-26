@@ -1,11 +1,10 @@
 package com.project.pescueshop.controller;
 
 import com.project.pescueshop.model.dto.ProductDTO;
+import com.project.pescueshop.model.entity.Invoice;
 import com.project.pescueshop.model.exception.FriendlyException;
-import com.project.pescueshop.service.ChatRoomService;
-import com.project.pescueshop.service.FileUploadService;
-import com.project.pescueshop.service.PaymentService;
-import com.project.pescueshop.service.ProductService;
+import com.project.pescueshop.repository.dao.PaymentDAO;
+import com.project.pescueshop.service.*;
 import com.project.pescueshop.util.Util;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +22,15 @@ import java.io.UnsupportedEncodingException;
 public class TestController {
 
     private final PaymentService paymentService;
+    private final PaymentDAO paymentDAO;
+    private final ThreadService threadService;
 
     @GetMapping("")
     public Object findAllProduct() throws FriendlyException, UnsupportedEncodingException {
 //        ProductDTO url = productService.addVarietyAttribute(null, null);
         String key = Util.getRandomKey();
-        String chatRoomId = paymentService.createPaymentLink(key, "abc" , 100000);
-        return ResponseEntity.ok(chatRoomId);
+        Invoice invoice = paymentDAO.findInvoiceById("INVO_1703597043275_RR31F");
+        threadService.sendReceiptEmail(invoice);
+        return ResponseEntity.ok("");
     }
 }

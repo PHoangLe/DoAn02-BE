@@ -34,6 +34,7 @@ public class PaymentService {
     private final CartDAO cartDAO;
     private final VarietyService varietyService;
     private final UserService userService;
+    private final ThreadService threadService;
 
     public String createPaymentLink(String content, String returnUrl, long value) throws UnsupportedEncodingException {
 
@@ -113,6 +114,7 @@ public class PaymentService {
         invoice.setVoucher(paymentInfo.getVoucher());
         invoice.setShippingFee(paymentInfo.getShippingFee());
         invoice.setUserEmail(paymentInfo.getUserEmail());
+        invoice.setRecipientName(paymentInfo.getRecipientName());
 
         long invoiceValue = cartDAO.sumValueOfAllSelectedProductInCart(cartCheckOutInfoDTO.getCartId(), user.getUserId()) + paymentInfo.getShippingFee();
 
@@ -147,6 +149,8 @@ public class PaymentService {
         }
 
         paymentDAO.saveAndFlushInvoice(invoice);
+
+        threadService.sendReceiptEmail(invoice);
 
         CompletableFuture.runAsync(() -> {
             addInvoiceItemsToInvoice(invoice);
@@ -190,6 +194,7 @@ public class PaymentService {
         invoice.setVoucher(paymentInfo.getVoucher());
         invoice.setShippingFee(paymentInfo.getShippingFee());
         invoice.setUserEmail(paymentInfo.getUserEmail());
+        invoice.setRecipientName(paymentInfo.getRecipientName());
 
         Variety variety = varietyService.findById(info.getVarietyId());
         long invoiceValue = (variety.getPrice() * info.getQuantity()) + paymentInfo.getShippingFee();
@@ -220,6 +225,8 @@ public class PaymentService {
         }
 
         paymentDAO.saveAndFlushInvoice(invoice);
+
+        threadService.sendReceiptEmail(invoice);
 
         CompletableFuture.runAsync(() -> {
             userService.addMemberPoint(user, invoice.getFinalPrice() / MEMBER_POINT_RATE);
@@ -267,5 +274,9 @@ public class PaymentService {
 
     public CheckoutResultDTO singleItemCheckOutAuthenticate(User user, SingleItemCheckOutInfoDTO singleItemCheckOutInfoDTO) throws UnsupportedEncodingException {
         return singleItemCheckOut(user, singleItemCheckOutInfoDTO);
+    }
+
+    public List<InvoiceItem> findInvoiceItemByInvoiceId(String invoiceId) {
+        return paymentDAO.findInvoiceItemByInvoiceId(invoiceId);
     }
 }
