@@ -1,9 +1,6 @@
 package com.project.pescueshop.service;
 
-import com.project.pescueshop.model.dto.AddOrUpdateImportItemDTO;
-import com.project.pescueshop.model.dto.ProductDTO;
-import com.project.pescueshop.model.dto.RatingResultDTO;
-import com.project.pescueshop.model.dto.VarietyDTO;
+import com.project.pescueshop.model.dto.*;
 import com.project.pescueshop.model.entity.*;
 import com.project.pescueshop.model.exception.FriendlyException;
 import com.project.pescueshop.repository.dao.ViewAuditLogDAO;
@@ -30,6 +27,9 @@ public class ThreadService extends BaseService {
     private final CartService cartService;
     private final ChatRoomService chatRoomService;
     private final ViewAuditLogDAO viewAuditLogDAO;
+    private final PaymentService paymentService;
+    private final EmailService emailService;
+    private final InvoiceService invoiceService;
     private final OtpService otpService;
 
     @Autowired
@@ -40,6 +40,9 @@ public class ThreadService extends BaseService {
             @Lazy ProductService productService,
             @Lazy CartService cartService,
             @Lazy OtpService otpService,
+            @Lazy PaymentService paymentService,
+            @Lazy EmailService emailService,
+            @Lazy InvoiceService invoiceService,
             @Lazy ChatRoomService chatRoomService,
             @Lazy ViewAuditLogDAO viewAuditLogDAO) {
         this.varietyService = varietyService;
@@ -49,6 +52,9 @@ public class ThreadService extends BaseService {
         this.cartService = cartService;
         this.chatRoomService = chatRoomService;
         this.otpService = otpService;
+        this.paymentService = paymentService;
+        this.emailService = emailService;
+        this.invoiceService = invoiceService;
         this.viewAuditLogDAO = viewAuditLogDAO;
     }
 
@@ -163,5 +169,27 @@ public class ThreadService extends BaseService {
         }
 
         executorService.shutdown();
+    }
+
+    public void sendReceiptEmail(Invoice invoice) {
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+
+        Future<List<InvoiceItemDTO>> invoiceItemListFuture = executorService.submit(() -> invoiceService.getInvoiceDetail(invoice.getInvoiceId()));
+
+        try {
+            List<InvoiceItemDTO> invoiceItemList = invoiceItemListFuture.get();
+
+            executorService.submit(() -> {
+                try {
+                    emailService.sendInvoiceEmail(invoiceItemList, invoice);
+                } catch (FriendlyException e) {
+                    log.trace(e.getMessage());
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+        catch (Exception e){
+            log.trace(e.getMessage());
+        }
     }
 }
