@@ -46,8 +46,6 @@ public class InvoiceController {
     }
 
     @PutMapping("/update-status")
-    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
-    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<ResponseDTO<Invoice>> getAllInvoice(
             @RequestParam String invoiceId,
             @RequestParam String status
