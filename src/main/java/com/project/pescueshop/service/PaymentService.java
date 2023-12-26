@@ -116,14 +116,14 @@ public class PaymentService {
         invoice.setUserEmail(paymentInfo.getUserEmail());
         invoice.setRecipientName(paymentInfo.getRecipientName());
 
-        long invoiceValue = cartDAO.sumValueOfAllSelectedProductInCart(cartCheckOutInfoDTO.getCartId(), user.getUserId()) + paymentInfo.getShippingFee();
+        long invoiceValue = cartDAO.sumValueOfAllSelectedProductInCart(cartCheckOutInfoDTO.getCartId(), user.getUserId());
 
         if (invoiceValue == 0){
             throw new FriendlyException(EnumResponseCode.NO_ITEM_TO_CHECKOUT);
         }
 
         invoice.setTotalPrice(invoiceValue);
-        invoice.setFinalPrice(invoiceValue);
+        invoice.setFinalPrice(invoiceValue + paymentInfo.getShippingFee());
 
         if (invoice.getVoucher() != null){
             Voucher voucher = invoice.getVoucher();
@@ -140,7 +140,7 @@ public class PaymentService {
             discountAmount = Math.min(discountAmount, voucher.getMaxValue());
             invoice.setDiscountPrice(discountAmount);
 
-            long finalPrice = Math.max(invoice.getTotalPrice() - discountAmount, 0);
+            long finalPrice = Math.max(invoice.getFinalPrice() - discountAmount, 0);
             invoice.setFinalPrice(finalPrice);
 
             CompletableFuture.runAsync(() -> {
@@ -197,9 +197,9 @@ public class PaymentService {
         invoice.setRecipientName(paymentInfo.getRecipientName());
 
         Variety variety = varietyService.findById(info.getVarietyId());
-        long invoiceValue = (variety.getPrice() * info.getQuantity()) + paymentInfo.getShippingFee();
+        long invoiceValue = (variety.getPrice() * info.getQuantity());
         invoice.setTotalPrice(invoiceValue);
-        invoice.setFinalPrice(invoiceValue);
+        invoice.setFinalPrice(invoiceValue + paymentInfo.getShippingFee());
 
         if (invoice.getVoucher() != null){
             Voucher voucher = invoice.getVoucher();
@@ -216,7 +216,7 @@ public class PaymentService {
             discountAmount = Math.min(discountAmount, voucher.getMaxValue());
             invoice.setDiscountPrice(discountAmount);
 
-            long finalPrice = Math.max(invoice.getTotalPrice() - discountAmount, 0);
+            long finalPrice = Math.max(invoice.getFinalPrice() - discountAmount, 0);
             invoice.setFinalPrice(finalPrice);
 
             CompletableFuture.runAsync(() -> {
