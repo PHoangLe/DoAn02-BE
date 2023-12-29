@@ -61,7 +61,7 @@ public class PaymentController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/createPaymentLink")
+    @PutMapping("/createPaymentLink")
     public ResponseEntity<ResponseDTO<String>> singleItemCheckoutUnAuthenticate(@RequestBody CreatePaymentLinkDTO dto) throws FriendlyException, UnsupportedEncodingException {
         String paymentLink = paymentService.createPaymentLink(dto.getContent(), dto.getReturnUrl(), dto.getValue());
         ResponseDTO<String> result = new ResponseDTO<>(EnumResponseCode.SUCCESS, paymentLink, "paymentLink");
